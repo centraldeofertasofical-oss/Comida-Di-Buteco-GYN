@@ -455,10 +455,12 @@ function toggleTourByName(name){
 function renderTour(){
   const pane=document.getElementById('tourPane');document.getElementById('tabCnt').textContent=`(${tour.length})`;
   if(!tour.length){pane.innerHTML='<div class="tour-empty"><div class="tour-empty-icon">🍻</div><div class="tour-empty-txt">Seu roteiro está vazio.<br>Vá em <strong>Bares</strong> e adicione os que quer visitar!</div></div>';return}
-  const orig=`${LAT},${LNG}`,dest=`${tour[tour.length-1].lat},${tour[tour.length-1].lng}`,wpts=tour.slice(0,-1).map(s=>`${s.lat},${s.lng}`).join('|');
-  let murl=`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(orig)}&destination=${encodeURIComponent(dest)}&travelmode=driving`;
+  const orig=`${LAT},${LNG}`;
+  const dest=encodeURIComponent(tour[tour.length-1].n+', '+tour[tour.length-1].a+', Goiânia, Brasil');
+  const wpts=tour.slice(0,-1).map(s=>encodeURIComponent(s.n+', '+s.a+', Goiânia, Brasil')).join('|');
+  let murl=`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(orig)}&destination=${dest}&travelmode=driving`;
   if(wpts)murl+=`&waypoints=${encodeURIComponent(wpts)}`;
-  pane.innerHTML=`<div class="tour-header"><div class="tour-title">🗺 Meu Roteiro</div><div class="tour-cnt-badge">${tour.length} paradas</div></div><div class="tour-total"><span>Total estimado</span><span>R$ ${tour.length*40} · ${tour.length} petisco${tour.length>1?'s':''}</span></div>${tour.map((b,i)=>`<div class="stop-item"><div class="stop-num">${i+1}</div><div class="stop-info"><div class="stop-name">${b.n}</div><div class="stop-petisco">${b.p}</div></div><div class="stop-dist">${fmt(dist(b))}</div><button class="stop-rm" onclick="toggleTourByName('${esc(b.n)}')">✕</button></div>`).join('')}<div style="margin-top:14px"><a href="${murl}" target="_blank" class="btn-maps-big">🗺 ABRIR ROTA NO GOOGLE MAPS</a><button class="btn-clr" onclick="clearTour()">✕ LIMPAR ROTEIRO</button></div>`;
+  pane.innerHTML=`<div class="tour-header"><div class="tour-title">🗺 Meu Roteiro</div><div style="display:flex;gap:6px;align-items:center"><button onclick="otimizarRota()" style="background:rgba(82,183,136,.15);border:1px solid rgba(82,183,136,.4);color:#52B788;font-family:JetBrains Mono,monospace;font-size:.6rem;padding:4px 8px;border-radius:6px;cursor:pointer">⚡ Otimizar</button><div class="tour-cnt-badge">${tour.length} paradas</div></div></div><div class="tour-total"><span>Total estimado</span><span>R$ ${tour.length*40} · ${tour.length} petisco${tour.length>1?'s':''}</span></div>${tour.map((b,i)=>`<div class="stop-item"><div class="stop-num">${i+1}</div><div class="stop-info"><div class="stop-name">${b.n}</div><div class="stop-petisco">${b.p}</div></div><div class="stop-dist">${fmt(dist(b))}</div><button class="stop-rm" onclick="toggleTourByName('${esc(b.n)}')">✕</button></div>`).join('')}<div style="margin-top:14px"><a href="${murl}" target="_blank" class="btn-maps-big">🗺 ABRIR ROTA NO GOOGLE MAPS</a><button class="btn-clr" onclick="clearTour()">✕ LIMPAR ROTEIRO</button></div>`;
 }
 function clearTour(){tour=[];renderList();renderTour();updateMarkers();document.getElementById('tabCnt').textContent='(0)';showToast('🗑 Roteiro limpo!')}
 
@@ -466,13 +468,96 @@ function renderResult(){
   const el=document.getElementById('resultContent'),r=CONFIG.resultado2026;
   const hoje=new Date(),dataRes=new Date(CONFIG.dataResultado);
   const emAndamento=hoje>=new Date('2026-04-10')&&hoje<=new Date('2026-05-10');
-  if(r.status==='aguardando'||hoje<dataRes){
-    el.innerHTML=`<div class="result-banner">${emAndamento?'<div class="result-live"><div class="live-dot"></div> EM ANDAMENTO</div>':''}<div class="result-title">Resultado ${CONFIG.ano}</div><div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição · ${BARS.length} bares</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px;text-align:center"><div style="font-size:3.5rem;margin-bottom:14px">⏳</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.55rem;color:var(--beer);letter-spacing:2px;margin-bottom:10px">${emAndamento?'VOTAÇÃO EM ANDAMENTO':'RESULTADO EM BREVE'}</div><div style="color:var(--cream3);font-size:.83rem;line-height:1.7;max-width:280px">${emAndamento?`O evento vai até ${CONFIG.dataFim}. O resultado sai logo após.`:`O evento começa em ${CONFIG.dataInicio}. Acompanhe aqui!`}</div><div style="margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--beer);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);border-radius:100px;padding:5px 16px">📅 Resultado: ${new Date(CONFIG.dataResultado).toLocaleDateString('pt-BR')}</div><div style="margin-top:20px;color:var(--cream3);font-size:.76rem;line-height:1.6">Monte seu roteiro e visite o máximo de bares! 🍺</div></div>`;return;
+
+  if(r.status==='finalizado'){
+    // Resultado já configurado manualmente
+    renderPodio(el, r.ranking);
+    return;
   }
-  const top3=r.ranking.slice(0,3),resto=r.ranking.slice(3);
-  const podSpot=(item,cls,medal,rank)=>item?`<div class="podium-spot"><div class="podium-medal">${medal}</div><div class="podium-rank ${cls}">${rank}º</div><div class="podium-block ${cls}"></div><div class="podium-name">${item.nome}</div><div class="podium-petisco">${item.petisco}</div></div>`:'';
-  el.innerHTML=`<div class="result-banner"><div class="result-title">🏆 Campeão ${CONFIG.ano}</div><div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição</div></div><div class="podium">${podSpot(top3[1],'silver','🥈',2)}${podSpot(top3[0],'gold','🥇',1)}${podSpot(top3[2],'bronze','🥉',3)}</div><div class="rank-list">${resto.map(item=>`<div class="rank-item"><div class="rank-pos">${item.pos}º</div><div class="rank-info"><div class="rank-name">${item.nome}</div><div class="rank-petisco">${item.petisco}</div></div>${item.pontos?`<div class="rank-pts">⭐ ${item.pontos}</div>`:''}</div>`).join('')}</div>`;
+
+  // Tenta buscar resultado automático do site oficial via proxy
+  if(emAndamento || hoje >= dataRes){
+    el.innerHTML=`<div style="text-align:center;padding:40px 20px;color:var(--cream3)">
+      <div style="font-size:2rem;margin-bottom:12px">🔍</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--beer);letter-spacing:2px">Buscando resultado...</div>
+    </div>`;
+    buscarResultadoAuto().then(ranking=>{
+      if(ranking && ranking.length>0){
+        CONFIG.resultado2026.status='finalizado';
+        CONFIG.resultado2026.ranking=ranking;
+        renderPodio(el, ranking);
+      } else {
+        renderAguardando(el, emAndamento);
+      }
+    }).catch(()=>renderAguardando(el, emAndamento));
+    return;
+  }
+
+  renderAguardando(el, emAndamento);
 }
+
+async function buscarResultadoAuto(){
+  try {
+    // Proxy Vercel que raspa o site do CdB
+    const r = await fetch('/api/resultado', {signal: AbortSignal.timeout(8000)});
+    if(!r.ok) return null;
+    const d = await r.json();
+    return d.ranking || null;
+  } catch(e){
+    return null;
+  }
+}
+
+function renderAguardando(el, emAndamento){
+  const r=CONFIG.resultado2026;
+  el.innerHTML=`<div style="display:flex;flex-direction:column;height:100%">
+    <div class="result-header"><div class="result-title">Resultado ${CONFIG.ano}</div>
+    <div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição · ${BARS.length} bares</div></div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px;text-align:center">
+      <div style="font-size:3.5rem;margin-bottom:14px">⏳</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.55rem;color:var(--beer);letter-spacing:2px;margin-bottom:10px">${emAndamento?'VOTAÇÃO EM ANDAMENTO':'RESULTADO EM BREVE'}</div>
+      <div style="color:var(--cream3);font-size:.83rem;line-height:1.7;max-width:280px">${emAndamento?`O evento vai até ${CONFIG.dataFim}. O resultado sai logo após.`:`O evento começa em ${CONFIG.dataInicio}. Acompanhe aqui!`}</div>
+      <div style="margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--green3);text-transform:uppercase;letter-spacing:2px">🔄 Buscando automaticamente...</div>
+      <button onclick="renderResult()" style="margin-top:18px;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);color:var(--beer);font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:8px 16px;border-radius:8px;cursor:pointer;letter-spacing:1px">↻ VERIFICAR AGORA</button>
+    </div></div>`;
+}
+
+function renderPodio(el, ranking){
+  const r=CONFIG.resultado2026;
+  const p1=ranking[0]||{}, p2=ranking[1]||{}, p3=ranking[2]||{};
+  const outros=ranking.slice(3);
+  el.innerHTML=`<div style="display:flex;flex-direction:column;height:100%;overflow-y:auto">
+    <div class="result-header"><div class="result-title">🏆 Resultado ${CONFIG.ano}</div>
+    <div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição</div></div>
+    <div style="padding:16px 12px;display:flex;flex-direction:column;gap:10px">
+      <div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(245,166,35,.05));border:1px solid rgba(255,215,0,.4);border-radius:14px;padding:16px;text-align:center">
+        <div style="font-size:2.2rem">🥇</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#FFD700;letter-spacing:1px;margin:4px 0">${p1.nome||''}</div>
+        ${p1.petisco?`<div style="font-size:.75rem;color:var(--cream3);font-style:italic">"${p1.petisco}"</div>`:''}
+        ${p1.pontos?`<div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--green3);margin-top:4px">⭐ ${p1.pontos}</div>`:''}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:rgba(192,192,192,.1);border:1px solid rgba(192,192,192,.3);border-radius:12px;padding:12px;text-align:center">
+          <div style="font-size:1.5rem">🥈</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:#C0C0C0;margin:3px 0">${p2.nome||''}</div>
+          ${p2.petisco?`<div style="font-size:.65rem;color:var(--cream3);font-style:italic">"${p2.petisco}"</div>`:''}
+        </div>
+        <div style="background:rgba(205,127,50,.1);border:1px solid rgba(205,127,50,.3);border-radius:12px;padding:12px;text-align:center">
+          <div style="font-size:1.5rem">🥉</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:#CD7F32;margin:3px 0">${p3.nome||''}</div>
+          ${p3.petisco?`<div style="font-size:.65rem;color:var(--cream3);font-style:italic">"${p3.petisco}"</div>`:''}
+        </div>
+      </div>
+      ${outros.length?`<div style="background:rgba(255,255,255,.03);border-radius:10px;padding:10px 14px">
+        ${outros.map(o=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--cream3);min-width:24px">${o.pos}º</span>
+          <span style="font-size:.8rem;color:var(--cream2)">${o.nome}</span>
+          ${o.petisco?`<span style="font-size:.65rem;color:var(--cream3);font-style:italic;margin-left:auto">"${o.petisco}"</span>`:''}
+        </div>`).join('')}
+      </div>`:''}
+    </div></div>`;
+}
+
 
 function renderHist(){
   const body=document.getElementById('histBody');
@@ -480,6 +565,30 @@ function renderHist(){
 }
 function toggleYear(i){const c=document.getElementById('ycont-'+i),ch=document.getElementById('chev-'+i),o=c.classList.contains('open');c.classList.toggle('open',!o);ch.textContent=o?'▼':'▲';ch.className='year-chev'+(o?'':' open')}
 
+function otimizarRota(){
+  if(tour.length<2)return;
+  // Nearest neighbor: começa da posição atual e vai sempre pro mais próximo
+  let restantes=[...tour];
+  const ordenado=[];
+  let atLat=LAT,atLng=LNG;
+  while(restantes.length){
+    let minD=Infinity,minI=0;
+    restantes.forEach((b,i)=>{const d=dist(b);if(d<minD){minD=d;minI=i;}});
+    // recalcula dist a partir do último bar adicionado
+    restantes.forEach((b,i)=>{
+      const R=6371,dLa=(b.lat-atLat)*Math.PI/180,dLn=(b.lng-atLng)*Math.PI/180;
+      const a=Math.sin(dLa/2)**2+Math.cos(atLat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLn/2)**2;
+      const d=R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+      if(d<minD){minD=d;minI=i;}
+    });
+    const b=restantes.splice(minI,1)[0];
+    ordenado.push(b);
+    atLat=b.lat;atLng=b.lng;
+  }
+  tour=ordenado;
+  renderTour();
+  showToast('⚡ Rota otimizada por proximidade!');
+}
 function showTab(id){
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['mapa','lista','tour','result','hist'][i]===id));
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
