@@ -456,9 +456,10 @@ function renderTour(){
   const pane=document.getElementById('tourPane');document.getElementById('tabCnt').textContent=`(${tour.length})`;
   if(!tour.length){pane.innerHTML='<div class="tour-empty"><div class="tour-empty-icon">🍻</div><div class="tour-empty-txt">Seu roteiro está vazio.<br>Vá em <strong>Bares</strong> e adicione os que quer visitar!</div></div>';return}
   const orig=`${LAT},${LNG}`;
-  const dest=encodeURIComponent(tour[tour.length-1].n+', '+tour[tour.length-1].a+', Goiânia, Brasil');
-  const wpts=tour.slice(0,-1).map(s=>encodeURIComponent(s.n+', '+s.a+', Goiânia, Brasil')).join('|');
-  let murl=`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(orig)}&destination=${dest}&travelmode=driving`;
+  const ultimo=tour[tour.length-1];
+  const dest=ultimo.lat+','+ultimo.lng;
+  const wpts=tour.slice(0,-1).map(s=>s.lat+','+s.lng).join('|');
+  let murl=`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(orig)}&destination=${encodeURIComponent(dest)}&travelmode=driving`;
   if(wpts)murl+=`&waypoints=${encodeURIComponent(wpts)}`;
   pane.innerHTML=`<div class="tour-header"><div class="tour-title">🗺 Meu Roteiro</div><div style="display:flex;gap:6px;align-items:center"><button onclick="otimizarRota()" style="background:rgba(82,183,136,.15);border:1px solid rgba(82,183,136,.4);color:#52B788;font-family:JetBrains Mono,monospace;font-size:.6rem;padding:4px 8px;border-radius:6px;cursor:pointer">⚡ Otimizar</button><div class="tour-cnt-badge">${tour.length} paradas</div></div></div><div class="tour-total"><span>Total estimado</span><span>R$ ${tour.length*40} · ${tour.length} petisco${tour.length>1?'s':''}</span></div>${tour.map((b,i)=>`<div class="stop-item"><div class="stop-num">${i+1}</div><div class="stop-info"><div class="stop-name">${b.n}</div><div class="stop-petisco">${b.p}</div></div><div class="stop-dist">${fmt(dist(b))}</div><button class="stop-rm" onclick="toggleTourByName('${esc(b.n)}')">✕</button></div>`).join('')}<div style="margin-top:14px"><a href="${murl}" target="_blank" class="btn-maps-big">🗺 ABRIR ROTA NO GOOGLE MAPS</a><button class="btn-clr" onclick="clearTour()">✕ LIMPAR ROTEIRO</button></div>`;
 }
