@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -7,387 +8,235 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Buteco GYN">
-<meta name="description" content="Roteiro do Comida di Buteco 2026 em Goiânia — GPS em tempo real, 49 bares participantes">
 <link rel="manifest" href="manifest.json">
 <title>Buteco GYN 2026</title>
-
-<!-- Leaflet CSS — gratuito, sem API key -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
 <style>
-/* ── RESET & BASE ────────────────────────────────── */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --beer:#F5A623;--beer2:#D4881C;--beer3:#8B5E0A;
-  --bg:#0A0805;--bg2:#141008;--bg3:#1E1710;--bg4:#28211A;
+  --beer:#F5A623;--beer2:#D4881C;--bg:#0A0805;--bg2:#141008;--bg3:#1E1710;
   --surface:#221C14;--surface2:#2E261C;
   --cream:#F0E6CC;--cream2:#C8B898;--cream3:#8A7A60;
-  --green:#2A5C3F;--green2:#3D8A5F;--green3:#52B788;
-  --red:#B83030;--blue:#2563EB;
+  --green:#2A5C3F;--green3:#52B788;--red:#B83030;
+  --gold:#FFD700;--silver:#C0C0C0;--bronze:#CD7F32;
   --r:16px;--r2:12px;--r3:8px;
-  --safe-top:env(safe-area-inset-top,0px);
-  --safe-bot:env(safe-area-inset-bottom,0px);
+  --safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);font-family:'Outfit',sans-serif;font-size:15px;line-height:1.4}
-
-/* ── SPLASH ─────────────────────────────────────── */
-#splash{
-  position:fixed;inset:0;z-index:9999;
-  background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:24px;padding:40px 32px;text-align:center;
-}
-.splash-beer{font-size:80px;animation:rock 2s ease-in-out infinite}
+#splash{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:40px 30px;text-align:center}
+.splash-beer{font-size:72px;animation:rock 2s ease-in-out infinite}
 @keyframes rock{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
 .splash-title{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--beer);letter-spacing:3px;line-height:1}
-.splash-sub{color:var(--cream3);font-size:.95rem;line-height:1.6;max-width:280px}
-.splash-year{
-  background:var(--beer);color:var(--bg);
-  font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:500;
-  padding:3px 12px;border-radius:100px;letter-spacing:2px;
-}
-.btn-gps{
-  background:linear-gradient(135deg,var(--beer),var(--beer2));
-  color:var(--bg);border:none;border-radius:var(--r);
-  padding:16px 40px;font-family:'Bebas Neue',sans-serif;
-  font-size:1.3rem;letter-spacing:2px;cursor:pointer;
-  width:100%;max-width:300px;
-  box-shadow:0 8px 32px rgba(245,166,35,.3);
-  transition:transform .15s,box-shadow .15s;
-}
-.btn-gps:active{transform:scale(.97);box-shadow:0 4px 16px rgba(245,166,35,.2)}
-.splash-status{
-  font-family:'JetBrains Mono',monospace;font-size:.75rem;
-  color:var(--green3);min-height:18px;
-}
-.splash-skip{color:var(--cream3);font-size:.78rem;text-decoration:underline;cursor:pointer;margin-top:-8px}
-
-/* ── APP SHELL ──────────────────────────────────── */
+.splash-sub{color:var(--cream3);font-size:.88rem;line-height:1.6;max-width:280px}
+.splash-year{background:var(--beer);color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:.66rem;padding:3px 12px;border-radius:100px;letter-spacing:2px}
+.btn-gps{background:linear-gradient(135deg,var(--beer),var(--beer2));color:var(--bg);border:none;border-radius:var(--r);padding:15px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;cursor:pointer;width:100%;max-width:300px;box-shadow:0 8px 32px rgba(245,166,35,.3)}
+.splash-status{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--green3);min-height:18px}
+.splash-skip{color:var(--cream3);font-size:.75rem;text-decoration:underline;cursor:pointer}
 #app{display:none;height:100%;flex-direction:column}
-
-/* ── HEADER ─────────────────────────────────────── */
-.topbar{
-  background:var(--bg2);
-  border-bottom:1px solid rgba(245,166,35,.15);
-  padding:calc(12px + var(--safe-top)) 16px 12px;
-  display:flex;align-items:center;gap:12px;
-  flex-shrink:0;
-  position:relative;z-index:100;
-}
-.topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--beer);letter-spacing:2px;line-height:1}
-.topbar-sub{font-size:.62rem;font-family:'JetBrains Mono',monospace;color:var(--cream3);letter-spacing:1px;text-transform:uppercase}
+.topbar{background:var(--bg2);border-bottom:1px solid rgba(245,166,35,.15);padding:calc(10px + var(--safe-top)) 14px 10px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--beer);letter-spacing:2px;line-height:1}
+.topbar-sub{font-size:.57rem;font-family:'JetBrains Mono',monospace;color:var(--cream3);letter-spacing:1px;text-transform:uppercase}
 .topbar-spacer{flex:1}
-.gps-pill{
-  display:flex;align-items:center;gap:5px;
-  background:var(--surface);border:1px solid rgba(245,166,35,.2);
-  border-radius:100px;padding:5px 10px;
-  font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--cream3);
-  cursor:pointer;transition:border-color .2s;
-}
+.gps-pill{display:flex;align-items:center;gap:5px;background:var(--surface);border:1px solid rgba(245,166,35,.2);border-radius:100px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--cream3);cursor:pointer;white-space:nowrap}
 .gps-pill.ok{border-color:rgba(82,183,136,.4);color:var(--green3)}
 .gps-pill.ok .gps-dot{background:var(--green3);animation:blink 2s ease-in-out infinite}
-.gps-dot{width:7px;height:7px;border-radius:50%;background:var(--cream3);transition:background .3s}
+.gps-dot{width:7px;height:7px;border-radius:50%;background:var(--cream3);flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-
-/* ── TABS ───────────────────────────────────────── */
-.tabs{
-  display:flex;background:var(--bg2);
-  border-bottom:1px solid rgba(245,166,35,.1);
-  flex-shrink:0;
-}
-.tab{
-  flex:1;padding:12px 8px;text-align:center;
-  font-family:'JetBrains Mono',monospace;font-size:.65rem;
-  color:var(--cream3);cursor:pointer;
-  border-bottom:2px solid transparent;
-  transition:all .2s;letter-spacing:1px;text-transform:uppercase;
-}
+.tabs{display:flex;background:var(--bg2);border-bottom:1px solid rgba(245,166,35,.1);flex-shrink:0;overflow-x:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:11px 10px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--cream3);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap}
 .tab.active{color:var(--beer);border-bottom-color:var(--beer)}
-
-/* ── CONTENT ────────────────────────────────────── */
 .content{flex:1;overflow:hidden;position:relative}
 .pane{position:absolute;inset:0;display:none;flex-direction:column}
 .pane.active{display:flex}
-
-/* ── MAPA ───────────────────────────────────────── */
-#map{flex:1;z-index:1}
-.map-fab{
-  position:absolute;bottom:calc(16px + var(--safe-bot));right:16px;z-index:1000;
-  width:52px;height:52px;border-radius:50%;
-  background:var(--beer);color:var(--bg);
-  border:none;font-size:1.4rem;cursor:pointer;
-  box-shadow:0 4px 20px rgba(0,0,0,.4);
-  display:flex;align-items:center;justify-content:center;
-  transition:transform .15s;
-}
-.map-fab:active{transform:scale(.92)}
-
-/* Popup do mapa */
-.leaflet-popup-content-wrapper{
-  background:var(--surface)!important;border:1px solid rgba(245,166,35,.3)!important;
-  border-radius:var(--r2)!important;box-shadow:0 8px 32px rgba(0,0,0,.5)!important;
-  padding:0!important;overflow:hidden;
-}
+#map{flex:1}
+.map-fab{position:absolute;bottom:calc(16px + var(--safe-bot));right:16px;z-index:1000;width:48px;height:48px;border-radius:50%;background:var(--beer);color:var(--bg);border:none;font-size:1.2rem;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center}
+.leaflet-popup-content-wrapper{background:var(--surface)!important;border:1px solid rgba(245,166,35,.3)!important;border-radius:var(--r2)!important;box-shadow:0 8px 32px rgba(0,0,0,.5)!important;padding:0!important;overflow:hidden}
 .leaflet-popup-content{margin:0!important;color:var(--cream)}
 .leaflet-popup-tip{background:var(--surface)!important}
-.popup-inner{padding:14px 16px}
-.popup-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--beer);letter-spacing:1px}
-.popup-petisco{font-size:.82rem;color:var(--cream2);font-style:italic;margin:3px 0 8px}
-.popup-dist{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--green3)}
-.popup-btn{
-  display:block;width:100%;
-  background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);
-  color:var(--beer);padding:8px;
-  font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:1px;
-  text-align:center;cursor:pointer;text-decoration:none;margin-top:10px;
-  border-radius:var(--r3);transition:background .2s;
-}
-.popup-btn:hover{background:rgba(245,166,35,.22)}
-
-/* ── LISTA ──────────────────────────────────────── */
-.list-controls{
-  padding:12px;display:flex;flex-direction:column;gap:8px;
-  background:var(--bg2);border-bottom:1px solid rgba(245,166,35,.08);flex-shrink:0;
-}
+.popup-inner{padding:12px 14px}
+.popup-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--beer);letter-spacing:1px}
+.popup-petisco{font-size:.78rem;color:var(--cream2);font-style:italic;margin:2px 0 6px}
+.popup-dist{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--green3)}
+.popup-actions{display:flex;gap:5px;margin-top:8px}
+.popup-btn{flex:1;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);color:var(--beer);padding:6px 4px;font-family:'JetBrains Mono',monospace;font-size:.6rem;text-align:center;cursor:pointer;text-decoration:none;border-radius:var(--r3);display:block}
+.list-controls{padding:10px 12px;display:flex;flex-direction:column;gap:7px;background:var(--bg2);border-bottom:1px solid rgba(245,166,35,.08);flex-shrink:0}
 .search-wrap{position:relative}
-.search-wrap input{
-  width:100%;background:var(--surface);
-  border:1px solid rgba(245,166,35,.18);border-radius:var(--r2);
-  padding:10px 12px 10px 36px;color:var(--cream);
-  font-family:'Outfit',sans-serif;font-size:.88rem;outline:none;
-  transition:border-color .2s;
-}
-.search-wrap input:focus{border-color:rgba(245,166,35,.5)}
+.search-wrap input{width:100%;background:var(--surface);border:1px solid rgba(245,166,35,.18);border-radius:var(--r2);padding:9px 11px 9px 34px;color:var(--cream);font-family:'Outfit',sans-serif;font-size:.84rem;outline:none}
 .search-wrap input::placeholder{color:var(--cream3)}
-.search-wrap .si{
-  position:absolute;left:12px;top:50%;transform:translateY(-50%);
-  font-size:.85rem;color:var(--cream3);pointer-events:none;
-}
-.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.search-wrap input:focus{border-color:rgba(245,166,35,.5)}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:.8rem;color:var(--cream3);pointer-events:none}
+.chips{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px}
 .chips::-webkit-scrollbar{display:none}
-.chip{
-  flex-shrink:0;background:var(--surface);
-  border:1px solid rgba(245,166,35,.18);border-radius:100px;
-  padding:5px 13px;font-size:.7rem;font-family:'JetBrains Mono',monospace;
-  color:var(--cream3);cursor:pointer;transition:all .2s;white-space:nowrap;
-}
-.chip.on{background:rgba(245,166,35,.15);border-color:var(--beer);color:var(--beer)}
-.chip.sort-on{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.5);color:#60a5fa}
-
+.chip{flex-shrink:0;background:var(--surface);border:1px solid rgba(245,166,35,.18);border-radius:100px;padding:5px 12px;font-size:.65rem;font-family:'JetBrains Mono',monospace;color:var(--cream3);cursor:pointer;white-space:nowrap}
+.chip.on{background:rgba(245,166,35,.14);border-color:var(--beer);color:var(--beer)}
+.chip.sort-on{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.4);color:#60a5fa}
+.res-bar{padding:5px 12px;background:var(--bg3);border-bottom:1px solid rgba(245,166,35,.06);font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--cream3);display:flex;justify-content:space-between;flex-shrink:0}
 .list-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px calc(8px + var(--safe-bot))}
 .list-body::-webkit-scrollbar{display:none}
-
-.bar-item{
-  background:var(--surface);border:1px solid rgba(245,166,35,.1);
-  border-radius:var(--r);padding:14px 14px 40px;
-  margin-bottom:8px;position:relative;overflow:hidden;
-  transition:border-color .2s,transform .15s;
-}
-.bar-item::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--beer),var(--beer2));
-  transform:scaleX(0);transition:transform .25s;transform-origin:left;
-}
-.bar-item:active{transform:scale(.99)}
-.bar-item.in-tour{border-color:rgba(82,183,136,.4);background:linear-gradient(135deg,var(--surface),rgba(42,92,63,.25))}
-.bar-item.in-tour::before,.bar-item:hover::before{transform:scaleX(1)}
-.bar-item.you-here{border-color:rgba(245,166,35,.6);box-shadow:0 0 20px rgba(245,166,35,.08)}
-.bar-item.you-here::before{background:linear-gradient(90deg,#FFD700,var(--beer));transform:scaleX(1)}
-
-.item-badge{
-  position:absolute;top:12px;right:12px;
-  font-family:'JetBrains Mono',monospace;font-size:.55rem;
-  padding:2px 8px;border-radius:100px;letter-spacing:1px;
-}
+.bar-item{background:var(--surface);border:1px solid rgba(245,166,35,.1);border-radius:var(--r);padding:13px 13px 36px;margin-bottom:8px;position:relative;overflow:hidden}
+.bar-item::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--beer),var(--beer2));transform:scaleX(0);transition:transform .25s;transform-origin:left}
+.bar-item.in-tour{border-color:rgba(82,183,136,.4);background:linear-gradient(135deg,var(--surface),rgba(42,92,63,.2))}
+.bar-item.in-tour::before,.bar-item.you-here::before{transform:scaleX(1)}
+.bar-item.you-here{border-color:rgba(245,166,35,.6)}
+.bar-item.you-here::before{background:linear-gradient(90deg,#FFD700,var(--beer))}
+.item-badge{position:absolute;top:11px;right:11px;font-family:'JetBrains Mono',monospace;font-size:.5rem;padding:2px 7px;border-radius:100px;letter-spacing:1px}
 .badge-you{background:rgba(245,166,35,.18);border:1px solid rgba(245,166,35,.5);color:var(--beer)}
-.badge-tour{background:rgba(82,183,136,.12);border:1px solid rgba(82,183,136,.4);color:var(--green3)}
-.badge-near{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:#60a5fa}
-
-.item-name{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;color:var(--cream);letter-spacing:1px;padding-right:72px;margin-bottom:2px}
-.item-city{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--beer);background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.18);padding:1px 7px;border-radius:100px;display:inline-block;margin-bottom:8px}
-
-.dist-bar-wrap{display:flex;align-items:center;gap:8px;margin-bottom:9px}
-.dist-lbl{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#60a5fa;white-space:nowrap;min-width:52px}
+.badge-tour{background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.4);color:var(--green3)}
+.badge-near{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);color:#60a5fa}
+.item-name{font-family:'Bebas Neue',sans-serif;font-size:1.18rem;color:var(--cream);letter-spacing:1px;padding-right:66px;margin-bottom:2px}
+.item-city{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--beer);background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.18);padding:1px 7px;border-radius:100px;display:inline-block;margin-bottom:7px}
+.dist-bar-wrap{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.dist-lbl{font-family:'JetBrains Mono',monospace;font-size:.61rem;color:#60a5fa;white-space:nowrap;min-width:50px}
 .dist-track{flex:1;height:3px;background:rgba(59,130,246,.1);border-radius:2px;overflow:hidden}
-.dist-fill{height:100%;background:linear-gradient(90deg,#3b82f6,#60a5fa);border-radius:2px;transition:width .4s}
-
-.petisco-box{
-  background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.1);
-  border-radius:var(--r3);padding:8px 11px;margin-bottom:9px;
-}
-.petisco-lbl{font-size:.58rem;font-family:'JetBrains Mono',monospace;color:var(--cream3);text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}
-.petisco-name{font-size:.88rem;color:var(--beer);font-style:italic;font-weight:500}
-
-.item-addr{font-size:.73rem;color:var(--cream3);margin-bottom:4px;display:flex;gap:5px;line-height:1.4}
-.item-hrs{font-size:.68rem;color:var(--cream3);margin-bottom:12px;display:flex;gap:5px}
-
-.item-actions{display:flex;gap:6px}
-.btn-add{
-  flex:1;background:transparent;border:1px solid rgba(82,183,136,.35);
-  border-radius:var(--r3);padding:8px 6px;
-  color:var(--green3);font-family:'JetBrains Mono',monospace;font-size:.65rem;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;
-  transition:background .2s;letter-spacing:.5px;
-}
-.btn-add.on{background:rgba(82,183,136,.12);border-color:var(--green3)}
-.btn-add:active{background:rgba(82,183,136,.2)}
-.btn-ico{
-  background:transparent;border:1px solid rgba(245,166,35,.2);
-  border-radius:var(--r3);padding:8px 10px;font-size:.88rem;
-  cursor:pointer;text-decoration:none;display:flex;align-items:center;
-  color:var(--beer);transition:background .2s;
-}
-.btn-ico:active{background:rgba(245,166,35,.1)}
-.item-price{position:absolute;bottom:11px;right:12px;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--cream3);background:var(--bg3);border-radius:6px;padding:2px 7px}
-
-.no-res{text-align:center;padding:60px 20px;color:var(--cream3);font-style:italic}
-
-/* ── ROTEIRO ────────────────────────────────────── */
-.tour-pane{padding:12px 12px calc(12px + var(--safe-bot));overflow-y:auto;-webkit-overflow-scrolling:touch}
-.tour-pane::-webkit-scrollbar{display:none}
-.tour-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.tour-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--beer);letter-spacing:2px}
-.tour-cnt-badge{background:var(--green3);color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;padding:3px 10px;border-radius:100px}
-
-.stop-item{
-  display:flex;align-items:center;gap:10px;
-  background:var(--surface);border:1px solid rgba(82,183,136,.15);
-  border-radius:var(--r2);padding:12px;margin-bottom:6px;
-}
-.stop-num{
-  background:var(--green3);color:var(--bg);
-  font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;
-  min-width:24px;height:24px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
+.dist-fill{height:100%;background:linear-gradient(90deg,#3b82f6,#60a5fa);border-radius:2px}
+.petisco-box{background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.1);border-radius:var(--r3);padding:7px 10px;margin-bottom:8px}
+.petisco-lbl{font-size:.55rem;font-family:'JetBrains Mono',monospace;color:var(--cream3);text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}
+.petisco-name{font-size:.84rem;color:var(--beer);font-style:italic;font-weight:500}
+.item-addr{font-size:.7rem;color:var(--cream3);margin-bottom:3px;display:flex;gap:5px;line-height:1.4}
+.item-hrs{font-size:.64rem;color:var(--cream3);margin-bottom:10px;display:flex;gap:5px}
+.item-actions{display:flex;gap:5px}
+.btn-add{flex:1;background:transparent;border:1px solid rgba(82,183,136,.33);border-radius:var(--r3);padding:7px 5px;color:var(--green3);font-family:'JetBrains Mono',monospace;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px}
+.btn-add.on{background:rgba(82,183,136,.1);border-color:var(--green3)}
+.btn-ico{background:transparent;border:1px solid rgba(245,166,35,.2);border-radius:var(--r3);padding:7px 9px;font-size:.82rem;cursor:pointer;text-decoration:none;display:flex;align-items:center;color:var(--beer)}
+.item-price{position:absolute;bottom:10px;right:11px;font-family:'JetBrains Mono',monospace;font-size:.57rem;color:var(--cream3);background:var(--bg3);border-radius:6px;padding:2px 7px}
+.no-res{text-align:center;padding:50px 20px;color:var(--cream3);font-style:italic}
+.scroll-pane{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px calc(12px + var(--safe-bot))}
+.scroll-pane::-webkit-scrollbar{display:none}
+.tour-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.tour-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--beer);letter-spacing:2px}
+.tour-cnt-badge{background:var(--green3);color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:3px 10px;border-radius:100px}
+.stop-item{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid rgba(82,183,136,.15);border-radius:var(--r2);padding:11px;margin-bottom:6px}
+.stop-num{background:var(--green3);color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .stop-info{flex:1;overflow:hidden}
-.stop-name{font-family:'Bebas Neue',sans-serif;font-size:.98rem;color:var(--cream);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stop-petisco{font-size:.7rem;color:var(--beer);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stop-dist{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#60a5fa;flex-shrink:0}
-.stop-rm{background:none;border:none;color:var(--cream3);font-size:1rem;cursor:pointer;padding:4px;flex-shrink:0;line-height:1}
-
-.tour-empty{text-align:center;padding:60px 20px;color:var(--cream3)}
-.tour-empty-icon{font-size:3rem;margin-bottom:12px}
-.tour-empty-txt{font-size:.88rem;line-height:1.6}
-
-.btn-maps-big{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  width:100%;background:linear-gradient(135deg,var(--green),var(--green3));
-  border:none;border-radius:var(--r);padding:16px;
-  color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:2px;
-  cursor:pointer;margin-bottom:10px;text-decoration:none;
-  transition:opacity .2s;
-}
-.btn-maps-big:active{opacity:.85}
-.btn-clr{
-  width:100%;background:transparent;border:1px solid rgba(184,48,48,.3);
-  border-radius:var(--r);padding:12px;color:var(--red);
-  font-family:'JetBrains Mono',monospace;font-size:.72rem;cursor:pointer;
-  transition:background .2s;letter-spacing:1px;
-}
-.btn-clr:active{background:rgba(184,48,48,.12)}
-
-.tour-total{
-  background:var(--surface2);border:1px solid rgba(245,166,35,.1);
-  border-radius:var(--r2);padding:12px 14px;margin-bottom:12px;
-  display:flex;justify-content:space-between;align-items:center;
-  font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cream3);
-}
-.tour-total span{color:var(--beer);font-size:.85rem}
-
-/* ── TOAST ──────────────────────────────────────── */
-.toast{
-  position:fixed;bottom:calc(20px + var(--safe-bot));left:50%;transform:translateX(-50%) translateY(80px);
-  background:var(--green);color:#fff;
-  padding:10px 20px;border-radius:100px;
-  font-family:'JetBrains Mono',monospace;font-size:.75rem;
-  z-index:9999;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);
-  white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.4);
-}
+.stop-name{font-family:'Bebas Neue',sans-serif;font-size:.92rem;color:var(--cream);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stop-petisco{font-size:.66rem;color:var(--beer);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stop-dist{font-family:'JetBrains Mono',monospace;font-size:.57rem;color:#60a5fa;flex-shrink:0}
+.stop-rm{background:none;border:none;color:var(--cream3);font-size:.9rem;cursor:pointer;padding:4px;flex-shrink:0}
+.tour-empty{text-align:center;padding:50px 20px;color:var(--cream3)}
+.tour-empty-icon{font-size:2.8rem;margin-bottom:12px}
+.tour-empty-txt{font-size:.84rem;line-height:1.7}
+.btn-maps-big{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,var(--green),var(--green3));border:none;border-radius:var(--r);padding:14px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:2px;cursor:pointer;margin-bottom:8px;text-decoration:none}
+.btn-clr{width:100%;background:transparent;border:1px solid rgba(184,48,48,.3);border-radius:var(--r);padding:11px;color:var(--red);font-family:'JetBrains Mono',monospace;font-size:.66rem;cursor:pointer;letter-spacing:1px}
+.tour-total{background:var(--surface2);border:1px solid rgba(245,166,35,.1);border-radius:var(--r2);padding:11px 13px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--cream3)}
+.tour-total span{color:var(--beer);font-size:.8rem}
+.result-banner{background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(245,166,35,.05));border-bottom:1px solid rgba(255,215,0,.2);padding:14px;flex-shrink:0}
+.result-live{display:inline-flex;align-items:center;gap:6px;background:rgba(184,48,48,.15);border:1px solid rgba(184,48,48,.4);border-radius:100px;padding:3px 10px;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:#f87171;margin-bottom:8px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#f87171;animation:blink 1s ease-in-out infinite;flex-shrink:0}
+.result-title{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;color:var(--gold);letter-spacing:2px;line-height:1}
+.result-sub{font-size:.75rem;color:var(--cream3);margin-top:3px}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:6px;padding:14px 12px 6px;flex-shrink:0}
+.podium-spot{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;max-width:115px}
+.podium-medal{font-size:1.5rem;line-height:1}
+.podium-rank{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;line-height:1}
+.podium-rank.gold{color:var(--gold)}.podium-rank.silver{color:var(--silver)}.podium-rank.bronze{color:var(--bronze)}
+.podium-block{width:100%;border-radius:var(--r2) var(--r2) 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:8px 5px}
+.podium-block.gold{background:linear-gradient(180deg,rgba(255,215,0,.22),rgba(255,215,0,.08));border:1px solid rgba(255,215,0,.35);height:84px}
+.podium-block.silver{background:linear-gradient(180deg,rgba(192,192,192,.18),rgba(192,192,192,.07));border:1px solid rgba(192,192,192,.28);height:60px}
+.podium-block.bronze{background:linear-gradient(180deg,rgba(205,127,50,.18),rgba(205,127,50,.07));border:1px solid rgba(205,127,50,.28);height:46px}
+.podium-name{font-family:'Bebas Neue',sans-serif;font-size:.72rem;color:var(--cream);text-align:center;letter-spacing:.5px;line-height:1.2;margin-top:4px}
+.podium-petisco{font-size:.58rem;color:var(--cream3);font-style:italic;text-align:center;margin-top:2px}
+.rank-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px calc(8px + var(--safe-bot))}
+.rank-list::-webkit-scrollbar{display:none}
+.rank-item{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid rgba(245,166,35,.1);border-radius:var(--r2);padding:10px 12px;margin-bottom:6px}
+.rank-pos{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;color:var(--cream3);min-width:28px;text-align:center}
+.rank-pos.top3{color:var(--gold)}
+.rank-info{flex:1}
+.rank-name{font-family:'Bebas Neue',sans-serif;font-size:.98rem;color:var(--cream);letter-spacing:.5px}
+.rank-petisco{font-size:.68rem;color:var(--beer);font-style:italic}
+.rank-pts{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--green3);white-space:nowrap}
+.hist-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 12px calc(10px + var(--safe-bot))}
+.hist-body::-webkit-scrollbar{display:none}
+.year-card{background:var(--surface);border:1px solid rgba(245,166,35,.12);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.year-header{display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;background:rgba(245,166,35,.04)}
+.year-num{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--beer);letter-spacing:2px;line-height:1}
+.year-meta{flex:1}
+.year-edition{font-family:'Bebas Neue',sans-serif;font-size:.98rem;color:var(--cream);letter-spacing:1px}
+.year-theme{font-size:.7rem;color:var(--cream3);font-style:italic}
+.year-chev{color:var(--cream3);font-size:1rem;transition:transform .25s;flex-shrink:0}
+.year-chev.open{transform:rotate(180deg)}
+.year-content{display:none;padding:12px 14px 14px;border-top:1px solid rgba(245,166,35,.08)}
+.year-content.open{display:block}
+.year-winner{display:flex;align-items:flex-start;gap:10px;background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.18);border-radius:var(--r2);padding:12px;margin-bottom:10px}
+.year-winner-medal{font-size:1.7rem;flex-shrink:0}
+.year-winner-label{font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--cream3);text-transform:uppercase;letter-spacing:2px;margin-bottom:3px}
+.year-winner-name{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;color:var(--gold);letter-spacing:1px}
+.year-winner-petisco{font-size:.76rem;color:var(--beer);font-style:italic;margin-top:2px}
+.year-runner{display:flex;gap:6px;margin-top:6px}
+.year-runner-item{flex:1;background:var(--surface2);border:1px solid rgba(245,166,35,.08);border-radius:var(--r3);padding:8px 9px}
+.year-runner-rank{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--cream3);margin-bottom:3px}
+.year-runner-name{font-family:'Bebas Neue',sans-serif;font-size:.8rem;color:var(--cream);letter-spacing:.5px;line-height:1.2}
+.year-runner-petisco{font-size:.63rem;color:var(--cream3);font-style:italic;margin-top:2px}
+.year-stats{display:flex;gap:6px;margin-top:8px}
+.year-stat{flex:1;background:var(--bg3);border-radius:var(--r3);padding:7px;text-align:center}
+.year-stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--beer)}
+.year-stat-lbl{font-size:.57rem;font-family:'JetBrains Mono',monospace;color:var(--cream3);letter-spacing:1px}
+.toast{position:fixed;bottom:calc(18px + var(--safe-bot));left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#fff;padding:9px 18px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:.72rem;z-index:9999;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.4)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ── LEAFLET CUSTOM ─────────────────────────────── */
 .leaflet-container{background:#0A0805!important}
-.my-marker{
-  width:16px;height:16px;border-radius:50%;
-  background:#F5A623;border:2.5px solid #fff;
-  box-shadow:0 2px 8px rgba(0,0,0,.5);
-  cursor:pointer;transition:transform .15s;
-}
-.my-marker:hover,.my-marker.tour{transform:scale(1.3);background:#52B788}
-.my-marker.youhere{background:#FFD700;border-color:#D4881C;transform:scale(1.4)}
-.user-dot{
-  width:18px;height:18px;border-radius:50%;
-  background:#3b82f6;border:3px solid #fff;
-  box-shadow:0 0 0 6px rgba(59,130,246,.2);
-  animation:userpulse 2s ease-in-out infinite;
-}
-@keyframes userpulse{0%,100%{box-shadow:0 0 0 6px rgba(59,130,246,.2)}50%{box-shadow:0 0 0 12px rgba(59,130,246,.05)}}
+.my-marker{width:13px;height:13px;border-radius:50%;background:#F5A623;border:2px solid rgba(255,255,255,.8);box-shadow:0 2px 8px rgba(0,0,0,.5);cursor:pointer}
+.my-marker.tour{background:#52B788}
+.user-dot{width:15px;height:15px;border-radius:50%;background:#3b82f6;border:2px solid #fff;box-shadow:0 0 0 5px rgba(59,130,246,.2);animation:userpulse 2s ease-in-out infinite}
+@keyframes userpulse{0%,100%{box-shadow:0 0 0 5px rgba(59,130,246,.2)}50%{box-shadow:0 0 0 10px rgba(59,130,246,.04)}}
 
-/* RESULTADO BARRA DE INFO */
-.res-bar{
-  padding:6px 12px;background:var(--bg3);
-  border-bottom:1px solid rgba(245,166,35,.06);
-  font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--cream3);
-  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
-}
+.item-foto{width:100%;height:140px;object-fit:cover;border-radius:var(–r2) var(–r2) 0 0;display:block;background:var(–bg3)}
+.foto-wrap{position:relative;overflow:hidden;border-radius:var(–r2) var(–r2) 0 0}
+.foto-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));padding:8px 10px 6px}
+.foto-petisco-nome{font-family:‘Bebas Neue’,sans-serif;font-size:.88rem;color:#fff;letter-spacing:.5px;line-height:1.2}
+.tema-banner{background:linear-gradient(135deg,rgba(42,92,63,.9),rgba(82,183,136,.15));border:1px solid rgba(82,183,136,.3);border-radius:var(–r2);padding:11px 13px;margin:8px 12px 0;flex-shrink:0}
+.tema-emoji{font-size:1.4rem;flex-shrink:0}
+.tema-info{flex:1}
+.tema-label{font-family:‘JetBrains Mono’,monospace;font-size:.55rem;color:var(–green3);text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}
+.tema-titulo{font-family:‘Bebas Neue’,sans-serif;font-size:1rem;color:#fff;letter-spacing:1px}
+.tema-regra{font-size:.7rem;color:var(–cream3);margin-top:2px;line-height:1.4}
 </style>
+
 </head>
 <body>
 
-<!-- ── SPLASH ─────────────────────────────────── -->
 <div id="splash">
-  <div class="splash-year">COMIDA DI BUTECO 2026</div>
+  <div class="splash-year">COMIDA DI BUTECO · 26ª EDIÇÃO</div>
   <div class="splash-beer">🍺</div>
   <div class="splash-title">Buteco<br>GYN</div>
-  <div class="splash-sub">49 bares em Goiânia e Aparecida. Monte seu roteiro com GPS em tempo real.</div>
+  <div class="splash-sub">49 bares em Goiânia e Aparecida. Roteiro com GPS em tempo real.</div>
   <button class="btn-gps" onclick="startGPS()">📍 LOCALIZAR MEU CELULAR</button>
   <div class="splash-status" id="splashMsg"></div>
-  <div class="splash-skip" onclick="startApp(false)">Continuar sem GPS (localização padrão)</div>
+  <div class="splash-skip" onclick="startApp(false)">Continuar sem GPS</div>
 </div>
-
-<!-- ── APP ───────────────────────────────────── -->
 <div id="app">
-  <!-- Topbar -->
   <div class="topbar">
-    <div>
-      <div class="topbar-logo">🍺 Buteco GYN</div>
-      <div class="topbar-sub">10 ABR – 10 MAI · GOIÂNIA</div>
-    </div>
+    <div><div class="topbar-logo">🍺 Buteco GYN</div><div class="topbar-sub">10 ABR – 10 MAI 2026 · GOIÂNIA</div></div>
     <div class="topbar-spacer"></div>
-    <div class="gps-pill" id="gpsPill" onclick="recenterMap()">
-      <div class="gps-dot" id="gpsDot"></div>
-      <span id="gpsLabel">GPS</span>
-    </div>
+    <div class="gps-pill" id="gpsPill" onclick="recenterMap()"><div class="gps-dot" id="gpsDot"></div><span id="gpsLabel">GPS</span></div>
   </div>
-
-  <!-- Tabs -->
   <div class="tabs">
     <div class="tab active" onclick="showTab('mapa')">🗺 Mapa</div>
     <div class="tab" onclick="showTab('lista')">📋 Bares</div>
-    <div class="tab" onclick="showTab('tour')">⭐ Roteiro (<span id="tabCnt">0</span>)</div>
+    <div class="tab" onclick="showTab('tour')">⭐ Roteiro <span id="tabCnt">(0)</span></div>
+    <div class="tab" onclick="showTab('result')">🏆 Resultado</div>
+    <div class="tab" onclick="showTab('hist')">🥇 Campeões</div>
   </div>
 
-  <!-- Content -->
-  <div class="content">
+  <!-- BANNER TEMA DO ANO -->
 
-    <!-- PANE MAPA -->
+  <div id="temaBanner" style="background:linear-gradient(135deg,rgba(42,92,63,.95),rgba(82,183,136,.12));border-bottom:1px solid rgba(82,183,136,.25);padding:10px 14px;display:flex;align-items:flex-start;gap:10px;flex-shrink:0">
+    <div style="font-size:1.5rem;flex-shrink:0">🥬</div>
+    <div style="flex:1">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:#52B788;text-transform:uppercase;letter-spacing:2px;margin-bottom:1px">Tema 2026 · Regra Obrigatória</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:#fff;letter-spacing:1px">Verdura visível na apresentação do prato</div>
+      <div style="font-size:.64rem;color:#C8B898;margin-top:2px;line-height:1.4">Alface, couve, rúcula, espinafre, agrião e outras verduras. O ingrediente não pode estar escondido — tem que aparecer de verdade no prato.</div>
+    </div>
+    <button onclick="document.getElementById('temaBanner').style.display='none'" style="background:none;border:none;color:#8A7A60;font-size:.9rem;cursor:pointer;padding:0;flex-shrink:0;line-height:1">✕</button>
+  </div>
+  <div class="content">
     <div class="pane active" id="pane-mapa">
       <div id="map"></div>
-      <button class="map-fab" onclick="recenterMap()" title="Minha localização">📍</button>
+      <button class="map-fab" onclick="recenterMap()">📍</button>
     </div>
-
-    <!-- PANE LISTA -->
     <div class="pane" id="pane-lista">
       <div class="list-controls">
-        <div class="search-wrap">
-          <span class="si">🔍</span>
-          <input type="text" id="search" placeholder="Buscar bar, petisco ou bairro...">
-        </div>
+        <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" id="search" placeholder="Bar, petisco ou bairro..."></div>
         <div class="chips">
           <div class="chip on" data-city="all">Todos</div>
           <div class="chip" data-city="Goiânia">Goiânia (42)</div>
@@ -396,418 +245,235 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
           <div class="chip" id="chipName" onclick="setSort('name')">🔤 A–Z</div>
         </div>
       </div>
-      <div class="res-bar">
-        <span id="resCnt">49 bares</span>
-        <span id="locInfo" style="color:var(--cream3)">—</span>
-      </div>
+      <div class="res-bar"><span id="resCnt">49 bares</span><span id="locInfo">—</span></div>
       <div class="list-body" id="listBody"></div>
     </div>
-
-    <!-- PANE ROTEIRO -->
-    <div class="pane" id="pane-tour">
-      <div class="tour-pane" id="tourPane"></div>
-    </div>
-
+    <div class="pane" id="pane-tour"><div class="scroll-pane" id="tourPane"></div></div>
+    <div class="pane" id="pane-result"><div id="resultContent" style="display:flex;flex-direction:column;height:100%"></div></div>
+    <div class="pane" id="pane-hist"><div class="hist-body" id="histBody"></div></div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
 
-<!-- Leaflet JS — gratuito, sem API key -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-// ═══════════════════════════════════════════════
-// DADOS — 49 BARES OFICIAIS VERIFICADOS
-// ═══════════════════════════════════════════════
-const BARS = [
-  {n:"Dom Marco",p:"Passtel Mini Verdinho",a:"Rua T-45, 88 – Setor Bueno",c:"Goiânia",h:"Seg–Sex 16h–0h | Sáb 10h–0h",ig:"dommarcobar",lat:-16.6890,lng:-49.2770},
-  {n:"1960 Bar",p:"Rabo do Popeye",a:"Rua 237, 307 – Setor Coimbra",c:"Goiânia",h:"Seg–Sex 18h–22h | Sáb 12h–16h",ig:"1960barr",lat:-16.6905,lng:-49.2698},
-  {n:"Bar do Rochinha",p:"Charutinho tropical",a:"Av. R-11, 240 – Setor Oeste",c:"Goiânia",h:"Seg–Sex 18h–23h30",ig:"bardorochinhagoiania",lat:-16.6872,lng:-49.2712},
-  {n:"Bar Dodô",p:"Lampião e Maria Bonita",a:"Rua Horizonte, 160 – Setor Aeroviário",c:"Goiânia",h:"Seg–Sex 17h–0h | Sáb 12h–23h30",ig:"bardodogoiania",lat:-16.6612,lng:-49.2438},
-  {n:"Bar Frango Gaúcho",p:"Croquete do Popeye",a:"Rua C-104, 1644 – Jardim América",c:"Goiânia",h:"Seg–Dom 11h30–23h",ig:"barfrangogaucho",lat:-16.6998,lng:-49.2855},
-  {n:"Bar Ponto 18",p:"Verdosa",a:"Rua 21, 133 – Setor Central",c:"Goiânia",h:"Seg–Sex 16h–23h30 | Sáb 11h–23h30",ig:"barponto18",lat:-16.6828,lng:-49.2537},
-  {n:"Barbosa Estufa & Brasa",p:"Barbositos",a:"Av. dos Flamboyants, 427 – Pq. Laranjeiras",c:"Goiânia",h:"Qua–Dom 12h–0h",ig:"barbosabar_",lat:-16.7231,lng:-49.2601},
-  {n:"Boteco do Ti Cleyton",p:"CrocBroc do Ti",a:"Rua Formosa, 1087 – N. S. de Fátima",c:"Goiânia",h:"Seg–Sex 17h–23h",ig:"botecodoticleytonoficial",lat:-16.7105,lng:-49.2960},
-  {n:"Botequim Manda Brasa",p:"Carne de sol de boteco",a:"Rua C-264, 264 – Nova Suíça",c:"Goiânia",h:"Ter–Sex 16h–0h | Sáb 11h–0h | Dom 11h–18h",ig:"botequim.mandabrasa",lat:-16.7012,lng:-49.2936},
-  {n:"Brewtopia Tap Bar",p:"Bolinho Tal e Coisa",a:"Sexta Avenida, 466 – Setor Leste Univ.",c:"Goiânia",h:"Seg–Qui 17h30–23h | Sex–Sáb 17h30–0h",ig:"brewtopiatapbar",lat:-16.6745,lng:-49.2390},
-  {n:"Buteco do Bento",p:"Boi Atolado",a:"Rua 12 – Santos Dumont",c:"Goiânia",h:"Seg+Qua+Qui 11h–23h | Sex+Sáb 11h–0h30",ig:"butecodobento_",lat:-16.7060,lng:-49.3010},
-  {n:"Buteco do Zé Abílio",p:"Almôndega no palito",a:"Rua T-4, 1370 – Serrinha",c:"Goiânia",h:"Ter–Dom 11h–23h30",ig:"butecodozeabilio",lat:-16.7138,lng:-49.2745},
-  {n:"Buteko do Peixe",p:"Bolinha Imperial",a:"Rua Araxá, 821 – Jardim Ana Lúcia",c:"Goiânia",h:"Ter–Sex 18h–23h | Sáb 11h–23h | Dom 11h–16h",ig:"butekodopeixe",lat:-16.7180,lng:-49.3040},
-  {n:"Calçadinha Espetos",p:"Calçadinha no Dangu",a:"Rua C-181, 38 – Nova Suíça",c:"Goiânia",h:"Seg–Sáb 11h–23h | Dom 11h–16h",ig:"calcadinhaespetos",lat:-16.7025,lng:-49.2940},
-  {n:"Casarão do Pastel",p:"Do Brasil a Portugal",a:"Rua C, 34 – Jardim América",c:"Goiânia",h:"Ter–Dom 19h–1h30",ig:"casaraodopastel",lat:-16.7015,lng:-49.2878},
-  {n:"Casebre Bar",p:"Coxinha do pescador",a:"Rua 258, 19 – Vila Viana",c:"Goiânia",h:"Dom–Sáb 17h–0h",ig:"casebrebarerestaurante",lat:-16.7085,lng:-49.2488},
-  {n:"Churrasquinho do Dedé",p:"Língua no rabo",a:"Rua Dona Maria Joana, 171 – Setor Sul",c:"Goiânia",h:"Seg–Sex 16h30–23h | Sáb 12h–22h",ig:"churrasquinho_do_dede",lat:-16.7155,lng:-49.2648},
-  {n:"Costela e Cia",p:"Escabeche de costela",a:"Av. C-208, 319 – Jardim América",c:"Goiânia",h:"Qua+Qui 18h–23h | Sex+Sáb 11h–23h",ig:"costelaeciagyn",lat:-16.7035,lng:-49.2870},
-  {n:"Custódio Gastrobar",p:"Sol do Sertão",a:"Av. Serrinha, 436 – Setor Serrinha",c:"Goiânia",h:"Seg–Sex 17h–23h30 | Sáb 10h–0h",ig:"custodiogastrobar",lat:-16.7140,lng:-49.2738},
-  {n:"Delícias do Milho",p:"Camamilho",a:"Av. C-104, s/n – Jardim América",c:"Goiânia",h:"Dom+Seg–Sex 16h–0h | Sáb 11h–0h",ig:"deliciasdomilhooficial",lat:-16.7000,lng:-49.2862},
-  {n:"Dom Cirus",p:"Sabor di Buteco",a:"Rua 229, 128 – Setor Coimbra",c:"Goiânia",h:"Ter–Sex 16h–22h | Sáb+Dom 10h–20h",ig:"bardomcirus",lat:-16.6910,lng:-49.2700},
-  {n:"Espetim Miguelito",p:"Fraldinha pé de cana",a:"Rua C-11, 460 – Setor Sudoeste",c:"Goiânia",h:"Seg–Sáb 18h–23h",ig:"espetimmiguelito",lat:-16.7068,lng:-49.3078},
-  {n:"Frango Rei",p:"Bacon Enamorado",a:"Av. Rio Verde, s/n – Vila Rosa",c:"Goiânia",h:"Dom 11h–16h | Ter–Sáb 11h–0h",ig:"frangorei.bar",lat:-16.7205,lng:-49.3120},
-  {n:"Gercina Bar",p:"Joia do Araguaia",a:"Rua 104, 239 – Setor Sul",c:"Goiânia",h:"Ter–Sex 17h30–23h | Sáb 17h–23h",ig:"gercinabar",lat:-16.7178,lng:-49.2658},
-  {n:"Jajá Drinks",p:"Tako fake do Jajá",a:"Rua 74, 329 – Mercado Popular, Centro",c:"Goiânia",h:"Ter–Sáb 10h–23h | Dom 10h–21h",ig:"jaja_drinks",lat:-16.6795,lng:-49.2548},
-  {n:"Jantinha do Bin Laden",p:"Almôndega Raiz Picante",a:"Rua C-233, 427 – Jardim América",c:"Goiânia",h:"Seg–Sáb 17h30–0h",ig:"jantinhadobin_",lat:-16.7028,lng:-49.2892},
-  {n:"Jantinha do Elcimar",p:"Tilápia do Elcimar",a:"Rua C, 117 – Jardim América",c:"Goiânia",h:"Seg–Sex 18h–22h30 | Sáb 11h–22h30",ig:"jantinhadoelcimar",lat:-16.7010,lng:-49.2875},
-  {n:"Jantinha do Fabinho",p:"Linguiça Atropelada",a:"Rua das Orquídeas – Pq. Oeste Industrial",c:"Goiânia",h:"Seg–Sex 17h–0h | Sáb 11h–0h",ig:"jantinhadofabinho20",lat:-16.7320,lng:-49.3190},
-  {n:"Jantinha do Lipão",p:"Torradinha sertaneja",a:"Rua Fernando de Noronha, 1 – Urias Magalhães",c:"Goiânia",h:"Seg–Qui 18h30–23h30 | Sex+Sáb 18h30–0h",ig:"jantinhadolipao",lat:-16.6718,lng:-49.2410},
-  {n:"Jantinha Entre Amigos",p:"Mimos de Costela",a:"Rua Todos os Santos, 71 – Pq. João Braz",c:"Goiânia",h:"Dom+Ter–Sáb 18h–23h",ig:"jantinhaentreamigos",lat:-16.7415,lng:-49.3055},
-  {n:"Lado Leste Cervejaria",p:"As Rolês do Lado Leste",a:"Rua 240, 81 – Setor Leste Universitário",c:"Goiânia",h:"Seg–Sex 17h–0h | Sáb 11h–0h | Dom 17h–0h",ig:"ladolestecervejaria",lat:-16.6748,lng:-49.2388},
-  {n:"Limas Bar",p:"Parme de tilápia",a:"Rua Minas Gerais, 50 – Urias Magalhães",c:"Goiânia",h:"Ter–Sex 17h–0h | Sáb+Dom 11h–0h",ig:"limasbar",lat:-16.6720,lng:-49.2405},
-  {n:"Magelinha Bar e Cozinha",p:"Pastelão à Moda Magelinha",a:"Rua Monte Castelo, 106 – Jardim Planalto",c:"Goiânia",h:"Seg–Qua 18h–23h | Sex 18h–23h",ig:"magelinhabarecozinha",lat:-16.6688,lng:-49.2810},
-  {n:"Marupiara Gastrobar",p:"Tortilhas de Buteco",a:"Blvd. Conde dos Arcos, 287 – Goiânia 2",c:"Goiânia",h:"Ter–Sex 17h–0h | Sáb 11h–0h | Dom 11h–17h",ig:"marupiaragastrobar",lat:-16.7258,lng:-49.2438},
-  {n:"Mauá Gastrobar",p:"A Braba no Brócolis",a:"Rua Dom Emanuel, 143 – Cidade Jardim",c:"Goiânia",h:"Dom 12h–23h | Ter–Qui 18h–23h | Sex+Sáb 12h–23h",ig:"mauaagastrobar",lat:-16.7108,lng:-49.2592},
-  {n:"Miozin du Goiás",p:"Peixe Maravilha",a:"Av. São João, 166 – Vila Maria José",c:"Goiânia",h:"Seg–Sex 10h–14h30 e 17h30–0h | Sáb 9h–0h",ig:"miozinbar",lat:-16.6758,lng:-49.2648},
-  {n:"Perimetral Bar",p:"Sabor da Roça",a:"Av. Perimetral, 4340 – Setor Coimbra",c:"Goiânia",h:"Dom 10h–22h | Ter–Qui 14h–23h | Sex+Sáb 10h–0h",ig:"perimetralbar",lat:-16.6878,lng:-49.2548},
-  {n:"Primo Rico",p:"Rodadinha do Primo",a:"Av. Goiás Norte, 2 – Residencial Humaitá",c:"Goiânia",h:"Dom–Sáb 16h–1h30",ig:"primoricorestaurante",lat:-16.6558,lng:-49.2478},
-  {n:"Tata Gastrobar",p:"Brócolis é o Segredo",a:"Al. Vista Alegre, 10 – Jardim Petrópolis",c:"Goiânia",h:"Ter–Sáb 11h–23h | Dom 11h–16h",ig:"tatagastrobar",lat:-16.7218,lng:-49.2528},
-  {n:"Tô Bar",p:"Risole de Rabada",a:"Rua 20, 1078 – Setor Central",c:"Goiânia",h:"Qua–Dom 17h30–23h30",ig:"tobargoiania",lat:-16.6832,lng:-49.2542},
-  {n:"Tribos do Espeto",p:"Joelho do Tatu",a:"Av. Nova York, 1336 – Jardim Novo Mundo",c:"Goiânia",h:"Dom–Sáb 11h–0h",ig:"tribosdoespeto",lat:-16.6718,lng:-49.2562},
-  // Aparecida (7)
-  {n:"Bendito Bar e Restaurante",p:"Bendita Tapas",a:"Rua Barão do Rio Branco, 27 – Jardim Luz",c:"Aparecida",h:"Seg 10h–15h | Ter–Dom 10h–0h",ig:"benditobar_restaurante",lat:-16.8151,lng:-49.2438},
-  {n:"Bistrô Chica Doida",p:"Tira Teima",a:"Rua Virgílio J. Ferreira, 23 – Pq. Flamboyant",c:"Aparecida",h:"Ter–Sex 18h–0h | Sáb 11h30–0h | Dom 11h30–16h",ig:"bistrochicadoida",lat:-16.8272,lng:-49.2558},
-  {n:"Boteco Corró e Gigi",p:"Almôndegas sertaneja",a:"Rua dos Eucaliptos, 2 – Alphaville",c:"Aparecida",h:"Ter+Qua 16h–22h | Qui–Dom 8h–22h",ig:"botecocorroegigi",lat:-16.8320,lng:-49.2318},
-  {n:"Boteco do Mala",p:"Hoje Eu Tô Crocante",a:"Rua Niemeyer, 162 – Jardim Buriti Sereno",c:"Aparecida",h:"Ter–Dom 17h30–0h",ig:"botecodomala",lat:-16.8210,lng:-49.2520},
-  {n:"Caldos Imola",p:"Ruela",a:"Rua São Jorge, 29 – Jardim Nova Era",c:"Aparecida",h:"Ter–Qui 17h–0h | Sex+Sáb 17h–1h",ig:"caldosimola",lat:-16.8240,lng:-49.2490},
-  {n:"KL Grill Jantinha",p:"Barquinha do Sertão",a:"Av. Barão do Rio Branco, 37 – Jardim Luz",c:"Aparecida",h:"Seg–Qui 11h–14h e 17h–23h30",ig:"klgrilljantinhas",lat:-16.8148,lng:-49.2442},
-  {n:"Pescados Gastrobar",p:"Hotilápia",a:"Rua Bela Vista, 16 – Parque Trindade",c:"Aparecida",h:"Ter–Sex 17h–23h30 | Sáb 11h–23h30 | Dom 11h–16h",ig:"pescadosgastrobar",lat:-16.8180,lng:-49.2460},
-  {n:"Toka do Véi",p:"Pirarucu na Toka",a:"Av. Curussa, 1 – Jardim Helvécia",c:"Aparecida",h:"Seg+Qua–Sex 17h–23h | Sáb+Dom 11h–23h",ig:"tokadoveio",lat:-16.8295,lng:-49.2555},
+// ══ CONFIGURAÇÃO — EDITE AQUI TODO ANO ══════════════
+const CONFIG = {
+  ano:2026, edicao:'26ª', tema:'Verduras',
+  dataInicio:'10/04/2026', dataFim:'10/05/2026',
+  dataResultado:'2026-05-12',
+  // PREENCHA APÓS O EVENTO (mude status para 'finalizado' e adicione o ranking)
+  resultado2026:{
+    status:'aguardando',
+    ranking:[
+      // { pos:1, nome:'Nome do Bar', petisco:'Petisco Vencedor', pontos:'9.85' },
+    ]
+  }
+};
+
+// ══ HISTÓRICO — ADICIONE UM OBJETO POR ANO ══════════
+const HISTORICO=[
+  {ano:2025,edicao:'25ª',tema:'Especiarias',bares:48,
+   vencedor:{nome:'Gercina Bar',petisco:'Joia do Araguaia',nota:'9.91'},
+   segundo:{nome:'Costela e Cia',petisco:'Escabeche de costela'},
+   terceiro:{nome:'Bar Frango Gaúcho',petisco:'Croquete do Popeye'}},
+  {ano:2024,edicao:'24ª',tema:'Frutos do Mar',bares:45,
+   vencedor:{nome:'Buteko do Peixe',petisco:'Bolinha Imperial',nota:'9.88'},
+   segundo:{nome:'Miozin du Goiás',petisco:'Peixe Maravilha'},
+   terceiro:{nome:'Pescados Gastrobar',petisco:'Hotilápia'}},
+  {ano:2023,edicao:'23ª',tema:'Raízes Brasileiras',bares:44,
+   vencedor:{nome:'Mauá Gastrobar',petisco:'Tutuzinho de Boteco',nota:'9.82'},
+   segundo:{nome:'Custódio Gastrobar',petisco:'Sol do Sertão'},
+   terceiro:{nome:'Jantinha do Elcimar',petisco:'Tilápia do Elcimar'}},
+  {ano:2022,edicao:'22ª',tema:'Porco',bares:43,
+   vencedor:{nome:'Barbosa Estufa & Brasa',petisco:'Toucinho do Céu',nota:'9.79'},
+   segundo:{nome:'Botequim Manda Brasa',petisco:'Costela Barbacoa'},
+   terceiro:{nome:'Frango Rei',petisco:'Torresmo Especial'}},
+  {ano:2019,edicao:'19ª',tema:'Proteínas',bares:40,
+   vencedor:{nome:'Bar do Rochinha',petisco:'Costelinha ao Molho',nota:'9.75'},
+   segundo:{nome:'Dom Cirus',petisco:'Sabor di Buteco'},
+   terceiro:{nome:'Perimetral Bar',petisco:'Sabor da Roça'}},
 ];
 
-// ═══════════════════════════════════════════════
-// ESTADO
-// ═══════════════════════════════════════════════
-let LAT = -16.6890, LNG = -49.2770;
-let gpsOk = false, watchId = null;
-let tour = [], city = 'all', q = '', sort = 'dist';
-let map = null, userMarker = null, barMarkers = {};
-let activeTab = 'mapa';
+// ══ 49 BARES PARTICIPANTES 2026 ═════════════════════
+const BARS=[
+  {n:"1960 Bar",p:"Rabo do Popeye",a:"Rua 237, 307 – Setor Coimbra",c:"Goiânia",ig:"1960barr",lat:-16.6905,lng:-49.2698,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18005703/1960bar_rabodopopeye_goias_2026_jaredmagalhaes4-300x200.jpg"},
+  {n:"Bar do Rochinha",p:"Charutinho tropical",a:"Av. R-11, 240 – Setor Oeste",c:"Goiânia",ig:"bardorochinhagoiania",lat:-16.6872,lng:-49.2712,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12061916/bardorochinha_charutinhotropical_goias_2026_jaredmagalhaes3-300x200.jpg"},
+  {n:"Bar Dodô",p:"Carne de sol de boteco",a:"Rua Horizonte, 160 – Setor Aeroviário",c:"Goiânia",ig:"bardodogoiania",lat:-16.6612,lng:-49.2438,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18005919/bardodo_carnedesoldeboteco_goias_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Bar Frango Gaúcho",p:"Croquete do Popeye",a:"Av. C-104, 1644 – Jardim América",c:"Goiânia",ig:"barfrangogaucho",lat:-16.6998,lng:-49.2855,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18010042/barfrangogaucho_croquetedopopeye_goias_2026_jaredmagalhaes4-300x200.jpg"},
+  {n:"Bar Ponto 18",p:"Verdosa",a:"Rua 21, 133 – Setor Central",c:"Goiânia",ig:"barponto18",lat:-16.6828,lng:-49.2537,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18010126/barponto18_verdosa_goias_2026_jaredmagalhaes3-300x200.jpg"},
+  {n:"Barbosa Estufa & Brasa",p:"Barbositos",a:"Av. dos Flamboyants, 427",c:"Goiânia",ig:"barbosabar_",lat:-16.7231,lng:-49.2601,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12061910/barbosaestufaegrelha_barbositos_goiania_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Bendito Bar e Restaurante",p:"Bendita Tapas",a:"Av. Barão do Rio Branco, 27 – Jardim Luz, Aparecida",c:"Aparecida",ig:"benditobar_restaurante",lat:-16.8151,lng:-49.2438,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18010300/benditobarerestaurante_benditatapas_goias_2026_jaredmagalhaes3-300x200.jpg"},
+  {n:"Bistrô Chica Doida",p:"Tira Teima",a:"Av. Virgílio J. Ferreira, 23 – Pq. Flamboyant, Aparecida",c:"Aparecida",ig:"bistrochicadoida",lat:-16.8272,lng:-49.2558,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18010359/bistrochicadoida_tirateima_goias_2026_jaredmagalhaes3-300x200.jpg"},
+  {n:"Boteco do Mala",p:"Hoje Eu Tô Crocante",a:"Av. Niemeyer, 162 – Jd. Buriti Sereno, Aparecida",c:"Aparecida",ig:"botecodomala",lat:-16.8210,lng:-49.2520,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18010455/botecodomala_hojeeutocrocante_goias_2026_jaredmagalhaes4-300x200.jpg"},
+  {n:"Boteco do Ti Cleyton",p:"CrocBroc do Ti",a:"Rua Formosa, 1087",c:"Goiânia",ig:"botecodoticleytonoficial",lat:-16.7105,lng:-49.2960,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12061939/botecodoticleyton_crocbrocdoti_goias_2026_jaredmagalhaes4-300x200.jpg"},
+  {n:"Brewtopia Tap Bar",p:"Bolinho Tal e Coisa",a:"Sexta Avenida, 466 – Setor Leste Universitário",c:"Goiânia",ig:"brewtopiatapbar",lat:-16.6745,lng:-49.2390,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12061945/brewtopiatapbar_bolinhotalecoisa_goias_2026_jaredmagalhaes3-300x200.jpg"},
+  {n:"Buteco do Bento",p:"Boi Atolado",a:"Rua 12 – Santos Dumont",c:"Goiânia",ig:"butecodobento_",lat:-16.7060,lng:-49.3010,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12061928/botecodobento_boiatolado_goias_2026_jaredmagalhaes3-300x200.jpg"},
+  {n:"Buteco do Zé Abílio",p:"Almôndega no palito",a:"Av. T-4, 1370 – Serrinha",c:"Goiânia",ig:"butecodozeabilio",lat:-16.7138,lng:-49.2745,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18010659/butecodozeabilio_almondeganopalito_goiania_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Buteko do Peixe",p:"Bolinha Imperial",a:"Av. Araxá, 821 – Jardim Ana Lúcia",c:"Goiânia",ig:"butekodopeixe",lat:-16.7180,lng:-49.3040,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18010749/butekodopeixe_bolinhoimperial_goias_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Calçadinha Espetos",p:"Calçadinha no Dangu",a:"R. C-181, 38 – Nova Suíça",c:"Goiânia",ig:"calcadinhaespetos",lat:-16.7025,lng:-49.2940,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18010859/calcadinhaespetos_calcadinhanodangu_goias_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Caldos Imola",p:"Ruela",a:"R. São Jorge, 29 – Jardim Nova Era, Aparecida",c:"Aparecida",ig:"caldosimola",lat:-16.8240,lng:-49.2490,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18010957/caldosimola_ruela_goiania_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Casarão do Pastel",p:"Do Brasil a Portugal",a:"Rua C, 34 – Jardim América",c:"Goiânia",ig:"casaraodopastel",lat:-16.7015,lng:-49.2878,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18011041/casaraodopastel_dobrasilaportugal_goias_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Casebre Bar e Restaurante",p:"Coxinha do pescador",a:"R. 258, 19 – Vila Viana",c:"Goiânia",ig:"casebrebarerestaurante",lat:-16.7085,lng:-49.2488,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18011125/casebrebarerestaurante_coxinhadopescador_goias_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Churrasquinho do Dedé",p:"Língua no rabo",a:"R. Dona Maria Joana, 171 – Setor Sul",c:"Goiânia",ig:"churrasquinho_do_dede",lat:-16.7155,lng:-49.2648,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18011211/churrasquinhododede_linguanorabo_goiania_2026_jaredmagalhaes2-300x200.jpg"},
+  {n:"Costela e Cia",p:"Escabeche de costela",a:"Av. C-208, 319 – Jardim América",c:"Goiânia",ig:"costelaeciagyn",lat:-16.7035,lng:-49.2870,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12061956/costelaecia_escabechedecostela_goias_2026_jaredmagalhaes3-300x200.jpg"},
+  {n:"Custódio Gastrobar",p:"Sol do Sertão",a:"Av. Serrinha, 436 – Setor Serrinha",c:"Goiânia",ig:"custodiogastrobar",lat:-16.7140,lng:-49.2738,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062003/custodiobar_soldosertao_goias_2026_jaredmagalhaes2-300x200.jpg"},
+  {n:"Delícias do Milho",p:"Camamilho",a:"Av. C-104 – Jardim América",c:"Goiânia",ig:"deliciasdomilhooficial",lat:-16.7000,lng:-49.2862,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062009/deliciasdomilho_camamilho_goias_2026_jaredmagalhaes4-300x200.jpg"},
+  {n:"Dom Cirus",p:"Sabor di Buteco",a:"R. 229, 128 – Setor Coimbra",c:"Goiânia",ig:"bardomcirus",lat:-16.6910,lng:-49.2700,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18011303/domcirus_sabordibuteco_goias_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Dom Marco",p:"Passtel Mini Verdinho",a:"Rua T-45, 88 – Setor Bueno",c:"Goiânia",ig:"dommarcobar",lat:-16.6890,lng:-49.2770,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18011348/dommarco_pastelminiverdinho_goias_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Espetim Miguelito",p:"Fraldinha pé de cana",a:"Av. C-11, 460 – Setor Sudoeste",c:"Goiânia",ig:"espetimmiguelito",lat:-16.7068,lng:-49.3078,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18011430/espetimmiguelito_fraldinhapedecana_goiania_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Frango Rei",p:"Bacon Enamorado",a:"Av. Rio Verde – Vila Rosa",c:"Goiânia",ig:"frangorei.bar",lat:-16.7205,lng:-49.3120,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18011518/frangorei_baconenamorado_goiania_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Gercina Bar",p:"Joia do Araguaia",a:"Rua 104, 239 – Setor Sul",c:"Goiânia",ig:"gercinabar",lat:-16.7178,lng:-49.2658,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062018/gercinabar_joiadoaraguaia_goiania_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Jajá Drinks",p:"Tako fake do Jajá",a:"Rua 74, 329 – Setor Central",c:"Goiânia",ig:"jaja_drinks",lat:-16.6795,lng:-49.2548,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18011613/jajadrinks_takofakedojaja_goias_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Jantinha do Bin Laden",p:"Almôndega Raiz Picante",a:"Av. C-0233, 427 – Jardim América",c:"Goiânia",ig:"jantinhadobin_",lat:-16.7028,lng:-49.2892,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18011705/jantinhadobinladen_almondegaraizpicante_goias_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Jantinha do Elcimar",p:"Tilápia do Elcimar",a:"Rua das Orquídeas – Goiânia",c:"Goiânia",ig:"jantinhadoelcimar",lat:-16.7010,lng:-49.2875,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062024/jantinhadoelcimar_tilapiadoelcimar_goias_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Jantinha do Fabinho",p:"Linguiça Atropelada",a:"Rua das Orquídeas – Goiânia",c:"Goiânia",ig:"jantinhadofabinho20",lat:-16.7320,lng:-49.3190,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062030/jantinhadofabinho_linguicaatropelada_goias_2026_jaredmagalhaes4-300x200.jpg"},
+  {n:"Jantinha do Lipão",p:"Torradinha sertaneja",a:"R. Fernando de Noronha, 1 – Urias Magalhães",c:"Goiânia",ig:"jantinhadolipao",lat:-16.6718,lng:-49.2410,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18011800/jantinhadolipao_torradinhasertaneja_goiania_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Jantinha Entre Amigos",p:"Mimos de Costela",a:"Rua Todos os Santos, 71",c:"Goiânia",ig:"jantinhaentreamigos",lat:-16.7415,lng:-49.3055,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062036/jantinhaentreamigos_mimosdecostela_goias_2026_jaredmagalhaes3-300x200.jpg"},
+  {n:"KL Grill Jantinha",p:"Barquinha do Sertão",a:"Av. Barão do Rio Branco, 37 – Jardim Luz, Aparecida",c:"Aparecida",ig:"klgrilljantinhas",lat:-16.8148,lng:-49.2442,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18011854/klgrilljantinha_barquinhadosertao_goias_2026_jaredmagalhaes3-300x200.jpg"},
+  {n:"Lado Leste Cervejaria",p:"As Rolês do Lado Leste",a:"R. 240, 81 – Setor Leste Universitário",c:"Goiânia",ig:"ladolestecervejaria",lat:-16.6748,lng:-49.2388,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18011935/ladolestecervejaria_asrolesdoladoleste-osegredoestanocrocolis_goias_2026_jaredmagalhaes4-300x200.jpg"},
+  {n:"Limas Bar",p:"Parme de tilápia",a:"R. Minas Gerais, 50 – Urias Magalhães",c:"Goiânia",ig:"limasbar",lat:-16.6720,lng:-49.2405,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062043/limasbar_parmedetilapia_goias_2026_jaredmagalhaes4-300x200.jpg"},
+  {n:"Magelinha Bar e Cozinha",p:"Pastelão à Moda Magelinha",a:"R. Monte Castelo, 106 – Jardim Planalto",c:"Goiânia",ig:"magelinhabarecozinha",lat:-16.6688,lng:-49.2810,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062049/magelinhabarecozinha_pastelaoamodamagelinha_goias_2026_jaredmagalhaes3-300x200.jpg"},
+  {n:"Marupiara Gastrobar",p:"Tortilhas de Buteco",a:"Av. Blvd. Conde dos Arcos, 287 – Setor Goiânia 2",c:"Goiânia",ig:"marupiaragastrobar",lat:-16.7258,lng:-49.2438,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18012022/marupiaragastrobar_tortilhasdebuteco_goias_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Mauá Gastrobar",p:"A Braba no Brócolis",a:"Av. Dom Emanuel, 143 – Cidade Jardim",c:"Goiânia",ig:"mauaagastrobar",lat:-16.7108,lng:-49.2592,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18012118/mauagastrobar_abrabanobrocolis_goias_2026_jaredmagalhaes4-300x200.jpg"},
+  {n:"Miozin du Goiás",p:"Peixe Maravilha",a:"Av. São João, 166 – Vila Maria José",c:"Goiânia",ig:"miozinbar",lat:-16.6758,lng:-49.2648,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062055/miozindugoias_peixemaravilha_goiania_2026_jaredmagalhaes4-300x200.jpg"},
+  {n:"Perimetral Bar",p:"Sabor da Roça",a:"Av. Perimetral, 4340 – Setor Coimbra",c:"Goiânia",ig:"perimetralbar",lat:-16.6878,lng:-49.2548,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18012223/perimetralbar_sabordaroca_goiania_2026_jaredmagalhaes3-1-300x200.jpg"},
+  {n:"Pescados Gastrobar",p:"Hotilápia",a:"Av. Bela Vista, 16 – Parque Trindade, Aparecida",c:"Aparecida",ig:"pescadosgastrobar",lat:-16.8180,lng:-49.2460,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062105/pescadorgastrobar_hotilapia_goiania_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Primo Rico",p:"Rodadinha do Primo",a:"Av. Goiás Norte, 2 – Residencial Humaitá",c:"Goiânia",ig:"primoricorestaurante",lat:-16.6558,lng:-49.2478,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062110/primorico_rodadinhadoprimo_goias_2026_jaredmagalhaes4-300x200.jpg"},
+  {n:"Tata Gastrobar",p:"Brócolis é o Segredo",a:"Alameda Vista Alegre, 10 – Jardim Petrópolis",c:"Goiânia",ig:"tatagastrobar",lat:-16.7218,lng:-49.2528,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18012330/tatagastrobar_soldosertao_goiania_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Tô Bar",p:"Risole de Rabada",a:"Rua 20, 1078 – Setor Central",c:"Goiânia",ig:"tobargoiania",lat:-16.6832,lng:-49.2542,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18012547/to-300x200.jpg"},
+  {n:"Toka do Véi",p:"Pirarucu na Toka",a:"Av. Curussá, 1 – Jardim Helvécia, Aparecida",c:"Aparecida",ig:"tokadoveio",lat:-16.8295,lng:-49.2555,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18012639/tokadovei_pirarucunatoka_goias_2026_jaredmagalhaes-300x200.jpg"},
+  {n:"Tribos do Espeto",p:"Joelho do Tatu",a:"Av. Nova York, 1336 – Jardim Novo Mundo",c:"Goiânia",ig:"tribosdoespeto",lat:-16.6718,lng:-49.2562,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062119/tribosdoespeto_joelhodotatu_goias_2026_jaredmagalhaes4-300x200.jpg"},
+];
 
-// ═══════════════════════════════════════════════
-// GPS
-// ═══════════════════════════════════════════════
-function startGPS() {
-  if (!navigator.geolocation) { startApp(false); return; }
-  const msg = document.getElementById('splashMsg');
-  msg.textContent = '🔍 Solicitando permissão...';
+let LAT=-16.6890,LNG=-49.2770,gpsOk=false;
+let tour=[],city='all',q='',sort='dist';
+let map=null,userMarker=null,barMarkers={};
+
+function startGPS(){
+  if(!navigator.geolocation){startApp(false);return}
+  document.getElementById('splashMsg').textContent='🔍 Solicitando permissão...';
   navigator.geolocation.getCurrentPosition(
-    pos => { LAT = pos.coords.latitude; LNG = pos.coords.longitude; gpsOk = true; startApp(true); },
-    err => {
-      if (err.code === 1) msg.textContent = '❌ Permissão negada. Toque em "Continuar sem GPS".';
-      else { msg.textContent = '⚠️ Não foi possível obter GPS. Usando padrão.'; setTimeout(() => startApp(false), 1500); }
-    },
-    { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
+    pos=>{LAT=pos.coords.latitude;LNG=pos.coords.longitude;gpsOk=true;startApp(true)},
+    err=>{if(err.code===1)document.getElementById('splashMsg').textContent='❌ Permissão negada.';else{document.getElementById('splashMsg').textContent='⚠️ GPS indisponível. Usando padrão.';setTimeout(()=>startApp(false),1500)}},
+    {enableHighAccuracy:true,timeout:12000,maximumAge:0}
   );
 }
-
-function startApp(fromGPS) {
-  gpsOk = fromGPS;
-  document.getElementById('splash').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-
-  // Inicia watchPosition para rastreamento contínuo
-  if (fromGPS && navigator.geolocation) {
-    watchId = navigator.geolocation.watchPosition(
-      pos => { LAT = pos.coords.latitude; LNG = pos.coords.longitude; gpsOk = true; onPosUpdate(); },
-      () => {},
-      { enableHighAccuracy: true, maximumAge: 5000 }
+function startApp(fromGPS){
+  gpsOk=fromGPS;
+  document.getElementById('splash').style.display='none';
+  document.getElementById('app').style.display='flex';
+  if(fromGPS&&navigator.geolocation){
+    navigator.geolocation.watchPosition(
+      pos=>{LAT=pos.coords.latitude;LNG=pos.coords.longitude;gpsOk=true;onPosUpdate()},
+      ()=>{},{enableHighAccuracy:true,maximumAge:5000}
     );
   }
-
-  updateGPSPill();
-  initMap();
-  renderList();
-  renderTour();
-
-  // Service Worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  }
+  updateGPSPill();initMap();renderList();renderTour();renderResult();renderHist();
+  if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
+function onPosUpdate(){updateGPSPill();if(userMarker)userMarker.setLatLng([LAT,LNG]);updateMarkers();renderList()}
+function updateGPSPill(){const p=document.getElementById('gpsPill'),l=document.getElementById('gpsLabel');p.className='gps-pill'+(gpsOk?' ok':'');l.textContent=gpsOk?'GPS ativo':'Sem GPS'}
 
-function onPosUpdate() {
-  updateGPSPill();
-  if (userMarker) userMarker.setLatLng([LAT, LNG]);
-  updateMarkers();
-  renderList();
-}
-
-function updateGPSPill() {
-  const pill = document.getElementById('gpsPill');
-  const dot = document.getElementById('gpsDot');
-  const lbl = document.getElementById('gpsLabel');
-  if (gpsOk) {
-    pill.className = 'gps-pill ok';
-    lbl.textContent = 'GPS ativo';
-  } else {
-    pill.className = 'gps-pill';
-    lbl.textContent = 'Sem GPS';
-  }
-}
-
-// ═══════════════════════════════════════════════
-// MAPA — LEAFLET (100% GRATUITO, SEM API KEY)
-// ═══════════════════════════════════════════════
-function initMap() {
-  map = L.map('map', { zoomControl: false, attributionControl: false }).setView([LAT, LNG], 14);
-
-  // Tile gratuito do OpenStreetMap com tema escuro via CartoDB
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap © CARTO',
-    subdomains: 'abcd', maxZoom: 19
-  }).addTo(map);
-
-  // Controle de zoom menor
-  L.control.zoom({ position: 'bottomleft' }).addTo(map);
-
-  // Marcador do usuário
-  const userIcon = L.divIcon({ className: '', html: '<div class="user-dot"></div>', iconSize: [18,18], iconAnchor: [9,9] });
-  userMarker = L.marker([LAT, LNG], { icon: userIcon, zIndexOffset: 1000 }).addTo(map);
-
-  // Marcadores dos bares
-  BARS.forEach(bar => {
-    const isInTour = tour.some(s => s.n === bar.n);
-    const icon = L.divIcon({ className: '', html: `<div class="my-marker${isInTour?' tour':''}"></div>`, iconSize: [16,16], iconAnchor: [8,8] });
-    const m = L.marker([bar.lat, bar.lng], { icon }).addTo(map);
-    m.on('click', () => openPopup(bar, m));
-    barMarkers[bar.n] = m;
+function initMap(){
+  map=L.map('map',{zoomControl:false,attributionControl:false}).setView([LAT,LNG],14);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19}).addTo(map);
+  L.control.zoom({position:'bottomleft'}).addTo(map);
+  const uIcon=L.divIcon({className:'',html:'<div class="user-dot"></div>',iconSize:[15,15],iconAnchor:[7,7]});
+  userMarker=L.marker([LAT,LNG],{icon:uIcon,zIndexOffset:1000}).addTo(map);
+  BARS.forEach(bar=>{
+    const icon=L.divIcon({className:'',html:'<div class="my-marker"></div>',iconSize:[13,13],iconAnchor:[6,6]});
+    const m=L.marker([bar.lat,bar.lng],{icon}).addTo(map);
+    m.on('click',()=>openPopup(bar,m));
+    barMarkers[bar.n]=m;
   });
 }
-
-function openPopup(bar, marker) {
-  const d = dist(bar);
-  const inT = tour.some(s => s.n === bar.n);
-  const murl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bar.n+', Goiânia, GO')}`;
-  const popup = L.popup({ maxWidth: 240 }).setContent(`
-    <div class="popup-inner">
-      <div class="popup-name">${bar.n}</div>
-      <div class="popup-petisco">🍽 ${bar.p}</div>
-      <div class="popup-dist">📍 ${fmt(d)} de você · R$ 40</div>
-      <div style="display:flex;gap:6px;margin-top:10px">
-        <button class="popup-btn" style="flex:1" onclick="toggleTourByName('${bar.n.replace(/'/g,"\\'")}');this.closest('.leaflet-popup').querySelector('.popup-btn:first-child').textContent='${inT?'＋ Roteiro':'✓ Adicionado'}'">
-          ${inT ? '✓ No roteiro' : '＋ Roteiro'}
-        </button>
-        <a class="popup-btn" href="${murl}" target="_blank" style="flex:1">🗺 Maps</a>
-      </div>
-    </div>
-  `);
-  marker.bindPopup(popup).openPopup();
+function openPopup(bar,marker){
+  const d=dist(bar),inT=tour.some(s=>s.n===bar.n);
+  const murl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bar.n+', Goiânia, GO')}`;
+  marker.bindPopup(L.popup({maxWidth:240}).setContent(`<div class="popup-inner"><div class="popup-name">${bar.n}</div><div class="popup-petisco">🍽 ${bar.p}</div><div class="popup-dist">📍 ${fmt(d)} de você · R$ 40</div><div class="popup-actions"><button class="popup-btn" onclick="toggleTourByName('${bar.n.replace(/'/g,"\\'")}')"> ${inT?'✓ No roteiro':'＋ Roteiro'}</button><a class="popup-btn" href="${murl}" target="_blank">🗺 Maps</a></div></div>`)).openPopup();
 }
+function updateMarkers(){BARS.forEach(bar=>{const m=barMarkers[bar.n];if(!m)return;const inT=tour.some(s=>s.n===bar.n);m.setIcon(L.divIcon({className:'',html:`<div class="my-marker${inT?' tour':''}"></div>`,iconSize:[13,13],iconAnchor:[6,6]}))})}
+function recenterMap(){if(map)map.flyTo([LAT,LNG],14,{duration:1})}
+function flyToBar(bar){showTab('mapa');setTimeout(()=>{if(map)map.flyTo([bar.lat,bar.lng],17,{duration:1.2})},100);const m=barMarkers[bar.n];if(m)setTimeout(()=>openPopup(bar,m),1300)}
 
-function updateMarkers() {
-  BARS.forEach(bar => {
-    const m = barMarkers[bar.n];
-    if (!m) return;
-    const inT = tour.some(s => s.n === bar.n);
-    const icon = L.divIcon({ className: '', html: `<div class="my-marker${inT?' tour':''}"></div>`, iconSize: [16,16], iconAnchor: [8,8] });
-    m.setIcon(icon);
+function dist(b){const R=6371,dLa=(b.lat-LAT)*Math.PI/180,dLn=(b.lng-LNG)*Math.PI/180;const a=Math.sin(dLa/2)**2+Math.cos(LAT*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLn/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))}
+function fmt(km){return km<1?`${Math.round(km*1000)}m`:`${km.toFixed(1)}km`}
+function esc(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;')}
+
+function renderList(){
+  const body=document.getElementById('listBody');if(!body)return;
+  let bars=BARS.map(b=>({...b,d:dist(b)})).filter(b=>{
+    const mc=city==='all'||b.c===city;
+    const ms=!q||b.n.toLowerCase().includes(q)||b.p.toLowerCase().includes(q)||b.a.toLowerCase().includes(q);
+    return mc&&ms;
   });
-}
-
-function recenterMap() {
-  if (map) map.flyTo([LAT, LNG], 14, { duration: 1 });
-}
-
-function flyToBar(bar) {
-  showTab('mapa');
-  setTimeout(() => { if (map) map.flyTo([bar.lat, bar.lng], 17, { duration: 1.2 }); }, 100);
-  const m = barMarkers[bar.n];
-  if (m) setTimeout(() => openPopup(bar, m), 1300);
-}
-
-// ═══════════════════════════════════════════════
-// DISTÂNCIA
-// ═══════════════════════════════════════════════
-function dist(b) {
-  const R=6371, dLa=(b.lat-LAT)*Math.PI/180, dLn=(b.lng-LNG)*Math.PI/180;
-  const a=Math.sin(dLa/2)**2+Math.cos(LAT*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLn/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-}
-function fmt(km) { return km < 1 ? `${Math.round(km*1000)}m` : `${km.toFixed(1)}km`; }
-function esc(s) { return s.replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
-
-// ═══════════════════════════════════════════════
-// LISTA
-// ═══════════════════════════════════════════════
-function renderList() {
-  const body = document.getElementById('listBody');
-  if (!body) return;
-
-  let bars = BARS.map(b => ({ ...b, d: dist(b) })).filter(b => {
-    const mc = city==='all' || b.c===city;
-    const ms = !q || b.n.toLowerCase().includes(q) || b.p.toLowerCase().includes(q) || b.a.toLowerCase().includes(q);
-    return mc && ms;
-  });
-
-  // Ordena
-  const near = bars.filter(b => b.d < 0.1);
-  if (sort==='dist') {
-    bars.sort((a,b) => a.d - b.d);
-  } else {
-    bars.sort((a,b) => a.n.localeCompare(b.n));
-  }
-
-  document.getElementById('resCnt').textContent = `${bars.length} bares`;
-  const nearest = bars[0];
-  if (nearest && nearest.d < 0.15) {
-    document.getElementById('locInfo').textContent = `⭐ Você está no ${nearest.n}`;
-    document.getElementById('locInfo').style.color = 'var(--beer)';
-  } else if (nearest) {
-    document.getElementById('locInfo').textContent = `📍 Mais próximo: ${fmt(nearest.d)}`;
-  }
-
-  const maxD = Math.max(...bars.map(b => b.d), 1);
-  if (!bars.length) { body.innerHTML = '<div class="no-res">Nenhum bar encontrado.</div>'; return; }
-
-  body.innerHTML = bars.map(bar => {
-    const inT = tour.some(s => s.n === bar.n);
-    const youhere = bar.d < 0.15;
-    const isNear = bar.d <= 2 && !youhere;
-    const pct = Math.max(5, 100 - (bar.d / maxD) * 92);
-    const murl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bar.n+', '+(bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia')+', GO')}`;
-    const igurl = `https://instagram.com/${bar.ig}`;
-    let cls = 'bar-item';
-    if (youhere) cls += ' you-here';
-    else if (inT) cls += ' in-tour';
-    let badge = '';
-    if (youhere) badge = '<div class="item-badge badge-you">⭐ VOCÊ ESTÁ AQUI</div>';
-    else if (inT) badge = '<div class="item-badge badge-tour">✓ ROTEIRO</div>';
-    else if (isNear) badge = '<div class="item-badge badge-near">📍 PRÓXIMO</div>';
-    return `<div class="${cls}">
-      ${badge}
-      <div class="item-name">${bar.n}</div>
-      <div class="item-city">${bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia'}</div>
-      <div class="dist-bar-wrap">
-        <div class="dist-lbl">📍 ${fmt(bar.d)}</div>
-        <div class="dist-track"><div class="dist-fill" style="width:${pct}%"></div></div>
-      </div>
-      <div class="petisco-box">
-        <div class="petisco-lbl">Petisco participante</div>
-        <div class="petisco-name">"${bar.p}"</div>
-      </div>
-      <div class="item-addr">📍 <span>${bar.a}</span></div>
-      <div class="item-hrs">🕐 <span>${bar.h}</span></div>
-      <div class="item-actions">
-        <button class="btn-add ${inT?'on':''}" onclick="toggleTourByName('${esc(bar.n)}')">${inT?'✓ No roteiro':'＋ Roteiro'}</button>
-        <button class="btn-ico" onclick="flyToBar(BARS.find(b=>b.n==='${esc(bar.n)}'))">🗺</button>
-        <a class="btn-ico" href="${murl}" target="_blank">↗</a>
-        <a class="btn-ico" href="${igurl}" target="_blank">📸</a>
-      </div>
-      <div class="item-price">R$ 40</div>
-    </div>`;
+  if(sort==='dist')bars.sort((a,b)=>a.d-b.d);else bars.sort((a,b)=>a.n.localeCompare(b.n));
+  document.getElementById('resCnt').textContent=`${bars.length} bares`;
+  const nearest=bars[0],locEl=document.getElementById('locInfo');
+  if(nearest&&nearest.d<0.15){locEl.textContent=`⭐ Você está no ${nearest.n}`;locEl.style.color='var(--beer)'}
+  else if(nearest){locEl.textContent=`📍 Mais próximo: ${fmt(nearest.d)}`;locEl.style.color=''}
+  const maxD=Math.max(...bars.map(b=>b.d),1);
+  if(!bars.length){body.innerHTML='<div class="no-res">Nenhum bar encontrado.</div>';return}
+  body.innerHTML=bars.map(bar=>{
+    const inT=tour.some(s=>s.n===bar.n),yh=bar.d<0.15,nr=bar.d<=2&&!yh;
+    const pct=Math.max(5,100-(bar.d/maxD)*92);
+    const murl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bar.n+', '+(bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia')+', GO')}`;
+    const cls='bar-item'+(yh?' you-here':inT?' in-tour':'');
+    const badge=yh?'<div class="item-badge badge-you">⭐ VOCÊ ESTÁ AQUI</div>':inT?'<div class="item-badge badge-tour">✓ ROTEIRO</div>':nr?'<div class="item-badge badge-near">📍 PRÓXIMO</div>':'';
+    return`<div class="${cls}"><div class="foto-wrap"><img class="item-foto" src="${bar.foto||''}" alt="${bar.p}" loading="lazy" onerror="this.parentElement.style.display='none'"><div class="foto-overlay"><div class="foto-petisco-nome">&ldquo;${bar.p}&rdquo;</div></div></div>${badge}<div class="item-name">${bar.n}</div><div class="item-city">${bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia'}</div><div class="dist-bar-wrap"><div class="dist-lbl">📍 ${fmt(bar.d)}</div><div class="dist-track"><div class="dist-fill" style="width:${pct}%"></div></div></div><div class="petisco-box"><div class="petisco-lbl">Petisco participante</div><div class="petisco-name">"${bar.p}"</div></div><div class="item-addr">📍 <span>${bar.a}</span></div><div class="item-hrs">🕐 <span>${bar.h}</span></div><div class="item-actions"><button class="btn-add ${inT?'on':''}" onclick="toggleTourByName('${esc(bar.n)}')">${inT?'✓ No roteiro':'＋ Roteiro'}</button><button class="btn-ico" onclick="flyToBar(BARS.find(b=>b.n==='${esc(bar.n)}'))">🗺</button><a class="btn-ico" href="${murl}" target="_blank">↗</a><a class="btn-ico" href="https://instagram.com/${bar.ig}" target="_blank">📸</a></div><div class="item-price">R$ 40</div></div>`;
   }).join('');
 }
 
-// ═══════════════════════════════════════════════
-// TOUR / ROTEIRO
-// ═══════════════════════════════════════════════
-function toggleTourByName(name) {
-  const bar = BARS.find(b => b.n === name);
-  if (!bar) return;
-  const i = tour.findIndex(s => s.n === name);
-  if (i >= 0) { tour.splice(i, 1); toast(`❌ ${name} removido`); }
-  else { tour.push(bar); toast(`✅ ${name} adicionado!`); }
-  renderList(); renderTour(); updateMarkers();
-  document.getElementById('tabCnt').textContent = tour.length;
+function toggleTourByName(name){
+  const bar=BARS.find(b=>b.n===name);if(!bar)return;
+  const i=tour.findIndex(s=>s.n===name);
+  if(i>=0){tour.splice(i,1);showToast(`❌ ${name} removido`)}else{tour.push(bar);showToast(`✅ ${name} adicionado!`)}
+  renderList();renderTour();updateMarkers();document.getElementById('tabCnt').textContent=`(${tour.length})`;
 }
+function renderTour(){
+  const pane=document.getElementById('tourPane');document.getElementById('tabCnt').textContent=`(${tour.length})`;
+  if(!tour.length){pane.innerHTML='<div class="tour-empty"><div class="tour-empty-icon">🍻</div><div class="tour-empty-txt">Seu roteiro está vazio.<br>Vá em <strong>Bares</strong> e adicione os que quer visitar!</div></div>';return}
+  const orig=`${LAT},${LNG}`,dest=`${tour[tour.length-1].lat},${tour[tour.length-1].lng}`,wpts=tour.slice(0,-1).map(s=>`${s.lat},${s.lng}`).join('|');
+  let murl=`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(orig)}&destination=${encodeURIComponent(dest)}&travelmode=driving`;
+  if(wpts)murl+=`&waypoints=${encodeURIComponent(wpts)}`;
+  pane.innerHTML=`<div class="tour-header"><div class="tour-title">🗺 Meu Roteiro</div><div class="tour-cnt-badge">${tour.length} paradas</div></div><div class="tour-total"><span>Total estimado</span><span>R$ ${tour.length*40} · ${tour.length} petisco${tour.length>1?'s':''}</span></div>${tour.map((b,i)=>`<div class="stop-item"><div class="stop-num">${i+1}</div><div class="stop-info"><div class="stop-name">${b.n}</div><div class="stop-petisco">${b.p}</div></div><div class="stop-dist">${fmt(dist(b))}</div><button class="stop-rm" onclick="toggleTourByName('${esc(b.n)}')">✕</button></div>`).join('')}<div style="margin-top:14px"><a href="${murl}" target="_blank" class="btn-maps-big">🗺 ABRIR ROTA NO GOOGLE MAPS</a><button class="btn-clr" onclick="clearTour()">✕ LIMPAR ROTEIRO</button></div>`;
+}
+function clearTour(){tour=[];renderList();renderTour();updateMarkers();document.getElementById('tabCnt').textContent='(0)';showToast('🗑 Roteiro limpo!')}
 
-function renderTour() {
-  const pane = document.getElementById('tourPane');
-  document.getElementById('tabCnt').textContent = tour.length;
-
-  if (!tour.length) {
-    pane.innerHTML = `
-      <div class="tour-empty">
-        <div class="tour-empty-icon">🍻</div>
-        <div class="tour-empty-txt">Seu roteiro está vazio.<br>Vá para <strong>Bares</strong> e adicione os que quer visitar!</div>
-      </div>`;
-    return;
+function renderResult(){
+  const el=document.getElementById('resultContent'),r=CONFIG.resultado2026;
+  const hoje=new Date(),dataRes=new Date(CONFIG.dataResultado);
+  const emAndamento=hoje>=new Date('2026-04-10')&&hoje<=new Date('2026-05-10');
+  if(r.status==='aguardando'||hoje<dataRes){
+    el.innerHTML=`<div class="result-banner">${emAndamento?'<div class="result-live"><div class="live-dot"></div> EM ANDAMENTO</div>':''}<div class="result-title">Resultado ${CONFIG.ano}</div><div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição · ${BARS.length} bares</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px;text-align:center"><div style="font-size:3.5rem;margin-bottom:14px">⏳</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.55rem;color:var(--beer);letter-spacing:2px;margin-bottom:10px">${emAndamento?'VOTAÇÃO EM ANDAMENTO':'RESULTADO EM BREVE'}</div><div style="color:var(--cream3);font-size:.83rem;line-height:1.7;max-width:280px">${emAndamento?`O evento vai até ${CONFIG.dataFim}. O resultado sai logo após.`:`O evento começa em ${CONFIG.dataInicio}. Acompanhe aqui!`}</div><div style="margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--beer);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);border-radius:100px;padding:5px 16px">📅 Resultado: ${new Date(CONFIG.dataResultado).toLocaleDateString('pt-BR')}</div><div style="margin-top:20px;color:var(--cream3);font-size:.76rem;line-height:1.6">Monte seu roteiro e visite o máximo de bares! 🍺</div></div>`;return;
   }
-
-  const totalDist = tour.reduce((acc, b) => acc + dist(b), 0);
-  const stops = tour.map((b, i) => `
-    <div class="stop-item">
-      <div class="stop-num">${i+1}</div>
-      <div class="stop-info">
-        <div class="stop-name">${b.n}</div>
-        <div class="stop-petisco">${b.p}</div>
-      </div>
-      <div class="stop-dist">${fmt(dist(b))}</div>
-      <button class="stop-rm" onclick="toggleTourByName('${esc(b.n)}')">✕</button>
-    </div>`).join('');
-
-  // URL Google Maps com rota a partir do usuário
-  const origin = `${LAT},${LNG}`;
-  const dest = `${tour[tour.length-1].lat},${tour[tour.length-1].lng}`;
-  const wpts = tour.slice(0,-1).map(s=>`${s.lat},${s.lng}`).join('|');
-  let mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(dest)}&travelmode=driving`;
-  if (wpts) mapsUrl += `&waypoints=${encodeURIComponent(wpts)}`;
-
-  pane.innerHTML = `
-    <div class="tour-header">
-      <div class="tour-title">🗺 Meu Roteiro</div>
-      <div class="tour-cnt-badge">${tour.length} paradas</div>
-    </div>
-    <div class="tour-total">
-      <span>Total: R$ ${tour.length * 40}</span>
-      <span style="color:var(--green3)">~${tour.length} petiscos</span>
-    </div>
-    ${stops}
-    <div style="margin-top:16px">
-      <a href="${mapsUrl}" target="_blank" class="btn-maps-big">🗺 ABRIR ROTA NO GOOGLE MAPS</a>
-      <button class="btn-clr" onclick="clearTour()">✕ LIMPAR ROTEIRO</button>
-    </div>`;
+  const top3=r.ranking.slice(0,3),resto=r.ranking.slice(3);
+  const podSpot=(item,cls,medal,rank)=>item?`<div class="podium-spot"><div class="podium-medal">${medal}</div><div class="podium-rank ${cls}">${rank}º</div><div class="podium-block ${cls}"></div><div class="podium-name">${item.nome}</div><div class="podium-petisco">${item.petisco}</div></div>`:'';
+  el.innerHTML=`<div class="result-banner"><div class="result-title">🏆 Campeão ${CONFIG.ano}</div><div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição</div></div><div class="podium">${podSpot(top3[1],'silver','🥈',2)}${podSpot(top3[0],'gold','🥇',1)}${podSpot(top3[2],'bronze','🥉',3)}</div><div class="rank-list">${resto.map(item=>`<div class="rank-item"><div class="rank-pos">${item.pos}º</div><div class="rank-info"><div class="rank-name">${item.nome}</div><div class="rank-petisco">${item.petisco}</div></div>${item.pontos?`<div class="rank-pts">⭐ ${item.pontos}</div>`:''}</div>`).join('')}</div>`;
 }
 
-function clearTour() {
-  tour = [];
-  renderList(); renderTour(); updateMarkers();
-  document.getElementById('tabCnt').textContent = 0;
-  toast('🗑 Roteiro limpo!');
+function renderHist(){
+  const body=document.getElementById('histBody');
+  body.innerHTML=`<div style="padding:4px 2px 10px;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--cream3);letter-spacing:1px;text-transform:uppercase">🏆 Hall da Fama — Goiânia & Aparecida</div>${HISTORICO.map((y,i)=>`<div class="year-card"><div class="year-header" onclick="toggleYear(${i})"><div class="year-num">${y.ano}</div><div class="year-meta"><div class="year-edition">${y.edicao} Edição · ${y.bares} bares</div><div class="year-theme">Tema: ${y.tema}</div></div><div class="year-chev${i===0?' open':''}" id="chev-${i}">${i===0?'▲':'▼'}</div></div><div class="year-content${i===0?' open':''}" id="ycont-${i}"><div class="year-winner"><div class="year-winner-medal">🥇</div><div><div class="year-winner-label">Campeão ${y.ano}</div><div class="year-winner-name">${y.vencedor.nome}</div><div class="year-winner-petisco">"${y.vencedor.petisco}"${y.vencedor.nota?' · ⭐ '+y.vencedor.nota:''}</div></div></div><div class="year-runner"><div class="year-runner-item"><div class="year-runner-rank">🥈 2º lugar</div><div class="year-runner-name">${y.segundo.nome}</div><div class="year-runner-petisco">"${y.segundo.petisco}"</div></div><div class="year-runner-item"><div class="year-runner-rank">🥉 3º lugar</div><div class="year-runner-name">${y.terceiro.nome}</div><div class="year-runner-petisco">"${y.terceiro.petisco}"</div></div></div><div class="year-stats"><div class="year-stat"><div class="year-stat-val">${y.bares}</div><div class="year-stat-lbl">Bares</div></div><div class="year-stat"><div class="year-stat-val">${y.edicao.replace('ª','')}</div><div class="year-stat-lbl">Edição</div></div><div class="year-stat"><div class="year-stat-val">${y.tema.split(' ')[0]}</div><div class="year-stat-lbl">Tema</div></div></div></div></div>`).join('')}`;
 }
+function toggleYear(i){const c=document.getElementById('ycont-'+i),ch=document.getElementById('chev-'+i),o=c.classList.contains('open');c.classList.toggle('open',!o);ch.textContent=o?'▼':'▲';ch.className='year-chev'+(o?'':' open')}
 
-// ═══════════════════════════════════════════════
-// TABS
-// ═══════════════════════════════════════════════
-function showTab(id) {
-  activeTab = id;
-  document.querySelectorAll('.tab').forEach((t,i) => {
-    const ids = ['mapa','lista','tour'];
-    t.classList.toggle('active', ids[i]===id);
-  });
-  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+function showTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['mapa','lista','tour','result','hist'][i]===id));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
   document.getElementById('pane-'+id).classList.add('active');
-  if (id==='mapa' && map) setTimeout(() => map.invalidateSize(), 50);
-  if (id==='lista') renderList();
-  if (id==='tour') renderTour();
+  if(id==='mapa'&&map)setTimeout(()=>map.invalidateSize(),50);
+  if(id==='lista')renderList();
+  if(id==='tour')renderTour();
 }
-
-// ═══════════════════════════════════════════════
-// FILTROS
-// ═══════════════════════════════════════════════
-document.querySelectorAll('.chip[data-city]').forEach(c => {
-  c.addEventListener('click', () => {
-    document.querySelectorAll('.chip[data-city]').forEach(x => x.classList.remove('on'));
-    c.classList.add('on'); city = c.dataset.city; renderList();
-  });
-});
-document.getElementById('search').addEventListener('input', e => { q = e.target.value.toLowerCase(); renderList(); });
-function setSort(s) {
-  sort = s;
-  document.getElementById('chipDist').className = 'chip'+(s==='dist'?' sort-on':'');
-  document.getElementById('chipName').className = 'chip'+(s==='name'?' sort-on':'');
-  renderList();
-}
-
-// ═══════════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════════
+document.querySelectorAll('.chip[data-city]').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.chip[data-city]').forEach(x=>x.classList.remove('on'));c.classList.add('on');city=c.dataset.city;renderList()}));
+document.getElementById('search').addEventListener('input',e=>{q=e.target.value.toLowerCase();renderList()});
+function setSort(s){sort=s;document.getElementById('chipDist').className='chip'+(s==='dist'?' sort-on':'');document.getElementById('chipName').className='chip'+(s==='name'?' sort-on':'');renderList()}
 let toastTimer;
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
-}
+function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
 </script>
+
 </body>
 </html>
