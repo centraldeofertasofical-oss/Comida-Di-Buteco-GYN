@@ -200,7 +200,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
 .tema-regra{font-size:.7rem;color:var(–cream3);margin-top:2px;line-height:1.4}
 
 /* ── LIGHTBOX ── */
-#lightbox{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0);backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);transition:background .3s,backdrop-filter .3s;pointer-events:none;padding:env(safe-area-inset-top,16px) 16px env(safe-area-inset-bottom,16px)}
+#lightbox{display:none;position:fixed;inset:0;z-index:9999;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0);backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);transition:background .3s,backdrop-filter .3s;pointer-events:none;padding:env(safe-area-inset-top,16px) 16px env(safe-area-inset-bottom,16px)}
 #lightbox.open{background:rgba(0,0,0,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);pointer-events:all}
 #lightbox .lb-img-wrap{position:relative;width:100%;max-width:500px;transform:scale(.85) translateY(20px);opacity:0;transition:transform .32s cubic-bezier(.34,1.56,.64,1),opacity .28s ease;border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.7)}
 #lightbox.open .lb-img-wrap{transform:scale(1) translateY(0);opacity:1}
@@ -660,21 +660,28 @@ function openLightbox(bar){
   const img=document.getElementById('lbImg');
   const info=document.getElementById('lbInfo');
 
-  // Usa a URL maior: troca -768x512 por original (sem sufixo) para máxima qualidade
-  const urlOrig = bar.foto ? bar.foto.replace(/-\d+x\d+\.jpg$/,'.jpg') : bar.foto;
-  
-  // Seta imagem — reutiliza se já carregada, senão usa a menor como placeholder
-  img.src = '';
-  img.src = urlOrig || bar.foto || '';
-  img.alt = bar.p || '';
-  // Fallback para 768x512 se original não existir
-  img.onerror = function(){
-    if(this.src !== bar.foto){ this.src = bar.foto; }
-  };
+  // 1. Mostra imediatamente com 768x512 (já cacheada do card)
+  img.style.transition='none';
+  img.style.opacity='1';
+  img.src='';
+  img.src=bar.foto||'';
+  img.alt=bar.p||'';
 
-  // Info do bar
-  const dist = bar.d && bar.d < 50 ? `<span class="lb-badge">📍 ${fmt(bar.d)}</span>` : '';
-  info.innerHTML = `
+  // 2. Em segundo plano tenta HD original (sem sufixo de tamanho)
+  const urlOrig=bar.foto?bar.foto.replace(/-\d+x\d+\.jpg$/,'.jpg'):null;
+  if(urlOrig&&urlOrig!==bar.foto){
+    const hd=new Image();
+    hd.onload=function(){
+      img.style.transition='opacity .3s';
+      img.style.opacity='0';
+      setTimeout(()=>{img.src=hd.src;img.style.opacity='1';},300);
+    };
+    hd.src=urlOrig;
+  }
+
+  // 3. Info do bar
+  const dist=bar.d&&bar.d<50?`<span class="lb-badge">📍 ${fmt(bar.d)}</span>`:'';
+  info.innerHTML=`
     <div class="lb-bar">${bar.n}</div>
     <div class="lb-petisco">&ldquo;${bar.p}&rdquo;</div>
     <div class="lb-meta">
@@ -683,7 +690,7 @@ function openLightbox(bar){
       <span class="lb-badge">${bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia'}</span>
     </div>`;
 
-  // Abre com animação
+  // 4. Abre: primeiro display flex, depois class open no próximo frame
   lb.style.display='flex';
   document.body.style.overflow='hidden';
   requestAnimationFrame(()=>requestAnimationFrame(()=>lb.classList.add('open')));
@@ -693,7 +700,11 @@ function closeLightbox(){
   const lb=document.getElementById('lightbox');
   lb.classList.remove('open');
   document.body.style.overflow='';
-  setTimeout(()=>{ lb.style.display='none'; document.getElementById('lbImg').src=''; },320);
+  setTimeout(()=>{
+    lb.style.display='none';
+    document.getElementById('lbImg').src='';
+    document.getElementById('lbImg').style.transition='none';
+  },320);
 }
 
 function lbClose(e){
@@ -704,13 +715,20 @@ function lbClose(e){
 // Fecha com swipe down ou tecla Escape
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLightbox(); });
 
-(function(){
-  let startY=0;
-  document.getElementById('lightbox').addEventListener('touchstart',e=>{ startY=e.touches[0].clientY; },{passive:true});
-  document.getElementById('lightbox').addEventListener('touchmove',e=>{
-    const dy=e.touches[0].clientY-startY;
-    if(dy>60) closeLightbox();
-  },{passive:true});
+// Listeners do lightbox — aguarda DOM estar pronto
+(function initLightboxListeners(){
+  function attach(){
+    const lb=document.getElementById('lightbox');
+    if(!lb){ document.addEventListener('DOMContentLoaded',attach); return; }
+    let startY=0;
+    lb.addEventListener('touchstart',e=>{ startY=e.touches[0].clientY; },{passive:true});
+    lb.addEventListener('touchmove',e=>{
+      const dy=e.touches[0].clientY-startY;
+      if(dy>60) closeLightbox();
+    },{passive:true});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',attach);
+  else attach();
 })();
 
 </script>
