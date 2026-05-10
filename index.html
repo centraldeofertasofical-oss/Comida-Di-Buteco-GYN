@@ -58,7 +58,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
 
 .modal-divider{display:flex;align-items:center;gap:10px;color:var(–cream3);font-size:.7rem;font-family:‘JetBrains Mono’,monospace;margin-bottom:14px}
 .modal-divider::before,.modal-divider::after{content:’’;flex:1;height:1px;background:rgba(255,255,255,.08)}
-.modal-input{width:100%;background:var(–surface);border:1px solid rgba(245,166,35,.2);border-radius:var(–r2);padding:11px 14px;color:var(–cream);font-family:‘Outfit’,sans-serif;font-size:.9rem;outline:none;margin-bottom:10px}
+/* Previne zoom do iOS em inputs — CRÍTICO */
+input,textarea,select{font-size:16px!important}
+.modal-input{width:100%;background:var(–surface);border:1px solid rgba(245,166,35,.2);border-radius:var(–r2);padding:11px 14px;color:var(–cream);font-family:‘Outfit’,sans-serif;font-size:16px;outline:none;margin-bottom:10px}
 .modal-input:focus{border-color:rgba(245,166,35,.5)}
 .btn-modal-confirm{width:100%;background:linear-gradient(135deg,var(–beer),var(–beer2));border:none;border-radius:var(–r2);padding:12px;color:var(–bg);font-family:‘Bebas Neue’,sans-serif;font-size:1rem;letter-spacing:2px;cursor:pointer;margin-bottom:8px}
 .btn-modal-logout{width:100%;background:transparent;border:1px solid rgba(184,48,48,.3);border-radius:var(–r2);padding:10px;color:var(–red);font-family:‘JetBrains Mono’,monospace;font-size:.68rem;cursor:pointer;letter-spacing:1px}
@@ -268,7 +270,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
 
   <!-- PASSO 2: GPS (oculto até login) -->
 
-  <div id="splashGPS" style="display:none;width:100%;max-width:300px;display:flex;flex-direction:column;gap:10px;align-items:center">
+  <div id="splashGPS" style="display:none;width:100%;max-width:300px;flex-direction:column;gap:10px;align-items:center">
     <div class="splash-status" id="splashMsg"></div>
     <div class="splash-skip" onclick="startApp(false)">Continuar sem GPS</div>
   </div>
@@ -292,21 +294,19 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
     <div class="tab" onclick="showTab('hist')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg><span class="tab-lbl">Campeões</span></div>
   </div>
 
-  <!-- BANNER TEMA DO ANO -->
-
-  <div id="temaBanner" style="background:linear-gradient(135deg,rgba(42,92,63,.95),rgba(82,183,136,.12));border-bottom:1px solid rgba(82,183,136,.25);padding:10px 14px;display:flex;align-items:flex-start;gap:10px;flex-shrink:0">
-    <div style="font-size:1.5rem;flex-shrink:0">🥬</div>
-    <div style="flex:1">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:#52B788;text-transform:uppercase;letter-spacing:2px;margin-bottom:1px">Tema 2026 · Regra Obrigatória</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:#fff;letter-spacing:1px">Verdura visível na apresentação do prato</div>
-      <div style="font-size:.64rem;color:#C8B898;margin-top:2px;line-height:1.4">Alface, couve, rúcula, espinafre, agrião e outras verduras. O ingrediente não pode estar escondido — tem que aparecer de verdade no prato.</div>
-    </div>
-    <button onclick="document.getElementById('temaBanner').style.display='none'" style="background:none;border:none;color:#8A7A60;font-size:.9rem;cursor:pointer;padding:0;flex-shrink:0;line-height:1">✕</button>
-  </div>
-
   <div class="content">
     <div class="pane active" id="pane-mapa">
-      <div id="map"></div>
+      <!-- BANNER TEMA DO ANO — só aparece no mapa -->
+      <div id="temaBanner" style="background:linear-gradient(135deg,rgba(42,92,63,.95),rgba(82,183,136,.12));border-bottom:1px solid rgba(82,183,136,.25);padding:10px 14px;display:flex;align-items:flex-start;gap:10px;flex-shrink:0">
+        <div style="font-size:1.5rem;flex-shrink:0">🥬</div>
+        <div style="flex:1">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:#52B788;text-transform:uppercase;letter-spacing:2px;margin-bottom:1px">Tema 2026 · Regra Obrigatória</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:#fff;letter-spacing:1px">Verdura visível na apresentação do prato</div>
+          <div style="font-size:.64rem;color:#C8B898;margin-top:2px;line-height:1.4">Alface, couve, rúcula, espinafre, agrião e outras verduras. O ingrediente não pode estar escondido — tem que aparecer de verdade no prato.</div>
+        </div>
+        <button onclick="document.getElementById('temaBanner').style.display='none'" style="background:none;border:none;color:#8A7A60;font-size:.9rem;cursor:pointer;padding:0;flex-shrink:0;line-height:1">✕</button>
+      </div>
+      <div id="map" style="flex:1"></div>
       <button class="map-fab" onclick="recenterMap()">📍</button>
     </div>
     <div class="pane" id="pane-lista">
@@ -326,7 +326,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
       <div class="list-body" id="listBody"></div>
     </div>
     <div class="pane" id="pane-tour"><div class="scroll-pane" id="tourPane"></div></div>
-    <div class="pane" id="pane-ranking" style="display:none;flex-direction:column">
+    <div class="pane" id="pane-ranking">
       <div class="rank-header-info">
         <div class="rank-header-title">⭐ Ranking dos Usuários</div>
         <div class="rank-header-sub">Avaliações do público · Baseado em notas de 1–5</div>
@@ -504,6 +504,20 @@ let map=null,userMarker=null,barMarkers={};
 
 // ══ GPS / APP INIT ════════════════════════════════
 // ══ SPLASH: LOGIN → GPS → APP ════════════════════
+// Se já tem apelido salvo, pula direto para o GPS
+(function checkSavedUser(){
+  const saved=localStorage.getItem('user_name');
+  if(saved){
+    document.getElementById('splashLogin').style.display='none';
+    const gpsDiv=document.getElementById('splashGPS');
+    gpsDiv.style.display='flex';
+    const msg=document.getElementById('splashMsg');
+    if(msg)msg.textContent='👋 Olá, '+saved.split(' ')[0]+'!';
+    // Aciona GPS automaticamente após breve delay para o splash renderizar
+    setTimeout(()=>startGPS(),300);
+  }
+})();
+
 function splashLoginAndGPS(){
   const name=document.getElementById('splashNickname').value.trim();
   if(!name){
@@ -518,7 +532,6 @@ function splashSkipLogin(){
   _iniciarGPS();
 }
 function _iniciarGPS(){
-  // Esconde login, mostra status GPS
   document.getElementById('splashLogin').style.display='none';
   document.getElementById('splashGPS').style.display='flex';
   startGPS();
