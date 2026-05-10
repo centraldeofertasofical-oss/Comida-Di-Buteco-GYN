@@ -1,15 +1,11 @@
-// Vercel Edge Function — raspa o resultado de Goiás do site oficial
-export const config = { runtime: ‘edge’ };
-
-export default async function handler(req) {
-const headers = {
-‘Access-Control-Allow-Origin’: ‘*’,
-‘Content-Type’: ‘application/json’,
-‘Cache-Control’: ‘public, max-age=3600’, // cache 1h
-};
+// Vercel Serverless Function — busca resultado do Comida di Buteco Goiás
+module.exports = async function handler(req, res) {
+res.setHeader(‘Access-Control-Allow-Origin’, ‘*’);
+res.setHeader(‘Content-Type’, ‘application/json’);
+res.setHeader(‘Cache-Control’, ‘public, max-age=3600’);
 
 try {
-const res = await fetch(‘https://comidadibuteco.com.br/vencedores/goias/’, {
+const response = await fetch(‘https://comidadibuteco.com.br/vencedores/goias/’, {
 headers: {
 ‘User-Agent’: ‘Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15’,
 ‘Accept’: ‘text/html’,
@@ -18,26 +14,30 @@ signal: AbortSignal.timeout(8000),
 });
 
 ```
-if (!res.ok) {
-  return new Response(JSON.stringify({ ranking: null, erro: 'site_indisponivel' }), { headers });
+if (!response.ok) {
+  return res.status(200).json({ ranking: null, erro: 'site_indisponivel' });
 }
 
-const html = await res.text();
+const html = await response.text();
 
-// Verifica se já tem vencedores do ano atual (2026)
+// Verifica se já tem vencedores do ano atual
 const ano = new Date().getFullYear();
 const temAno = html.includes(`<h3 class="year">${ano}</h3>`);
 
 if (!temAno) {
-  return new Response(JSON.stringify({ ranking: null, status: 'aguardando' }), { headers });
+  return res.status(200).json({ ranking: null, status: 'aguardando' });
 }
 
 // Extrai os vencedores do ano atual
 const inicioAno = html.indexOf(`<h3 class="year">${ano}</h3>`);
-const fimBloco = html.indexOf('</div>', html.indexOf('box-vencedores', inicioAno) + 200);
+const idxBox = html.indexOf('box-vencedores', inicioAno);
+if (idxBox < 0) {
+  return res.status(200).json({ ranking: null, status: 'sem_dados' });
+}
+const fimBloco = html.indexOf('</div>', idxBox + 200);
 const bloco = html.substring(inicioAno, fimBloco + 10);
 
-// Extrai cada colocado: <li>Xº</li><li><strong>NOME</strong>...</li>
+// Extrai cada colocado
 const ranking = [];
 const re = /<li>(\d+)º<\/li>\s*<li><strong>([^<]+)<\/strong>/g;
 let m;
@@ -46,13 +46,13 @@ while ((m = re.exec(bloco)) !== null) {
 }
 
 if (ranking.length === 0) {
-  return new Response(JSON.stringify({ ranking: null, status: 'sem_dados' }), { headers });
+  return res.status(200).json({ ranking: null, status: 'sem_dados' });
 }
 
-return new Response(JSON.stringify({ ranking, status: 'finalizado', ano }), { headers });
+return res.status(200).json({ ranking, status: 'finalizado', ano });
 ```
 
 } catch (e) {
-return new Response(JSON.stringify({ ranking: null, erro: e.message }), { headers, status: 200 });
+return res.status(200).json({ ranking: null, erro: String(e.message || ‘erro’) });
 }
-}
+};
