@@ -768,10 +768,6 @@ async function loadAllRatings(){
 }
 function getRating(name){const c=_rc[name];if(!c||!c.count)return{avg:0,count:0};return{avg:c.sum/c.count,count:c.count};}
 function getMyRating(name){return(_rc[name]&&_rc[name].mine)||0;};
-    const sum=arr.reduce((s,r)=>s+r.rating,0);
-    return{avg:sum/arr.length,count:arr.length};
-  }catch(e){return{avg:0,count:0};}
-}
 async function setRating(name,rating){
   const user=getUser();
   if(!user){openLoginModal();showToast('⚠️ Faça login para avaliar!');return;}
@@ -783,14 +779,6 @@ async function setRating(name,rating){
   renderList();renderRanking();
   showToast('⭐ Avaliação salva!');
   try{await supaFetch('/rest/v1/avaliacoes',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({bar_nome:name,user_id:uid,user_name:user,rating})});}catch(e){console.warn('Erro ao salvar',e);}
-}catch(e){arr=[];}
-  const idx=arr.findIndex(r=>r.user===user);
-  if(idx>=0)arr[idx].rating=rating;
-  else arr.push({user,rating});
-  localStorage.setItem('rating_'+name,JSON.stringify(arr));
-  renderList();
-  renderRanking();
-  showToast('⭐ Avaliação salva!');
 }
 function ratingHtml(name){
   const info=getRating(name);
