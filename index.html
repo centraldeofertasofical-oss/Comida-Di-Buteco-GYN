@@ -55,9 +55,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
 .modal-box{background:var(–bg2);border:1px solid rgba(245,166,35,.2);border-radius:20px;padding:28px 24px;width:100%;max-width:340px;position:relative}
 .modal-title{font-family:‘Bebas Neue’,sans-serif;font-size:1.5rem;color:var(–beer);letter-spacing:2px;margin-bottom:6px}
 .modal-sub{font-size:.74rem;color:var(–cream3);margin-bottom:22px;line-height:1.5}
-.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;border:none;border-radius:var(–r2);padding:13px;font-family:‘Outfit’,sans-serif;font-size:.9rem;font-weight:600;color:#1f1f1f;cursor:pointer;margin-bottom:14px;transition:opacity .2s}
-.btn-google:hover{opacity:.9}
-.btn-google svg{flex-shrink:0}
+
 .modal-divider{display:flex;align-items:center;gap:10px;color:var(–cream3);font-size:.7rem;font-family:‘JetBrains Mono’,monospace;margin-bottom:14px}
 .modal-divider::before,.modal-divider::after{content:’’;flex:1;height:1px;background:rgba(255,255,255,.08)}
 .modal-input{width:100%;background:var(–surface);border:1px solid rgba(245,166,35,.2);border-radius:var(–r2);padding:11px 14px;color:var(–cream);font-family:‘Outfit’,sans-serif;font-size:.9rem;outline:none;margin-bottom:10px}
@@ -259,9 +257,21 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
   <div class="splash-beer">🍺</div>
   <div class="splash-title">Buteco<br>GYN</div>
   <div class="splash-sub">47 bares no evento + bares indicados em Goiânia e Aparecida.</div>
-  <button class="btn-gps" onclick="startGPS()">📍 LOCALIZAR MEU CELULAR</button>
-  <div class="splash-status" id="splashMsg"></div>
-  <div class="splash-skip" onclick="startApp(false)">Continuar sem GPS</div>
+
+  <!-- PASSO 1: LOGIN -->
+
+  <div id="splashLogin" style="width:100%;max-width:300px;display:flex;flex-direction:column;gap:10px">
+    <input id="splashNickname" class="modal-input" type="text" placeholder="Seu apelido para o ranking..." maxlength="30" style="margin:0;text-align:center">
+    <button class="btn-gps" onclick="splashLoginAndGPS()">ENTRAR E LOCALIZAR 📍</button>
+    <div class="splash-skip" onclick="splashSkipLogin()">Entrar sem apelido</div>
+  </div>
+
+  <!-- PASSO 2: GPS (oculto até login) -->
+
+  <div id="splashGPS" style="display:none;width:100%;max-width:300px;display:flex;flex-direction:column;gap:10px;align-items:center">
+    <div class="splash-status" id="splashMsg"></div>
+    <div class="splash-skip" onclick="startApp(false)">Continuar sem GPS</div>
+  </div>
 </div>
 
 <div id="app">
@@ -335,12 +345,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
     <button class="modal-close" onclick="closeLoginModal()">✕</button>
     <div id="modalLoggedOut">
       <div class="modal-title">Entrar</div>
-      <div class="modal-sub">Faça login para salvar suas avaliações e aparecer no ranking.</div>
-      <button class="btn-google" onclick="loginGoogle()">
-        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Entrar com Google
-      </button>
-      <div class="modal-divider">ou use um apelido</div>
+      <div class="modal-sub">Digite um apelido para salvar suas avaliações e aparecer no ranking.</div>
       <input class="modal-input" id="nicknameInput" type="text" placeholder="Seu apelido (ex: Maria G.)" maxlength="30">
       <button class="btn-modal-confirm" onclick="loginNickname()">ENTRAR</button>
     </div>
@@ -498,6 +503,27 @@ let tour=[],city='all',q='',sort='dist',showExtra=false;
 let map=null,userMarker=null,barMarkers={};
 
 // ══ GPS / APP INIT ════════════════════════════════
+// ══ SPLASH: LOGIN → GPS → APP ════════════════════
+function splashLoginAndGPS(){
+  const name=document.getElementById('splashNickname').value.trim();
+  if(!name){
+    document.getElementById('splashNickname').style.borderColor='rgba(184,48,48,.6)';
+    document.getElementById('splashNickname').placeholder='Digite um apelido primeiro...';
+    return;
+  }
+  localStorage.setItem('user_name',name);
+  _iniciarGPS();
+}
+function splashSkipLogin(){
+  _iniciarGPS();
+}
+function _iniciarGPS(){
+  // Esconde login, mostra status GPS
+  document.getElementById('splashLogin').style.display='none';
+  document.getElementById('splashGPS').style.display='flex';
+  startGPS();
+}
+
 function startGPS(){
   if(!navigator.geolocation){startApp(false);return}
   document.getElementById('splashMsg').textContent='🔍 Solicitando permissão...';
@@ -517,6 +543,10 @@ function startApp(fromGPS){
       ()=>{},{enableHighAccuracy:true,maximumAge:5000}
     );
   }
+  // Inicializa todos os panes como none, exceto mapa
+  document.querySelectorAll('.pane').forEach(p=>{p.style.display='none';p.classList.remove('active');});
+  const mapPane=document.getElementById('pane-mapa');
+  if(mapPane){mapPane.style.display='flex';mapPane.classList.add('active');}
   updateGPSPill();initMap();renderTour();renderResult();renderHist();
   updateLoginUI();
   // Carrega avaliações do Supabase e depois renderiza lista e ranking
@@ -577,7 +607,11 @@ function showTab(name){
     const tabs=['mapa','lista','tour','ranking','result','hist'];
     t.classList.toggle('active',tabs[i]===name);
   });
-  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  // Remove active E zera display inline de todos os panes
+  document.querySelectorAll('.pane').forEach(p=>{
+    p.classList.remove('active');
+    p.style.display='none';
+  });
   const pane=document.getElementById('pane-'+name);
   if(pane){pane.classList.add('active');pane.style.display='flex';}
   if(name==='ranking')renderRanking();
@@ -909,10 +943,7 @@ function closeLoginModal(e){
   if(e&&e.target!==document.getElementById('loginModal'))return;
   document.getElementById('loginModal').style.display='none';
 }
-function loginGoogle(){
-  showToast('Em breve: login com Google');
-  document.getElementById('loginModal').style.display='none';
-}
+
 function loginNickname(){
   const name=document.getElementById('nicknameInput').value.trim();
   if(!name){showToast('⚠️ Digite um apelido!');return;}
