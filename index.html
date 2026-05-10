@@ -198,6 +198,32 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
 .tema-label{font-family:‘JetBrains Mono’,monospace;font-size:.55rem;color:var(–green3);text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}
 .tema-titulo{font-family:‘Bebas Neue’,sans-serif;font-size:1rem;color:#fff;letter-spacing:1px}
 .tema-regra{font-size:.7rem;color:var(–cream3);margin-top:2px;line-height:1.4}
+
+/* ── LIGHTBOX ── */
+#lightbox{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0);backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);transition:background .3s,backdrop-filter .3s;pointer-events:none;padding:env(safe-area-inset-top,16px) 16px env(safe-area-inset-bottom,16px)}
+#lightbox.open{background:rgba(0,0,0,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);pointer-events:all}
+#lightbox .lb-img-wrap{position:relative;width:100%;max-width:500px;transform:scale(.85) translateY(20px);opacity:0;transition:transform .32s cubic-bezier(.34,1.56,.64,1),opacity .28s ease;border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.7)}
+#lightbox.open .lb-img-wrap{transform:scale(1) translateY(0);opacity:1}
+#lightbox .lb-img{width:100%;height:auto;max-height:65vh;object-fit:contain;display:block;background:#111}
+#lightbox .lb-info{width:100%;max-width:500px;padding:14px 16px;background:rgba(20,16,10,.9);border-radius:0 0 16px 16px;margin-top:-4px}
+#lightbox .lb-bar{font-family:‘Bebas Neue’,sans-serif;font-size:1.15rem;color:#fff;letter-spacing:.5px;line-height:1.2}
+#lightbox .lb-petisco{font-size:.78rem;color:var(–cream3);font-style:italic;margin-top:2px}
+#lightbox .lb-meta{display:flex;gap:14px;margin-top:8px}
+#lightbox .lb-badge{font-family:‘JetBrains Mono’,monospace;font-size:.6rem;color:var(–green3);background:rgba(82,183,136,.12);border:1px solid rgba(82,183,136,.25);border-radius:5px;padding:3px 8px;text-transform:uppercase;letter-spacing:1px}
+#lightbox .lb-close{position:absolute;top:max(env(safe-area-inset-top,16px),16px);right:16px;width:36px;height:36px;background:rgba(255,255,255,.12);border:none;border-radius:50%;color:#fff;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1;transition:background .15s}
+#lightbox .lb-close:active{background:rgba(255,255,255,.25)}
+
+/* ── CARD FOTO melhorias ── */
+.item-foto{width:100%;height:200px;object-fit:cover;object-position:center top;display:block;background:var(–bg3);transition:transform .35s ease,opacity .3s}
+.item-foto.loaded{opacity:1}
+.foto-wrap{position:relative;overflow:hidden;border-radius:var(–r2) var(–r2) 0 0;cursor:zoom-in;background:linear-gradient(90deg,var(–bg3) 25%,var(–bg2) 50%,var(–bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+.foto-wrap.loaded{animation:none}
+.foto-wrap:active .item-foto{transform:scale(1.03)}
+.foto-zoom-hint{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.55);border-radius:6px;padding:3px 7px;font-size:.6rem;color:rgba(255,255,255,.8);letter-spacing:.5px;pointer-events:none;opacity:0;transition:opacity .2s}
+.foto-wrap:hover .foto-zoom-hint{opacity:1}
+.foto-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent 0%,rgba(0,0,0,.75) 100%);padding:28px 10px 8px}
+.foto-petisco-nome{font-family:‘Bebas Neue’,sans-serif;font-size:.92rem;color:#fff;letter-spacing:.5px;line-height:1.2}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 </style>
 
 </head>
@@ -465,7 +491,7 @@ function renderList(){
     const murl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bar.n+', '+(bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia')+', GO')}`;
     const cls='bar-item'+(yh?' you-here':inT?' in-tour':'');
     const badge=yh?'<div class="item-badge badge-you">⭐ VOCÊ ESTÁ AQUI</div>':inT?'<div class="item-badge badge-tour">✓ ROTEIRO</div>':nr?'<div class="item-badge badge-near">📍 PRÓXIMO</div>':'';
-    return`<div class="${cls}"><div class="foto-wrap"><img class="item-foto" src="${bar.foto||''}" alt="${bar.p}" loading="lazy" onload="this.classList.add('loaded');this.parentElement.style.animation='none'" onerror="this.style.display='none'"><div class="foto-overlay"><div class="foto-petisco-nome">&ldquo;${bar.p}&rdquo;</div></div></div>${badge}<div class="item-name">${bar.n}</div><div class="item-city">${bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia'}</div><div class="dist-bar-wrap"><div class="dist-lbl">📍 ${fmt(bar.d)}</div><div class="dist-track"><div class="dist-fill" style="width:${pct}%"></div></div></div><div class="petisco-box"><div class="petisco-lbl">Petisco participante</div><div class="petisco-name">"${bar.p}"</div></div><div class="item-addr">📍 <span>${bar.a}</span></div><div class="item-hrs">🕐 <span>${bar.h}</span></div><div class="item-actions"><button class="btn-add ${inT?'on':''}" onclick="toggleTourByName('${esc(bar.n)}')">${inT?'✓ No roteiro':'＋ Roteiro'}</button><button class="btn-ico" onclick="flyToBar(BARS.find(b=>b.n==='${esc(bar.n)}'))"title="Ver no mapa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></button><a class="btn-ico" href="${murl}" target="_blank" title="Abrir no Google Maps"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4285F4"/></svg></a><a class="btn-ico btn-ig" href="https://instagram.com/${bar.ig}" target="_blank" title="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a></div><div class="item-price">R$ 40</div></div>`;
+    return`<div class="${cls}"><div class="foto-wrap" onclick="openLightbox(BARS.find(b=>b.n===\'${esc(bar.n)}\'))" role="button" aria-label="Ver foto ampliada"><img class="item-foto" src="${bar.foto||''}" alt="${bar.p}" loading="lazy" onload="this.classList.add('loaded');this.classList.add('loaded');this.parentElement.classList.add('loaded');this.parentElement.style.animation='none'" onerror="this.style.display='none'"><div class="foto-zoom-hint">🔍 ampliar</div><div class="foto-overlay"><div class="foto-petisco-nome">&ldquo;${bar.p}&rdquo;</div></div></div>${badge}<div class="item-name">${bar.n}</div><div class="item-city">${bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia'}</div><div class="dist-bar-wrap"><div class="dist-lbl">📍 ${fmt(bar.d)}</div><div class="dist-track"><div class="dist-fill" style="width:${pct}%"></div></div></div><div class="petisco-box"><div class="petisco-lbl">Petisco participante</div><div class="petisco-name">"${bar.p}"</div></div><div class="item-addr">📍 <span>${bar.a}</span></div><div class="item-hrs">🕐 <span>${bar.h}</span></div><div class="item-actions"><button class="btn-add ${inT?'on':''}" onclick="toggleTourByName('${esc(bar.n)}')">${inT?'✓ No roteiro':'＋ Roteiro'}</button><button class="btn-ico" onclick="flyToBar(BARS.find(b=>b.n==='${esc(bar.n)}'))"title="Ver no mapa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></button><a class="btn-ico" href="${murl}" target="_blank" title="Abrir no Google Maps"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4285F4"/></svg></a><a class="btn-ico btn-ig" href="https://instagram.com/${bar.ig}" target="_blank" title="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a></div><div class="item-price">R$ 40</div></div>`;
   }).join('');
 }
 
@@ -627,7 +653,78 @@ document.getElementById('search').addEventListener('input',e=>{q=e.target.value.
 function setSort(s){sort=s;document.getElementById('chipDist').className='chip'+(s==='dist'?' sort-on':'');document.getElementById('chipName').className='chip'+(s==='name'?' sort-on':'');renderList()}
 let toastTimer;
 function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
+
+// ── LIGHTBOX ──
+function openLightbox(bar){
+  const lb=document.getElementById('lightbox');
+  const img=document.getElementById('lbImg');
+  const info=document.getElementById('lbInfo');
+
+  // Usa a URL maior: troca -768x512 por original (sem sufixo) para máxima qualidade
+  const urlOrig = bar.foto ? bar.foto.replace(/-\d+x\d+\.jpg$/,'.jpg') : bar.foto;
+  
+  // Seta imagem — reutiliza se já carregada, senão usa a menor como placeholder
+  img.src = '';
+  img.src = urlOrig || bar.foto || '';
+  img.alt = bar.p || '';
+  // Fallback para 768x512 se original não existir
+  img.onerror = function(){
+    if(this.src !== bar.foto){ this.src = bar.foto; }
+  };
+
+  // Info do bar
+  const dist = bar.d && bar.d < 50 ? `<span class="lb-badge">📍 ${fmt(bar.d)}</span>` : '';
+  info.innerHTML = `
+    <div class="lb-bar">${bar.n}</div>
+    <div class="lb-petisco">&ldquo;${bar.p}&rdquo;</div>
+    <div class="lb-meta">
+      <span class="lb-badge">R$ 40</span>
+      ${dist}
+      <span class="lb-badge">${bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia'}</span>
+    </div>`;
+
+  // Abre com animação
+  lb.style.display='flex';
+  document.body.style.overflow='hidden';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>lb.classList.add('open')));
+}
+
+function closeLightbox(){
+  const lb=document.getElementById('lightbox');
+  lb.classList.remove('open');
+  document.body.style.overflow='';
+  setTimeout(()=>{ lb.style.display='none'; document.getElementById('lbImg').src=''; },320);
+}
+
+function lbClose(e){
+  // Fecha ao clicar fora da imagem/info
+  if(e.target===document.getElementById('lightbox')) closeLightbox();
+}
+
+// Fecha com swipe down ou tecla Escape
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLightbox(); });
+
+(function(){
+  let startY=0;
+  document.getElementById('lightbox').addEventListener('touchstart',e=>{ startY=e.touches[0].clientY; },{passive:true});
+  document.getElementById('lightbox').addEventListener('touchmove',e=>{
+    const dy=e.touches[0].clientY-startY;
+    if(dy>60) closeLightbox();
+  },{passive:true});
+})();
+
 </script>
 
+  <!-- LIGHTBOX -->
+
+  <div id="lightbox" onclick="lbClose(event)">
+    <button class="lb-close" onclick="closeLightbox()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="lb-img-wrap" id="lbImgWrap">
+      <img id="lbImg" class="lb-img" src="" alt="">
+    </div>
+    <div class="lb-info" id="lbInfo"></div>
+  </div>
 </body>
 </html>
