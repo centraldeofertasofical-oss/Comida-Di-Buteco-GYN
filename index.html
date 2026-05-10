@@ -521,28 +521,45 @@ function renderTour(){
 function clearTour(){tour=[];renderList();renderTour();updateMarkers();document.getElementById('tabCnt').textContent='(0)';showToast('🗑 Roteiro limpo!')}
 
 function verificarAgora(btn){
-  btn.disabled=true;
-  btn.textContent='⏳ VERIFICANDO...';
-  btn.style.opacity='.6';
+  const msg = document.getElementById('verificarMsg');
+  btn.disabled = true;
+  btn.style.opacity = '.7';
+  btn.textContent = '⏳ VERIFICANDO...';
+  if(msg) msg.textContent = '';
+
   buscarResultadoAuto().then(ranking=>{
-    if(ranking&&ranking.length>0){
-      CONFIG.resultado2026.status='finalizado';
-      CONFIG.resultado2026.ranking=ranking;
+    btn.style.opacity = '1';
+    btn.disabled = false;
+    btn.textContent = '↻ VERIFICAR AGORA';
+
+    if(ranking && ranking.length > 0){
+      // Resultado encontrado!
+      CONFIG.resultado2026.status = 'finalizado';
+      CONFIG.resultado2026.ranking = ranking;
       renderResult();
     } else {
-      btn.textContent='✓ VERIFICADO — SEM RESULTADO AINDA';
-      btn.style.color='var(--cream3)';
-      setTimeout(()=>{
-        btn.textContent='↻ VERIFICAR AGORA';
-        btn.style.color='var(--beer)';
-        btn.style.opacity='1';
-        btn.disabled=false;
-      }, 3000);
+      // Sem resultado ainda — mostra mensagem amigável
+      const hoje = new Date();
+      const fim = new Date('2026-05-10');
+      const emCurso = hoje <= fim;
+
+      if(msg){
+        msg.innerHTML = emCurso
+          ? '🍻 Evento ainda em curso!<br>O resultado sai após 10/05/2026.'
+          : '📋 Resultado ainda não publicado.<br>Tente novamente em breve.';
+        msg.style.color = 'var(--cream3)';
+        // Limpa após 5s
+        setTimeout(()=>{ if(msg) msg.textContent=''; }, 5000);
+      }
     }
   }).catch(()=>{
-    btn.textContent='↻ VERIFICAR AGORA';
-    btn.style.opacity='1';
-    btn.disabled=false;
+    btn.style.opacity = '1';
+    btn.disabled = false;
+    btn.textContent = '↻ VERIFICAR AGORA';
+    if(msg){
+      msg.textContent = '⚠️ Erro ao verificar. Tente novamente.';
+      setTimeout(()=>{ if(msg) msg.textContent=''; }, 4000);
+    }
   });
 }
 function renderResult(){
@@ -601,17 +618,31 @@ async function buscarResultadoAuto(){
 }
 
 function renderAguardando(el, emAndamento){
-  const r=CONFIG.resultado2026;
+  const titulo = emAndamento ? 'VOTAÇÃO EM ANDAMENTO' : 'RESULTADO EM BREVE';
+  const descricao = emAndamento
+    ? `O evento está acontecendo de ${CONFIG.dataInicio} a ${CONFIG.dataFim}. O resultado será divulgado após o encerramento.`
+    : `O evento acontece de ${CONFIG.dataInicio} a ${CONFIG.dataFim}. Acompanhe o resultado aqui assim que for divulgado.`;
+
   el.innerHTML=`<div style="display:flex;flex-direction:column;min-height:100%;padding-bottom:env(safe-area-inset-bottom,20px)">
-    <div class="result-header"><div class="result-title">Resultado ${CONFIG.ano}</div>
-    <div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição · ${BARS.length} bares</div></div>
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px;text-align:center">
-      <div style="font-size:3.5rem;margin-bottom:14px">⏳</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.55rem;color:var(--beer);letter-spacing:2px;margin-bottom:10px">${emAndamento?'VOTAÇÃO EM ANDAMENTO':'RESULTADO EM BREVE'}</div>
-      <div style="color:var(--cream3);font-size:.83rem;line-height:1.7;max-width:280px">${emAndamento?`O evento vai até ${CONFIG.dataFim}. O resultado sai logo após.`:`O evento começa em ${CONFIG.dataInicio}. Acompanhe aqui!`}</div>
-      <div style="margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--green3);text-transform:uppercase;letter-spacing:2px">🔄 Buscando automaticamente...</div>
-      <button id="btnVerificar" onclick="verificarAgora(this)" style="margin-top:20px;background:var(--beer);border:none;color:#1a1200;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:13px 28px;border-radius:10px;cursor:pointer;letter-spacing:1.5px;width:100%;max-width:260px;-webkit-tap-highlight-color:transparent;touch-action:manipulation">↻ VERIFICAR AGORA</button>
-    </div></div>`;
+    <div class="result-header">
+      <div class="result-title">Resultado ${CONFIG.ano}</div>
+      <div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição · ${BARS.length} bares</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 24px;text-align:center">
+      <div style="font-size:3rem;margin-bottom:16px">⏳</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.45rem;color:var(--beer);letter-spacing:2px;margin-bottom:12px">${titulo}</div>
+
+      <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:12px;padding:14px 18px;max-width:300px;margin-bottom:18px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--green3);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px">Período do evento</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:#fff;letter-spacing:1px">${CONFIG.dataInicio} → ${CONFIG.dataFim}</div>
+        <div style="font-size:.72rem;color:var(--cream3);margin-top:6px;line-height:1.5">${descricao}</div>
+      </div>
+
+      <button id="btnVerificar" onclick="verificarAgora(this)" style="background:var(--beer);border:none;color:#1a1200;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:14px 32px;border-radius:10px;cursor:pointer;letter-spacing:1.5px;width:100%;max-width:280px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;display:block">↻ VERIFICAR AGORA</button>
+
+      <div id="verificarMsg" style="margin-top:12px;min-height:20px;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--cream3);letter-spacing:1px"></div>
+    </div>
+  </div>`;
 }
 
 function renderPodio(el, ranking){
