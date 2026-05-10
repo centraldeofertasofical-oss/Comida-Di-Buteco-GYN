@@ -522,6 +522,24 @@ window.addEventListener('DOMContentLoaded', function(){
   }
 });
 
+function splashConfirm(){
+  const name=document.getElementById('splashNick').value.trim();
+  if(!name){
+    document.getElementById('splashNick').style.borderColor='rgba(184,48,48,.6)';
+    document.getElementById('splashNick').placeholder='Digite um apelido primeiro...';
+    return;
+  }
+  localStorage.setItem('user_name',name);
+  updateLoginUI();
+  _goGPS();
+}
+function splashSkip(){_goGPS();}
+function _goGPS(){
+  document.getElementById('splashStep1').style.display='none';
+  document.getElementById('splashStep2').style.display='flex';
+  startGPS();
+}
+
 function startGPS(){
   if(!navigator.geolocation){startApp(false);return}
   document.getElementById('splashMsg').textContent='🔍 Solicitando permissão...';
@@ -743,6 +761,16 @@ function renderTour(){
       <a class="btn-maps-big" href="${wazeUrl}" target="_blank">🗺 Abrir no Waze</a>
       <button class="btn-clr" onclick="clearTour()">🗑 LIMPAR ROTEIRO</button>
     </div>`;
+}
+function otimizarRota(){
+  if(tour.length<2)return;
+  let rest=[...tour],ord=[],atLat=LAT,atLng=LNG;
+  while(rest.length){
+    let minD=Infinity,minI=0;
+    rest.forEach((b,i)=>{const R=6371,dLa=(b.lat-atLat)*Math.PI/180,dLn=(b.lng-atLng)*Math.PI/180;const a=Math.sin(dLa/2)**2+Math.cos(atLat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLn/2)**2;const d=R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));if(d<minD){minD=d;minI=i;}});
+    const b=rest.splice(minI,1)[0];ord.push(b);atLat=b.lat;atLng=b.lng;
+  }
+  tour=ord;renderTour();showToast('⚡ Rota otimizada!');
 }
 function clearTour(){tour=[];renderList();renderTour();updateMarkers();document.getElementById('tabCnt').textContent='(0)';showToast('🗑 Roteiro limpo!')}
 
