@@ -133,7 +133,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
 .result-banner{background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(245,166,35,.05));border-bottom:1px solid rgba(255,215,0,.2);padding:14px;flex-shrink:0}
 .result-live{display:inline-flex;align-items:center;gap:6px;background:rgba(184,48,48,.15);border:1px solid rgba(184,48,48,.4);border-radius:100px;padding:3px 10px;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:#f87171;margin-bottom:8px}
 .live-dot{width:6px;height:6px;border-radius:50%;background:#f87171;animation:blink 1s ease-in-out infinite;flex-shrink:0}
-.result-title{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;color:var(--gold);letter-spacing:2px;line-height:1}
+.result-header{padding:16px 14px 12px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.result-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:2px;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .result-sub{font-size:.75rem;color:var(--cream3);margin-top:3px}
 .podium{display:flex;align-items:flex-end;justify-content:center;gap:6px;padding:14px 12px 6px;flex-shrink:0}
 .podium-spot{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;max-width:115px}
@@ -287,7 +288,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
       <div class="list-body" id="listBody"></div>
     </div>
     <div class="pane" id="pane-tour"><div class="scroll-pane" id="tourPane"></div></div>
-    <div class="pane" id="pane-result"><div id="resultContent" style="display:flex;flex-direction:column;height:100%"></div></div>
+    <div class="pane" id="pane-result" style="overflow-y:auto"><div id="resultContent" style="display:flex;flex-direction:column;min-height:100%"></div></div>
     <div class="pane" id="pane-hist"><div class="hist-body" id="histBody"></div></div>
   </div>
 </div>
@@ -519,6 +520,31 @@ function renderTour(){
 }
 function clearTour(){tour=[];renderList();renderTour();updateMarkers();document.getElementById('tabCnt').textContent='(0)';showToast('🗑 Roteiro limpo!')}
 
+function verificarAgora(btn){
+  btn.disabled=true;
+  btn.textContent='⏳ VERIFICANDO...';
+  btn.style.opacity='.6';
+  buscarResultadoAuto().then(ranking=>{
+    if(ranking&&ranking.length>0){
+      CONFIG.resultado2026.status='finalizado';
+      CONFIG.resultado2026.ranking=ranking;
+      renderResult();
+    } else {
+      btn.textContent='✓ VERIFICADO — SEM RESULTADO AINDA';
+      btn.style.color='var(--cream3)';
+      setTimeout(()=>{
+        btn.textContent='↻ VERIFICAR AGORA';
+        btn.style.color='var(--beer)';
+        btn.style.opacity='1';
+        btn.disabled=false;
+      }, 3000);
+    }
+  }).catch(()=>{
+    btn.textContent='↻ VERIFICAR AGORA';
+    btn.style.opacity='1';
+    btn.disabled=false;
+  });
+}
 function renderResult(){
   const el=document.getElementById('resultContent'),r=CONFIG.resultado2026;
   const hoje=new Date(),dataRes=new Date(CONFIG.dataResultado);
@@ -552,20 +578,31 @@ function renderResult(){
 }
 
 async function buscarResultadoAuto(){
+  // Tenta primeiro via Edge Function (se existir no Vercel)
   try {
-    // Proxy Vercel que raspa o site do CdB
-    const r = await fetch('/api/resultado', {signal: AbortSignal.timeout(8000)});
-    if(!r.ok) return null;
-    const d = await r.json();
-    return d.ranking || null;
-  } catch(e){
-    return null;
-  }
+    const r = await fetch('/api/resultado', {signal: AbortSignal.timeout(5000)});
+    if(r.ok){
+      const d = await r.json();
+      if(d.ranking) return d.ranking;
+    }
+  } catch(e){}
+
+  // Fallback: verifica direto o site oficial (pode ser bloqueado por CORS)
+  try {
+    const r = await fetch('https://comidadibuteco.com.br/vencedores/goias/', {
+      signal: AbortSignal.timeout(8000),
+      mode: 'no-cors'
+    });
+    // no-cors retorna opaque — não conseguimos ler o conteúdo
+    // mas pelo menos confirma que o site está online
+  } catch(e){}
+
+  return null;
 }
 
 function renderAguardando(el, emAndamento){
   const r=CONFIG.resultado2026;
-  el.innerHTML=`<div style="display:flex;flex-direction:column;height:100%">
+  el.innerHTML=`<div style="display:flex;flex-direction:column;min-height:100%;padding-bottom:env(safe-area-inset-bottom,20px)">
     <div class="result-header"><div class="result-title">Resultado ${CONFIG.ano}</div>
     <div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição · ${BARS.length} bares</div></div>
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px;text-align:center">
@@ -573,7 +610,7 @@ function renderAguardando(el, emAndamento){
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.55rem;color:var(--beer);letter-spacing:2px;margin-bottom:10px">${emAndamento?'VOTAÇÃO EM ANDAMENTO':'RESULTADO EM BREVE'}</div>
       <div style="color:var(--cream3);font-size:.83rem;line-height:1.7;max-width:280px">${emAndamento?`O evento vai até ${CONFIG.dataFim}. O resultado sai logo após.`:`O evento começa em ${CONFIG.dataInicio}. Acompanhe aqui!`}</div>
       <div style="margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--green3);text-transform:uppercase;letter-spacing:2px">🔄 Buscando automaticamente...</div>
-      <button onclick="renderResult()" style="margin-top:18px;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);color:var(--beer);font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:8px 16px;border-radius:8px;cursor:pointer;letter-spacing:1px">↻ VERIFICAR AGORA</button>
+      <button id="btnVerificar" onclick="verificarAgora(this)" style="margin-top:20px;background:var(--beer);border:none;color:#1a1200;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:13px 28px;border-radius:10px;cursor:pointer;letter-spacing:1.5px;width:100%;max-width:260px;-webkit-tap-highlight-color:transparent;touch-action:manipulation">↻ VERIFICAR AGORA</button>
     </div></div>`;
 }
 
