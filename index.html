@@ -43,182 +43,189 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
 .gps-pill.ok .gps-dot{background:var(--green3);animation:blink 2s ease-in-out infinite}
 .gps-dot{width:7px;height:7px;border-radius:50%;background:var(--cream3);flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.tabs{display:flex;background:var(--bg2);border-bottom:1px solid rgba(245,166,35,.1);flex-shrink:0;overflow-x:auto}
+
+/* ── LOGIN PILL ── */
+.login-pill{display:flex;align-items:center;gap:6px;background:var(–surface);border:1px solid rgba(245,166,35,.2);border-radius:100px;padding:4px 10px;font-family:‘JetBrains Mono’,monospace;font-size:.6rem;color:var(–cream3);cursor:pointer;white-space:nowrap;transition:all .2s}
+.login-pill:hover{background:rgba(245,166,35,.08)}
+.login-pill.logged{border-color:rgba(82,183,136,.4);color:var(–green3)}
+.login-avatar{width:18px;height:18px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(245,166,35,.3)}
+
+/* ── MODAL DE LOGIN ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.modal-box{background:var(–bg2);border:1px solid rgba(245,166,35,.2);border-radius:20px;padding:28px 24px;width:100%;max-width:340px;position:relative}
+.modal-title{font-family:‘Bebas Neue’,sans-serif;font-size:1.5rem;color:var(–beer);letter-spacing:2px;margin-bottom:6px}
+.modal-sub{font-size:.74rem;color:var(–cream3);margin-bottom:22px;line-height:1.5}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;border:none;border-radius:var(–r2);padding:13px;font-family:‘Outfit’,sans-serif;font-size:.9rem;font-weight:600;color:#1f1f1f;cursor:pointer;margin-bottom:14px;transition:opacity .2s}
+.btn-google:hover{opacity:.9}
+.btn-google svg{flex-shrink:0}
+.modal-divider{display:flex;align-items:center;gap:10px;color:var(–cream3);font-size:.7rem;font-family:‘JetBrains Mono’,monospace;margin-bottom:14px}
+.modal-divider::before,.modal-divider::after{content:’’;flex:1;height:1px;background:rgba(255,255,255,.08)}
+.modal-input{width:100%;background:var(–surface);border:1px solid rgba(245,166,35,.2);border-radius:var(–r2);padding:11px 14px;color:var(–cream);font-family:‘Outfit’,sans-serif;font-size:.9rem;outline:none;margin-bottom:10px}
+.modal-input:focus{border-color:rgba(245,166,35,.5)}
+.btn-modal-confirm{width:100%;background:linear-gradient(135deg,var(–beer),var(–beer2));border:none;border-radius:var(–r2);padding:12px;color:var(–bg);font-family:‘Bebas Neue’,sans-serif;font-size:1rem;letter-spacing:2px;cursor:pointer;margin-bottom:8px}
+.btn-modal-logout{width:100%;background:transparent;border:1px solid rgba(184,48,48,.3);border-radius:var(–r2);padding:10px;color:var(–red);font-family:‘JetBrains Mono’,monospace;font-size:.68rem;cursor:pointer;letter-spacing:1px}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(–cream3);font-size:1.1rem;cursor:pointer;padding:4px;line-height:1}
+
+/* ── AVALIAÇÃO ── */
+.item-rating{display:flex;align-items:center;gap:3px;margin-top:6px}
+.item-rating .star{font-size:.9rem;color:var(–cream3);cursor:pointer;user-select:none;transition:transform .1s}
+.item-rating .star:active{transform:scale(1.3)}
+.item-rating .star.on{color:var(–beer)}
+.item-rating .rating-value{font-family:‘JetBrains Mono’,monospace;font-size:.6rem;margin-left:4px;color:var(–cream3)}
+
+/* ── BADGE FORA DO EVENTO ── */
+.badge-extra{background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.35);color:#a78bfa}
+.bar-item.extra-bar{border-color:rgba(139,92,246,.2)}
+.bar-item.extra-bar::before{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+.extra-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);border-radius:100px;padding:2px 8px;font-family:‘JetBrains Mono’,monospace;font-size:.5rem;color:#a78bfa;margin-bottom:6px;letter-spacing:.5px}
+
+/* ── RANKING INTERNO ── */
+.ranking-pane{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 12px calc(10px + var(–safe-bot))}
+.ranking-pane::-webkit-scrollbar{display:none}
+.rank-header-info{padding:10px 12px 6px;background:var(–bg2);border-bottom:1px solid rgba(245,166,35,.08);flex-shrink:0}
+.rank-header-title{font-family:‘Bebas Neue’,sans-serif;font-size:1.1rem;color:var(–beer);letter-spacing:2px}
+.rank-header-sub{font-family:‘JetBrains Mono’,monospace;font-size:.55rem;color:var(–cream3);letter-spacing:1px;margin-top:2px}
+.rank-item{display:flex;align-items:center;gap:10px;background:var(–surface);border:1px solid rgba(245,166,35,.1);border-radius:var(–r2);padding:10px 12px;margin-bottom:6px;transition:border-color .2s}
+.rank-item:hover{border-color:rgba(245,166,35,.25)}
+.rank-pos{font-family:‘Bebas Neue’,sans-serif;font-size:1.25rem;color:var(–cream3);min-width:32px;text-align:center;flex-shrink:0}
+.rank-pos.p1{color:var(–gold)}.rank-pos.p2{color:var(–silver)}.rank-pos.p3{color:var(–bronze)}
+.rank-medal{font-size:1rem;flex-shrink:0}
+.rank-info{flex:1;overflow:hidden}
+.rank-name{font-family:‘Bebas Neue’,sans-serif;font-size:.98rem;color:var(–cream);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-petisco{font-size:.65rem;color:var(–beer);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.rank-avg{font-family:‘JetBrains Mono’,monospace;font-size:.75rem;color:var(–beer);font-weight:600}
+.rank-votes{font-family:‘JetBrains Mono’,monospace;font-size:.55rem;color:var(–cream3)}
+.rank-stars{font-size:.65rem;color:var(–beer)}
+.rank-empty{text-align:center;padding:40px 20px;color:var(–cream3)}
+.rank-empty-icon{font-size:2.5rem;margin-bottom:12px}
+.rank-empty-txt{font-size:.82rem;line-height:1.7}
+
+.tabs{display:flex;background:var(–bg2);border-bottom:1px solid rgba(245,166,35,.1);flex-shrink:0;overflow-x:auto}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex-shrink:0;padding:8px 10px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.52rem;color:var(--cream3);cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:3px}
+.tab{flex-shrink:0;padding:8px 10px;text-align:center;font-family:‘JetBrains Mono’,monospace;font-size:.52rem;color:var(–cream3);cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:3px}
 .tab svg{transition:stroke .2s;flex-shrink:0}
-.tab.active{color:var(--beer);border-bottom-color:var(--beer)}
-.tab.active svg{stroke:var(--beer)}
-.tab:not(.active) svg{stroke:var(--cream3)}
+.tab.active{color:var(–beer);border-bottom-color:var(–beer)}
+.tab.active svg{stroke:var(–beer)}
+.tab:not(.active) svg{stroke:var(–cream3)}
 .tab-lbl{line-height:1}
 .content{flex:1;overflow:hidden;position:relative}
 .pane{position:absolute;inset:0;display:none;flex-direction:column}
 .pane.active{display:flex}
 #map{flex:1}
-.map-fab{position:absolute;bottom:calc(16px + var(--safe-bot));right:16px;z-index:1000;width:48px;height:48px;border-radius:50%;background:var(--beer);color:var(--bg);border:none;font-size:1.2rem;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center}
-.leaflet-popup-content-wrapper{background:var(--surface)!important;border:1px solid rgba(245,166,35,.3)!important;border-radius:var(--r2)!important;box-shadow:0 8px 32px rgba(0,0,0,.5)!important;padding:0!important;overflow:hidden}
-.leaflet-popup-content{margin:0!important;color:var(--cream)}
-.leaflet-popup-tip{background:var(--surface)!important}
+.map-fab{position:absolute;bottom:calc(16px + var(–safe-bot));right:16px;z-index:1000;width:48px;height:48px;border-radius:50%;background:var(–beer);color:var(–bg);border:none;font-size:1.2rem;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center}
+.leaflet-popup-content-wrapper{background:var(–surface)!important;border:1px solid rgba(245,166,35,.3)!important;border-radius:var(–r2)!important;box-shadow:0 8px 32px rgba(0,0,0,.5)!important;padding:0!important;overflow:hidden}
+.leaflet-popup-content{margin:0!important;color:var(–cream)}
+.leaflet-popup-tip{background:var(–surface)!important}
 .popup-inner{padding:12px 14px}
-.popup-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--beer);letter-spacing:1px}
-.popup-petisco{font-size:.78rem;color:var(--cream2);font-style:italic;margin:2px 0 6px}
-.popup-dist{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--green3)}
+.popup-name{font-family:‘Bebas Neue’,sans-serif;font-size:1rem;color:var(–beer);letter-spacing:1px}
+.popup-petisco{font-size:.78rem;color:var(–cream2);font-style:italic;margin:2px 0 6px}
+.popup-dist{font-family:‘JetBrains Mono’,monospace;font-size:.65rem;color:var(–green3)}
 .popup-actions{display:flex;gap:5px;margin-top:8px}
-.popup-btn{flex:1;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);color:var(--beer);padding:6px 4px;font-family:'JetBrains Mono',monospace;font-size:.6rem;text-align:center;cursor:pointer;text-decoration:none;border-radius:var(--r3);display:block}
-.list-controls{padding:10px 12px;display:flex;flex-direction:column;gap:7px;background:var(--bg2);border-bottom:1px solid rgba(245,166,35,.08);flex-shrink:0}
+.popup-btn{flex:1;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);color:var(–beer);padding:6px 4px;font-family:‘JetBrains Mono’,monospace;font-size:.6rem;text-align:center;cursor:pointer;text-decoration:none;border-radius:var(–r3);display:block}
+.list-controls{padding:10px 12px;display:flex;flex-direction:column;gap:7px;background:var(–bg2);border-bottom:1px solid rgba(245,166,35,.08);flex-shrink:0}
 .search-wrap{position:relative}
-.search-wrap input{width:100%;background:var(--surface);border:1px solid rgba(245,166,35,.18);border-radius:var(--r2);padding:9px 11px 9px 34px;color:var(--cream);font-family:'Outfit',sans-serif;font-size:.84rem;outline:none}
-.search-wrap input::placeholder{color:var(--cream3)}
+.search-wrap input{width:100%;background:var(–surface);border:1px solid rgba(245,166,35,.18);border-radius:var(–r2);padding:9px 11px 9px 34px;color:var(–cream);font-family:‘Outfit’,sans-serif;font-size:.84rem;outline:none}
+.search-wrap input::placeholder{color:var(–cream3)}
 .search-wrap input:focus{border-color:rgba(245,166,35,.5)}
-.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:.8rem;color:var(--cream3);pointer-events:none}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:.8rem;color:var(–cream3);pointer-events:none}
 .chips{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex-shrink:0;background:var(--surface);border:1px solid rgba(245,166,35,.18);border-radius:100px;padding:5px 12px;font-size:.65rem;font-family:'JetBrains Mono',monospace;color:var(--cream3);cursor:pointer;white-space:nowrap}
-.chip.on{background:rgba(245,166,35,.14);border-color:var(--beer);color:var(--beer)}
+.chip{flex-shrink:0;background:var(–surface);border:1px solid rgba(245,166,35,.18);border-radius:100px;padding:5px 12px;font-size:.65rem;font-family:‘JetBrains Mono’,monospace;color:var(–cream3);cursor:pointer;white-space:nowrap}
+.chip.on{background:rgba(245,166,35,.14);border-color:var(–beer);color:var(–beer)}
 .chip.sort-on{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.4);color:#60a5fa}
-.res-bar{padding:5px 12px;background:var(--bg3);border-bottom:1px solid rgba(245,166,35,.06);font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--cream3);display:flex;justify-content:space-between;flex-shrink:0}
-.list-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px calc(8px + var(--safe-bot))}
+.chip.extra-on{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.4);color:#a78bfa}
+.res-bar{padding:5px 12px;background:var(–bg3);border-bottom:1px solid rgba(245,166,35,.06);font-family:‘JetBrains Mono’,monospace;font-size:.58rem;color:var(–cream3);display:flex;justify-content:space-between;flex-shrink:0}
+.list-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px calc(8px + var(–safe-bot))}
 .list-body::-webkit-scrollbar{display:none}
-.bar-item{background:var(--surface);border:1px solid rgba(245,166,35,.1);border-radius:var(--r);padding:13px 13px 36px;margin-bottom:8px;position:relative;overflow:hidden}
-.bar-item::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--beer),var(--beer2));transform:scaleX(0);transition:transform .25s;transform-origin:left}
-.bar-item.in-tour{border-color:rgba(82,183,136,.4);background:linear-gradient(135deg,var(--surface),rgba(42,92,63,.2))}
+.bar-item{background:var(–surface);border:1px solid rgba(245,166,35,.1);border-radius:var(–r);padding:13px 13px 36px;margin-bottom:8px;position:relative;overflow:hidden}
+.bar-item::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(–beer),var(–beer2));transform:scaleX(0);transition:transform .25s;transform-origin:left}
+.bar-item.in-tour{border-color:rgba(82,183,136,.4);background:linear-gradient(135deg,var(–surface),rgba(42,92,63,.2))}
 .bar-item.in-tour::before,.bar-item.you-here::before{transform:scaleX(1)}
 .bar-item.you-here{border-color:rgba(245,166,35,.6)}
-.bar-item.you-here::before{background:linear-gradient(90deg,#FFD700,var(--beer))}
-.item-badge{position:absolute;top:11px;right:11px;font-family:'JetBrains Mono',monospace;font-size:.5rem;padding:2px 7px;border-radius:100px;letter-spacing:1px}
-.badge-you{background:rgba(245,166,35,.18);border:1px solid rgba(245,166,35,.5);color:var(--beer)}
-.badge-tour{background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.4);color:var(--green3)}
+.bar-item.you-here::before{background:linear-gradient(90deg,#FFD700,var(–beer))}
+.item-badge{position:absolute;top:11px;right:11px;font-family:‘JetBrains Mono’,monospace;font-size:.5rem;padding:2px 7px;border-radius:100px;letter-spacing:1px}
+.badge-you{background:rgba(245,166,35,.18);border:1px solid rgba(245,166,35,.5);color:var(–beer)}
+.badge-tour{background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.4);color:var(–green3)}
 .badge-near{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);color:#60a5fa}
-.item-name{font-family:'Bebas Neue',sans-serif;font-size:1.18rem;color:var(--cream);letter-spacing:1px;padding-right:66px;margin-bottom:2px}
-.item-city{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--beer);background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.18);padding:1px 7px;border-radius:100px;display:inline-block;margin-bottom:7px}
+.item-name{font-family:‘Bebas Neue’,sans-serif;font-size:1.18rem;color:var(–cream);letter-spacing:1px;padding-right:66px;margin-bottom:2px}
+.item-city{font-family:‘JetBrains Mono’,monospace;font-size:.54rem;color:var(–beer);background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.18);padding:1px 7px;border-radius:100px;display:inline-block;margin-bottom:7px}
 .dist-bar-wrap{display:flex;align-items:center;gap:7px;margin-bottom:8px}
-.dist-lbl{font-family:'JetBrains Mono',monospace;font-size:.61rem;color:#60a5fa;white-space:nowrap;min-width:50px}
+.dist-lbl{font-family:‘JetBrains Mono’,monospace;font-size:.61rem;color:#60a5fa;white-space:nowrap;min-width:50px}
 .dist-track{flex:1;height:3px;background:rgba(59,130,246,.1);border-radius:2px;overflow:hidden}
 .dist-fill{height:100%;background:linear-gradient(90deg,#3b82f6,#60a5fa);border-radius:2px}
-.petisco-box{background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.1);border-radius:var(--r3);padding:7px 10px;margin-bottom:8px}
-.petisco-lbl{font-size:.55rem;font-family:'JetBrains Mono',monospace;color:var(--cream3);text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}
-.petisco-name{font-size:.84rem;color:var(--beer);font-style:italic;font-weight:500}
-.item-addr{font-size:.7rem;color:var(--cream3);margin-bottom:3px;display:flex;gap:5px;line-height:1.4}
-.item-hrs{font-size:.64rem;color:var(--cream3);margin-bottom:10px;display:flex;gap:5px}
+.petisco-box{background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.1);border-radius:var(–r3);padding:7px 10px;margin-bottom:8px}
+.petisco-lbl{font-size:.55rem;font-family:‘JetBrains Mono’,monospace;color:var(–cream3);text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}
+.petisco-name{font-size:.84rem;color:var(–beer);font-style:italic;font-weight:500}
+.item-addr{font-size:.7rem;color:var(–cream3);margin-bottom:3px;display:flex;gap:5px;line-height:1.4}
+.item-hrs{font-size:.64rem;color:var(–cream3);margin-bottom:10px;display:flex;gap:5px}
 .item-actions{display:flex;gap:5px}
-.btn-add{flex:1;background:transparent;border:1px solid rgba(82,183,136,.33);border-radius:var(--r3);padding:7px 5px;color:var(--green3);font-family:'JetBrains Mono',monospace;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px}
-.btn-add.on{background:rgba(82,183,136,.1);border-color:var(--green3)}
-.btn-ico{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:9px;width:36px;height:36px;padding:0;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;color:var(--cream2);transition:background .15s,transform .1s,color .15s;flex-shrink:0}
+.btn-add{flex:1;background:transparent;border:1px solid rgba(82,183,136,.33);border-radius:var(–r3);padding:7px 5px;color:var(–green3);font-family:‘JetBrains Mono’,monospace;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px}
+.btn-add.on{background:rgba(82,183,136,.1);border-color:var(–green3)}
+.btn-ico{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:9px;width:36px;height:36px;padding:0;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;color:var(–cream2);transition:background .15s,transform .1s,color .15s;flex-shrink:0}
 .btn-ico:active{transform:scale(.9)}
 .btn-ico svg{pointer-events:none}
 .btn-ig{color:#C13584}
 .btn-ig:hover,.btn-ig:active{background:rgba(193,53,132,.15);color:#E1306C}
-.btn-ico:not(.btn-ig):hover{background:rgba(245,166,35,.1);color:var(--beer)}
-.item-price{position:absolute;bottom:10px;right:11px;font-family:'JetBrains Mono',monospace;font-size:.57rem;color:var(--cream3);background:var(--bg3);border-radius:6px;padding:2px 7px}
-.no-res{text-align:center;padding:50px 20px;color:var(--cream3);font-style:italic}
-.scroll-pane{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px calc(12px + var(--safe-bot))}
+.btn-ico:not(.btn-ig):hover{background:rgba(245,166,35,.1);color:var(–beer)}
+.item-price{position:absolute;bottom:10px;right:11px;font-family:‘JetBrains Mono’,monospace;font-size:.57rem;color:var(–cream3);background:var(–bg3);border-radius:6px;padding:2px 7px}
+.no-res{text-align:center;padding:50px 20px;color:var(–cream3);font-style:italic}
+.scroll-pane{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px calc(12px + var(–safe-bot))}
 .scroll-pane::-webkit-scrollbar{display:none}
 .tour-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.tour-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--beer);letter-spacing:2px}
-.tour-cnt-badge{background:var(--green3);color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:3px 10px;border-radius:100px}
-.stop-item{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid rgba(82,183,136,.15);border-radius:var(--r2);padding:11px;margin-bottom:6px}
-.stop-num{background:var(--green3);color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tour-title{font-family:‘Bebas Neue’,sans-serif;font-size:1.3rem;color:var(–beer);letter-spacing:2px}
+.tour-cnt-badge{background:var(–green3);color:var(–bg);font-family:‘JetBrains Mono’,monospace;font-size:.6rem;font-weight:700;padding:3px 10px;border-radius:100px}
+.stop-item{display:flex;align-items:center;gap:9px;background:var(–surface);border:1px solid rgba(82,183,136,.15);border-radius:var(–r2);padding:11px;margin-bottom:6px}
+.stop-num{background:var(–green3);color:var(–bg);font-family:‘JetBrains Mono’,monospace;font-size:.6rem;font-weight:700;min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .stop-info{flex:1;overflow:hidden}
-.stop-name{font-family:'Bebas Neue',sans-serif;font-size:.92rem;color:var(--cream);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stop-petisco{font-size:.66rem;color:var(--beer);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stop-dist{font-family:'JetBrains Mono',monospace;font-size:.57rem;color:#60a5fa;flex-shrink:0}
-.stop-rm{background:none;border:none;color:var(--cream3);font-size:.9rem;cursor:pointer;padding:4px;flex-shrink:0}
-.tour-empty{text-align:center;padding:50px 20px;color:var(--cream3)}
+.stop-name{font-family:‘Bebas Neue’,sans-serif;font-size:.92rem;color:var(–cream);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stop-petisco{font-size:.66rem;color:var(–beer);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stop-dist{font-family:‘JetBrains Mono’,monospace;font-size:.57rem;color:#60a5fa;flex-shrink:0}
+.stop-rm{background:none;border:none;color:var(–cream3);font-size:.9rem;cursor:pointer;padding:4px;flex-shrink:0}
+.tour-empty{text-align:center;padding:50px 20px;color:var(–cream3)}
 .tour-empty-icon{font-size:2.8rem;margin-bottom:12px}
 .tour-empty-txt{font-size:.84rem;line-height:1.7}
-.btn-maps-big{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,var(--green),var(--green3));border:none;border-radius:var(--r);padding:14px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:2px;cursor:pointer;margin-bottom:8px;text-decoration:none}
-.btn-clr{width:100%;background:transparent;border:1px solid rgba(184,48,48,.3);border-radius:var(--r);padding:11px;color:var(--red);font-family:'JetBrains Mono',monospace;font-size:.66rem;cursor:pointer;letter-spacing:1px}
-.tour-total{background:var(--surface2);border:1px solid rgba(245,166,35,.1);border-radius:var(--r2);padding:11px 13px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--cream3)}
-.tour-total span{color:var(--beer);font-size:.8rem}
-.result-banner{background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(245,166,35,.05));border-bottom:1px solid rgba(255,215,0,.2);padding:14px;flex-shrink:0}
-.result-live{display:inline-flex;align-items:center;gap:6px;background:rgba(184,48,48,.15);border:1px solid rgba(184,48,48,.4);border-radius:100px;padding:3px 10px;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:#f87171;margin-bottom:8px}
-.live-dot{width:6px;height:6px;border-radius:50%;background:#f87171;animation:blink 1s ease-in-out infinite;flex-shrink:0}
+.btn-maps-big{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,var(–green),var(–green3));border:none;border-radius:var(–r);padding:14px;color:#fff;font-family:‘Bebas Neue’,sans-serif;font-size:1.05rem;letter-spacing:2px;cursor:pointer;margin-bottom:8px;text-decoration:none}
+.btn-clr{width:100%;background:transparent;border:1px solid rgba(184,48,48,.3);border-radius:var(–r);padding:11px;color:var(–red);font-family:‘JetBrains Mono’,monospace;font-size:.66rem;cursor:pointer;letter-spacing:1px}
+.tour-total{background:var(–surface2);border:1px solid rgba(245,166,35,.1);border-radius:var(–r2);padding:11px 13px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;font-family:‘JetBrains Mono’,monospace;font-size:.68rem;color:var(–cream3)}
+.tour-total span{color:var(–beer);font-size:.8rem}
 .result-header{padding:16px 14px 12px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0}
-.result-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:2px;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.result-sub{font-size:.75rem;color:var(--cream3);margin-top:3px}
-.podium{display:flex;align-items:flex-end;justify-content:center;gap:6px;padding:14px 12px 6px;flex-shrink:0}
-.podium-spot{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;max-width:115px}
-.podium-medal{font-size:1.5rem;line-height:1}
-.podium-rank{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;line-height:1}
-.podium-rank.gold{color:var(--gold)}.podium-rank.silver{color:var(--silver)}.podium-rank.bronze{color:var(--bronze)}
-.podium-block{width:100%;border-radius:var(--r2) var(--r2) 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:8px 5px}
-.podium-block.gold{background:linear-gradient(180deg,rgba(255,215,0,.22),rgba(255,215,0,.08));border:1px solid rgba(255,215,0,.35);height:84px}
-.podium-block.silver{background:linear-gradient(180deg,rgba(192,192,192,.18),rgba(192,192,192,.07));border:1px solid rgba(192,192,192,.28);height:60px}
-.podium-block.bronze{background:linear-gradient(180deg,rgba(205,127,50,.18),rgba(205,127,50,.07));border:1px solid rgba(205,127,50,.28);height:46px}
-.podium-name{font-family:'Bebas Neue',sans-serif;font-size:.72rem;color:var(--cream);text-align:center;letter-spacing:.5px;line-height:1.2;margin-top:4px}
-.podium-petisco{font-size:.58rem;color:var(--cream3);font-style:italic;text-align:center;margin-top:2px}
-.rank-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px calc(8px + var(--safe-bot))}
-.rank-list::-webkit-scrollbar{display:none}
-.rank-item{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid rgba(245,166,35,.1);border-radius:var(--r2);padding:10px 12px;margin-bottom:6px}
-.rank-pos{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;color:var(--cream3);min-width:28px;text-align:center}
-.rank-pos.top3{color:var(--gold)}
-.rank-info{flex:1}
-.rank-name{font-family:'Bebas Neue',sans-serif;font-size:.98rem;color:var(--cream);letter-spacing:.5px}
-.rank-petisco{font-size:.68rem;color:var(--beer);font-style:italic}
-.rank-pts{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--green3);white-space:nowrap}
-.hist-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 12px calc(10px + var(--safe-bot))}
+.result-title{font-family:‘Bebas Neue’,sans-serif;font-size:1.4rem;color:var(–gold);letter-spacing:2px;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.result-sub{font-size:.75rem;color:var(–cream3);margin-top:3px}
+.hist-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 12px calc(10px + var(–safe-bot))}
 .hist-body::-webkit-scrollbar{display:none}
-.year-card{background:var(--surface);border:1px solid rgba(245,166,35,.12);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.year-card{background:var(–surface);border:1px solid rgba(245,166,35,.12);border-radius:var(–r);margin-bottom:10px;overflow:hidden}
 .year-header{display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;background:rgba(245,166,35,.04)}
-.year-num{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--beer);letter-spacing:2px;line-height:1}
+.year-num{font-family:‘Bebas Neue’,sans-serif;font-size:1.9rem;color:var(–beer);letter-spacing:2px;line-height:1}
 .year-meta{flex:1}
-.year-edition{font-family:'Bebas Neue',sans-serif;font-size:.98rem;color:var(--cream);letter-spacing:1px}
-.year-theme{font-size:.7rem;color:var(--cream3);font-style:italic}
-.year-chev{color:var(--cream3);font-size:1rem;transition:transform .25s;flex-shrink:0}
+.year-edition{font-family:‘Bebas Neue’,sans-serif;font-size:.98rem;color:var(–cream);letter-spacing:1px}
+.year-theme{font-size:.7rem;color:var(–cream3);font-style:italic}
+.year-chev{color:var(–cream3);font-size:1rem;transition:transform .25s;flex-shrink:0}
 .year-chev.open{transform:rotate(180deg)}
 .year-content{display:none;padding:12px 14px 14px;border-top:1px solid rgba(245,166,35,.08)}
 .year-content.open{display:block}
-.year-winner{display:flex;align-items:flex-start;gap:10px;background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.18);border-radius:var(--r2);padding:12px;margin-bottom:10px}
+.year-winner{display:flex;align-items:flex-start;gap:10px;background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.18);border-radius:var(–r2);padding:12px;margin-bottom:10px}
 .year-winner-medal{font-size:1.7rem;flex-shrink:0}
-.year-winner-label{font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--cream3);text-transform:uppercase;letter-spacing:2px;margin-bottom:3px}
-.year-winner-name{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;color:var(--gold);letter-spacing:1px}
-.year-winner-petisco{font-size:.76rem;color:var(--beer);font-style:italic;margin-top:2px}
+.year-winner-label{font-family:‘JetBrains Mono’,monospace;font-size:.56rem;color:var(–cream3);text-transform:uppercase;letter-spacing:2px;margin-bottom:3px}
+.year-winner-name{font-family:‘Bebas Neue’,sans-serif;font-size:1.15rem;color:var(–gold);letter-spacing:1px}
+.year-winner-petisco{font-size:.76rem;color:var(–beer);font-style:italic;margin-top:2px}
 .year-runner{display:flex;gap:6px;margin-top:6px}
-.year-runner-item{flex:1;background:var(--surface2);border:1px solid rgba(245,166,35,.08);border-radius:var(--r3);padding:8px 9px}
-.year-runner-rank{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--cream3);margin-bottom:3px}
-.year-runner-name{font-family:'Bebas Neue',sans-serif;font-size:.8rem;color:var(--cream);letter-spacing:.5px;line-height:1.2}
-.year-runner-petisco{font-size:.63rem;color:var(--cream3);font-style:italic;margin-top:2px}
+.year-runner-item{flex:1;background:var(–surface2);border:1px solid rgba(245,166,35,.08);border-radius:var(–r3);padding:8px 9px}
+.year-runner-rank{font-family:‘JetBrains Mono’,monospace;font-size:.54rem;color:var(–cream3);margin-bottom:3px}
+.year-runner-name{font-family:‘Bebas Neue’,sans-serif;font-size:.8rem;color:var(–cream);letter-spacing:.5px;line-height:1.2}
+.year-runner-petisco{font-size:.63rem;color:var(–cream3);font-style:italic;margin-top:2px}
 .year-stats{display:flex;gap:6px;margin-top:8px}
-.year-stat{flex:1;background:var(--bg3);border-radius:var(--r3);padding:7px;text-align:center}
-.year-stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--beer)}
-.year-stat-lbl{font-size:.57rem;font-family:'JetBrains Mono',monospace;color:var(--cream3);letter-spacing:1px}
-.toast{position:fixed;bottom:calc(18px + var(--safe-bot));left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#fff;padding:9px 18px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:.72rem;z-index:9999;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.year-stat{flex:1;background:var(–bg3);border-radius:var(–r3);padding:7px;text-align:center}
+.year-stat-val{font-family:‘Bebas Neue’,sans-serif;font-size:1.2rem;color:var(–beer)}
+.year-stat-lbl{font-size:.57rem;font-family:‘JetBrains Mono’,monospace;color:var(–cream3);letter-spacing:1px}
+.toast{position:fixed;bottom:calc(18px + var(–safe-bot));left:50%;transform:translateX(-50%) translateY(80px);background:var(–green);color:#fff;padding:9px 18px;border-radius:100px;font-family:‘JetBrains Mono’,monospace;font-size:.72rem;z-index:9999;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.4)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .leaflet-container{background:#0A0805!important}
 .my-marker{width:13px;height:13px;border-radius:50%;background:#F5A623;border:2px solid rgba(255,255,255,.8);box-shadow:0 2px 8px rgba(0,0,0,.5);cursor:pointer}
 .my-marker.tour{background:#52B788}
+.my-marker.extra{background:#a78bfa}
 .user-dot{width:15px;height:15px;border-radius:50%;background:#3b82f6;border:2px solid #fff;box-shadow:0 0 0 5px rgba(59,130,246,.2);animation:userpulse 2s ease-in-out infinite}
 @keyframes userpulse{0%,100%{box-shadow:0 0 0 5px rgba(59,130,246,.2)}50%{box-shadow:0 0 0 10px rgba(59,130,246,.04)}}
-
-.item-foto{width:100%;height:160px;object-fit:cover;border-radius:var(–r2) var(–r2) 0 0;display:block;background:var(–bg3)}
-.foto-wrap{position:relative;overflow:hidden;border-radius:var(–r2) var(–r2) 0 0;background:linear-gradient(90deg,var(–bg3) 25%,var(–bg2) 50%,var(–bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.item-foto{transition:opacity .3s}
-.item-foto.loaded{animation:none}
-.foto-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));padding:8px 10px 6px}
-.foto-petisco-nome{font-family:‘Bebas Neue’,sans-serif;font-size:.88rem;color:#fff;letter-spacing:.5px;line-height:1.2}
-.tema-banner{background:linear-gradient(135deg,rgba(42,92,63,.9),rgba(82,183,136,.15));border:1px solid rgba(82,183,136,.3);border-radius:var(–r2);padding:11px 13px;margin:8px 12px 0;flex-shrink:0}
-.tema-emoji{font-size:1.4rem;flex-shrink:0}
-.tema-info{flex:1}
-.tema-label{font-family:‘JetBrains Mono’,monospace;font-size:.55rem;color:var(–green3);text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}
-.tema-titulo{font-family:‘Bebas Neue’,sans-serif;font-size:1rem;color:#fff;letter-spacing:1px}
-.tema-regra{font-size:.7rem;color:var(–cream3);margin-top:2px;line-height:1.4}
-
-/* ── LIGHTBOX ── */
-#lightbox{display:none;position:fixed;inset:0;z-index:9999;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0);backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);transition:background .3s,backdrop-filter .3s;pointer-events:none;padding:env(safe-area-inset-top,16px) 16px env(safe-area-inset-bottom,16px)}
-#lightbox.open{background:rgba(0,0,0,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);pointer-events:all}
-#lightbox .lb-img-wrap{position:relative;width:100%;max-width:500px;transform:scale(.85) translateY(20px);opacity:0;transition:transform .32s cubic-bezier(.34,1.56,.64,1),opacity .28s ease;border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.7)}
-#lightbox.open .lb-img-wrap{transform:scale(1) translateY(0);opacity:1}
-#lightbox .lb-img{width:100%;height:auto;max-height:65vh;object-fit:contain;display:block;background:#111}
-#lightbox .lb-info{width:100%;max-width:500px;padding:14px 16px;background:rgba(20,16,10,.9);border-radius:0 0 16px 16px;margin-top:-4px}
-#lightbox .lb-bar{font-family:‘Bebas Neue’,sans-serif;font-size:1.15rem;color:#fff;letter-spacing:.5px;line-height:1.2}
-#lightbox .lb-petisco{font-size:.78rem;color:var(–cream3);font-style:italic;margin-top:2px}
-#lightbox .lb-meta{display:flex;gap:14px;margin-top:8px}
-#lightbox .lb-badge{font-family:‘JetBrains Mono’,monospace;font-size:.6rem;color:var(–green3);background:rgba(82,183,136,.12);border:1px solid rgba(82,183,136,.25);border-radius:5px;padding:3px 8px;text-transform:uppercase;letter-spacing:1px}
-#lightbox .lb-close{position:absolute;top:max(env(safe-area-inset-top,16px),16px);right:16px;width:36px;height:36px;background:rgba(255,255,255,.12);border:none;border-radius:50%;color:#fff;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1;transition:background .15s}
-#lightbox .lb-close:active{background:rgba(255,255,255,.25)}
-
-/* ── CARD FOTO melhorias ── */
 .item-foto{width:100%;height:200px;object-fit:cover;object-position:center top;display:block;background:var(–bg3);transition:transform .35s ease,opacity .3s}
 .item-foto.loaded{opacity:1}
 .foto-wrap{position:relative;overflow:hidden;border-radius:var(–r2) var(–r2) 0 0;cursor:zoom-in;background:linear-gradient(90deg,var(–bg3) 25%,var(–bg2) 50%,var(–bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
@@ -229,6 +236,19 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
 .foto-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent 0%,rgba(0,0,0,.75) 100%);padding:28px 10px 8px}
 .foto-petisco-nome{font-family:‘Bebas Neue’,sans-serif;font-size:.92rem;color:#fff;letter-spacing:.5px;line-height:1.2}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* LIGHTBOX */
+#lightbox{display:none;position:fixed;inset:0;z-index:9999;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0);backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);transition:background .3s,backdrop-filter .3s;pointer-events:none;padding:env(safe-area-inset-top,16px) 16px env(safe-area-inset-bottom,16px)}
+#lightbox.open{background:rgba(0,0,0,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);pointer-events:all}
+#lightbox .lb-img-wrap{position:relative;width:100%;max-width:500px;transform:scale(.85) translateY(20px);opacity:0;transition:transform .32s cubic-bezier(.34,1.56,.64,1),opacity .28s ease;border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.7)}
+#lightbox.open .lb-img-wrap{transform:scale(1) translateY(0);opacity:1}
+#lightbox .lb-img{width:100%;height:auto;max-height:65vh;object-fit:contain;display:block;background:#111}
+#lightbox .lb-info{width:100%;max-width:500px;padding:14px 16px;background:rgba(20,16,10,.9);border-radius:0 0 16px 16px;margin-top:-4px}
+#lightbox .lb-bar{font-family:‘Bebas Neue’,sans-serif;font-size:1.15rem;color:#fff;letter-spacing:.5px;line-height:1.2}
+#lightbox .lb-petisco{font-size:.78rem;color:var(–cream3);font-style:italic;margin-top:2px}
+#lightbox .lb-meta{display:flex;gap:14px;margin-top:8px;flex-wrap:wrap}
+#lightbox .lb-badge{font-family:‘JetBrains Mono’,monospace;font-size:.6rem;color:var(–green3);background:rgba(82,183,136,.12);border:1px solid rgba(82,183,136,.25);border-radius:5px;padding:3px 8px;text-transform:uppercase;letter-spacing:1px}
+#lightbox .lb-close{position:absolute;top:max(env(safe-area-inset-top,16px),16px);right:16px;width:36px;height:36px;background:rgba(255,255,255,.12);border:none;border-radius:50%;color:#fff;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1;transition:background .15s}
+#lightbox .lb-close:active{background:rgba(255,255,255,.25)}
 </style>
 
 </head>
@@ -238,21 +258,26 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
   <div class="splash-year">COMIDA DI BUTECO · 26ª EDIÇÃO</div>
   <div class="splash-beer">🍺</div>
   <div class="splash-title">Buteco<br>GYN</div>
-  <div class="splash-sub">49 bares em Goiânia e Aparecida. Roteiro com GPS em tempo real.</div>
+  <div class="splash-sub">47 bares no evento + bares indicados em Goiânia e Aparecida.</div>
   <button class="btn-gps" onclick="startGPS()">📍 LOCALIZAR MEU CELULAR</button>
   <div class="splash-status" id="splashMsg"></div>
   <div class="splash-skip" onclick="startApp(false)">Continuar sem GPS</div>
 </div>
+
 <div id="app">
   <div class="topbar">
     <div><div class="topbar-logo">🍺 Buteco GYN</div><div class="topbar-sub">10 ABR – 10 MAI 2026 · GOIÂNIA</div></div>
     <div class="topbar-spacer"></div>
     <div class="gps-pill" id="gpsPill" onclick="recenterMap()"><div class="gps-dot" id="gpsDot"></div><span id="gpsLabel">GPS</span></div>
+    <div class="login-pill" id="loginBtn" onclick="openLoginModal()">
+      <span id="loginBtnLabel">Entrar</span>
+    </div>
   </div>
   <div class="tabs">
     <div class="tab active" onclick="showTab('mapa')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg><span class="tab-lbl">Mapa</span></div>
     <div class="tab" onclick="showTab('lista')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg><span class="tab-lbl">Bares</span></div>
     <div class="tab" onclick="showTab('tour')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="tab-lbl">Roteiro <span id="tabCnt">(0)</span></span></div>
+    <div class="tab" onclick="showTab('ranking')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg><span class="tab-lbl">Ranking</span></div>
     <div class="tab" onclick="showTab('result')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg><span class="tab-lbl">Resultado</span></div>
     <div class="tab" onclick="showTab('hist')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg><span class="tab-lbl">Campeões</span></div>
   </div>
@@ -268,6 +293,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
     </div>
     <button onclick="document.getElementById('temaBanner').style.display='none'" style="background:none;border:none;color:#8A7A60;font-size:.9rem;cursor:pointer;padding:0;flex-shrink:0;line-height:1">✕</button>
   </div>
+
   <div class="content">
     <div class="pane active" id="pane-mapa">
       <div id="map"></div>
@@ -278,85 +304,125 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
         <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" id="search" placeholder="Bar, petisco ou bairro..."></div>
         <div class="chips">
           <div class="chip on" data-city="all">Todos</div>
-          <div class="chip" data-city="Goiânia">Goiânia (42)</div>
-          <div class="chip" data-city="Aparecida">Aparecida (7)</div>
+          <div class="chip" data-city="Goiânia">Goiânia</div>
+          <div class="chip" data-city="Aparecida">Aparecida</div>
+          <div class="chip" id="chipExtra" onclick="toggleExtra()">🔮 Indicados</div>
           <div class="chip sort-on" id="chipDist" onclick="setSort('dist')">📍 Distância</div>
           <div class="chip" id="chipName" onclick="setSort('name')">🔤 A–Z</div>
+          <div class="chip" id="chipRating" onclick="setSort('rating')">⭐ Avaliação</div>
         </div>
       </div>
-      <div class="res-bar"><span id="resCnt">49 bares</span><span id="locInfo">—</span></div>
+      <div class="res-bar"><span id="resCnt"></span><span id="locInfo">—</span></div>
       <div class="list-body" id="listBody"></div>
     </div>
     <div class="pane" id="pane-tour"><div class="scroll-pane" id="tourPane"></div></div>
+    <div class="pane" id="pane-ranking" style="display:none;flex-direction:column">
+      <div class="rank-header-info">
+        <div class="rank-header-title">⭐ Ranking dos Usuários</div>
+        <div class="rank-header-sub">Avaliações do público · Baseado em notas de 1–5</div>
+      </div>
+      <div class="ranking-pane" id="rankingBody"></div>
+    </div>
     <div class="pane" id="pane-result" style="overflow-y:auto"><div id="resultContent" style="display:flex;flex-direction:column;min-height:100%"></div></div>
     <div class="pane" id="pane-hist"><div class="hist-body" id="histBody"></div></div>
   </div>
 </div>
+
+<!-- MODAL DE LOGIN -->
+
+<div id="loginModal" class="modal-overlay" style="display:none" onclick="closeLoginModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeLoginModal()">✕</button>
+    <div id="modalLoggedOut">
+      <div class="modal-title">Entrar</div>
+      <div class="modal-sub">Faça login para salvar suas avaliações e aparecer no ranking.</div>
+      <button class="btn-google" onclick="loginGoogle()">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Entrar com Google
+      </button>
+      <div class="modal-divider">ou use um apelido</div>
+      <input class="modal-input" id="nicknameInput" type="text" placeholder="Seu apelido (ex: Maria G.)" maxlength="30">
+      <button class="btn-modal-confirm" onclick="loginNickname()">ENTRAR</button>
+    </div>
+    <div id="modalLoggedIn" style="display:none">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <img id="modalAvatar" src="" alt="" class="login-avatar" style="width:44px;height:44px;border-radius:50%;display:none">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--beer);letter-spacing:1px" id="modalUserName"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--cream3)" id="modalUserType"></div>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border-radius:var(--r2);padding:12px 14px;margin-bottom:14px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--cream3);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px">Suas avaliações</div>
+        <div id="modalStats" style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--cream)"></div>
+      </div>
+      <button class="btn-modal-logout" onclick="logout()">SAIR DA CONTA</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-// ══ CONFIGURAÇÃO — EDITE AQUI TODO ANO ══════════════
+// ══ CONFIGURAÇÃO ══════════════════════════════════
 const CONFIG = {
   ano:2026, edicao:'26ª', tema:'Verduras',
   dataInicio:'10/04/2026', dataFim:'10/05/2026',
   dataResultado:'2026-05-12',
-  // PREENCHA APÓS O EVENTO (mude status para 'finalizado' e adicione o ranking)
   resultado2026:{
     status:'aguardando',
-    ranking:[
-      // { pos:1, nome:'Nome do Bar', petisco:'Petisco Vencedor', pontos:'9.85' },
-    ]
+    ranking:[]
   }
 };
 
-// ══ HISTÓRICO — ADICIONE UM OBJETO POR ANO ══════════
+// ══ HISTÓRICO ════════════════════════════════════
 const HISTORICO=[
   {ano:2025,edicao:'25ª',tema:'Especiarias',bares:47,
    vencedor:{nome:'Caldos Imola',petisco:'Ruela',nota:''},
    segundo:{nome:'Buteko do Peixe',petisco:'Bolinha Imperial'},
    terceiro:{nome:'1960 Bar',petisco:'Rabo do Popeye'},
    outros:['4º Tata Gastrobar','5º Bendito Bar e Restaurante']},
-  {ano:2024,edicao:'24ª',tema:'',bares:0,
+  {ano:2024,edicao:'24ª',tema:'',bares:45,
    vencedor:{nome:'Boteco do Mala',petisco:'Hoje Eu Tô Crocante',nota:''},
    segundo:{nome:'1960 Bar',petisco:'Rabo do Popeye'},
    terceiro:{nome:'KL Grill Jantinha',petisco:'Barquinha do Sertão'},
    outros:['4º Casarão do Pastel']},
-  {ano:2023,edicao:'23ª',tema:'',bares:0,
+  {ano:2023,edicao:'23ª',tema:'',bares:44,
    vencedor:{nome:'Casarão do Pastel',petisco:'Do Brasil a Portugal',nota:''},
    segundo:{nome:'Dom Cirus',petisco:'Sabor di Buteco'},
    terceiro:{nome:'Cumpadi Bar',petisco:''},
    outros:['4º 1960 Bar','5º Vila Rica Bar e Restaurante']},
-  {ano:2022,edicao:'22ª',tema:'',bares:0,
+  {ano:2022,edicao:'22ª',tema:'',bares:42,
    vencedor:{nome:'Bar Dodô',petisco:'Lampião e Maria Bonita',nota:''},
    segundo:{nome:'Dom Cirus',petisco:'Sabor di Buteco'},
    terceiro:{nome:'Retrô Bar',petisco:''},
    outros:['4º Bar Via 70','5º Vila Rica Bar e Restaurante']},
-  {ano:2021,edicao:'21ª',tema:'',bares:0,
+  {ano:2021,edicao:'21ª',tema:'',bares:35,
    vencedor:{nome:'Camargos Chopp',petisco:'',nota:''},
    segundo:{nome:'Bistrô Chica Doida',petisco:'Tira Teima'},
    terceiro:{nome:'Bar Dodô',petisco:''},
    outros:['4º Gurupi Restaurante']},
-  {ano:2019,edicao:'19ª',tema:'',bares:0,
+  {ano:2019,edicao:'19ª',tema:'',bares:40,
    vencedor:{nome:'Boteco do Filhote',petisco:'',nota:''},
    segundo:{nome:'Bar Dodô',petisco:''},
    terceiro:{nome:'Camargos Chopp',petisco:''},
    outros:[]},
-  {ano:2018,edicao:'18ª',tema:'',bares:0,
+  {ano:2018,edicao:'18ª',tema:'',bares:38,
    vencedor:{nome:'Dom Cirus',petisco:'Sabor di Buteco',nota:''},
    segundo:{nome:'Bistrô Chica Doida',petisco:''},
    terceiro:{nome:'Bar do Piry',petisco:''},
    outros:['4º Recanto Chopp','5º Boteco do Filhote']},
-  {ano:2017,edicao:'17ª',tema:'',bares:0,
+  {ano:2017,edicao:'17ª',tema:'',bares:36,
    vencedor:{nome:'Dom Cirus',petisco:'Sabor di Buteco',nota:''},
    segundo:{nome:'Whiskinão Bar',petisco:''},
    terceiro:{nome:'Varanda Bar e Restaurante',petisco:''},
    outros:[]},
 ];
 
-// ══ 49 BARES PARTICIPANTES 2026 ═════════════════════
-const BARS=[
+// ══ 47 BARES DO EVENTO 2026 ═══════════════════════
+const BARS_EVENTO=[
   {n:"1960 Bar",p:"Rabo do Popeye",a:"Rua 237, 307 – Setor Coimbra",c:"Goiânia",ig:"1960barr",lat:-16.6810272,lng:-49.2825398,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18005703/1960bar_rabodopopeye_goias_2026_jaredmagalhaes4-768x512.jpg"},
   {n:"Bar do Rochinha",p:"Charutinho tropical",a:"Av. R-11, 240 – Setor Oeste",c:"Goiânia",ig:"bardorochinhagoiania",lat:-16.6853661,lng:-49.2758958,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12061916/bardorochinha_charutinhotropical_goias_2026_jaredmagalhaes3-768x512.jpg"},
   {n:"Bar Dodô",p:"Carne de sol de boteco",a:"Rua Horizonte, 160 – Setor Aeroviário",c:"Goiânia",ig:"bardodogoiania",lat:-16.6632217,lng:-49.3077828,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18005919/bardodo_carnedesoldeboteco_goias_2026_jaredmagalhaes-768x512.jpg"},
@@ -406,11 +472,32 @@ const BARS=[
   {n:"Tribos do Espeto",p:"Joelho do Tatu",a:"Av. Nova York, 1336 – Jardim Novo Mundo",c:"Goiânia",ig:"tribosdoespeto",lat:-16.6612384,lng:-49.210502,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062119/tribosdoespeto_joelhodotatu_goias_2026_jaredmagalhaes4-768x512.jpg"},
 ];
 
+// ══ BARES FORA DO EVENTO (indicados) ══════════════
+// Adicione aqui bares bons de Goiânia que não participam do Comida di Buteco
+// Esses bares aparecem com badge "Indicado" e marcador roxo no mapa
+const BARS_EXTRA=[
+  {n:"Perlla Bar e Cozinha",p:"Torresmo artesanal",a:"Rua 23, 456 – Setor Oeste",c:"Goiânia",ig:"perllabar",lat:-16.6840,lng:-49.2780,h:"Ter–Dom 18h–01h",extra:true},
+  {n:"Barzim do Zé",p:"Costelinha defumada",a:"Av. T-63, 200 – Setor Bueno",c:"Goiânia",ig:"barzim_do_ze",lat:-16.6915,lng:-49.2720,h:"Qua–Dom 17h–00h",extra:true},
+  {n:"Choperia Serrinha",p:"Chopp artesanal gelado",a:"Av. Serrinha, 1100 – Setor Serrinha",c:"Goiânia",ig:"choperiaserinha",lat:-16.7310,lng:-49.2640,h:"Seg–Dom 16h–02h",extra:true},
+  {n:"Bar do Coruja",p:"Frango ao molho pardo",a:"Rua 136, 78 – Setor Sul",c:"Goiânia",ig:"bardocoruja",lat:-16.6930,lng:-49.2480,h:"Ter–Sáb 18h–01h",extra:true},
+  {n:"Boteco da Praça",p:"Pastel de carne seca",a:"Praça Cívica, 10 – Centro",c:"Goiânia",ig:"botecosopraça",lat:-16.6735,lng:-49.2528,h:"Qui–Dom 17h–23h",extra:true},
+];
+
+// ══ COMBINAR TODOS OS BARES ══════════════════════
+// BARS_EVENTO = bares do Comida di Buteco 2026
+// BARS_EXTRA = bares indicados fora do evento
+const ALL_BARS = [...BARS_EVENTO, ...BARS_EXTRA];
+
+// Alias para compatibilidade com código que usa BARS
+const BARS = ALL_BARS;
+
+// ══ ESTADO ═══════════════════════════════════════
 let LAT=-16.6890,LNG=-49.2770,gpsOk=false;
 let _lastRenderLat=0,_lastRenderLng=0,_lastRenderTs=0;
-let tour=[],city='all',q='',sort='dist';
+let tour=[],city='all',q='',sort='dist',showExtra=false;
 let map=null,userMarker=null,barMarkers={};
 
+// ══ GPS / APP INIT ════════════════════════════════
 function startGPS(){
   if(!navigator.geolocation){startApp(false);return}
   document.getElementById('splashMsg').textContent='🔍 Solicitando permissão...';
@@ -430,14 +517,16 @@ function startApp(fromGPS){
       ()=>{},{enableHighAccuracy:true,maximumAge:5000}
     );
   }
-  updateGPSPill();initMap();renderList();renderTour();renderResult();renderHist();
+  updateGPSPill();initMap();renderTour();renderResult();renderHist();
+  updateLoginUI();
+  // Carrega avaliações do Supabase e depois renderiza lista e ranking
+  loadAllRatings().then(()=>{renderList();renderRanking();}).catch(()=>{renderList();renderRanking();});
   if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 function onPosUpdate(){
   updateGPSPill();
   if(userMarker)userMarker.setLatLng([LAT,LNG]);
   updateMarkers();
-  // Só re-renderiza lista se moveu >15m OU passaram >60s desde último render
   const agora=Date.now();
   const dLat=Math.abs(LAT-(_lastRenderLat||LAT));
   const dLng=Math.abs(LNG-(_lastRenderLng||LNG));
@@ -450,14 +539,16 @@ function onPosUpdate(){
 }
 function updateGPSPill(){const p=document.getElementById('gpsPill'),l=document.getElementById('gpsLabel');p.className='gps-pill'+(gpsOk?' ok':'');l.textContent=gpsOk?'GPS ativo':'Sem GPS'}
 
+// ══ MAPA ══════════════════════════════════════════
 function initMap(){
   map=L.map('map',{zoomControl:false,attributionControl:false}).setView([LAT,LNG],14);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19}).addTo(map);
   L.control.zoom({position:'bottomleft'}).addTo(map);
   const uIcon=L.divIcon({className:'',html:'<div class="user-dot"></div>',iconSize:[15,15],iconAnchor:[7,7]});
   userMarker=L.marker([LAT,LNG],{icon:uIcon,zIndexOffset:1000}).addTo(map);
-  BARS.forEach(bar=>{
-    const icon=L.divIcon({className:'',html:'<div class="my-marker"></div>',iconSize:[13,13],iconAnchor:[6,6]});
+  ALL_BARS.forEach(bar=>{
+    const cls=bar.extra?'my-marker extra':'my-marker';
+    const icon=L.divIcon({className:'',html:`<div class="${cls}"></div>`,iconSize:[13,13],iconAnchor:[6,6]});
     const m=L.marker([bar.lat,bar.lng],{icon}).addTo(map);
     m.on('click',()=>openPopup(bar,m));
     barMarkers[bar.n]=m;
@@ -466,192 +557,434 @@ function initMap(){
 function openPopup(bar,marker){
   const d=dist(bar),inT=tour.some(s=>s.n===bar.n);
   const murl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bar.n+', Goiânia, GO')}`;
-  marker.bindPopup(L.popup({maxWidth:240}).setContent(`<div class="popup-inner"><div class="popup-name">${bar.n}</div><div class="popup-petisco">🍽 ${bar.p}</div><div class="popup-dist">📍 ${fmt(d)} de você · R$ 40</div><div class="popup-actions"><button class="popup-btn" onclick="toggleTourByName('${bar.n.replace(/'/g,"\\'")}')"> ${inT?'✓ No roteiro':'＋ Roteiro'}</button><a class="popup-btn" href="${murl}" target="_blank"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg> Maps</a></div></div>`)).openPopup();
+  const extraTag=bar.extra?'<span style="color:#a78bfa;font-size:.58rem">🔮 Indicado</span>':'<span style="color:var(--green3);font-size:.58rem">🏆 Evento 2026</span>';
+  marker.bindPopup(L.popup({maxWidth:240}).setContent(`<div class="popup-inner"><div class="popup-name">${bar.n}</div><div class="popup-petisco">🍽 ${bar.p}</div><div style="margin:3px 0">${extraTag}</div><div class="popup-dist">📍 ${fmt(d)} de você${bar.extra?'':' · R$ 40'}</div><div class="popup-actions"><button class="popup-btn" onclick="toggleTourByName('${bar.n.replace(/'/g,"\\'")}')"> ${inT?'✓ No roteiro':'＋ Roteiro'}</button><a class="popup-btn" href="${murl}" target="_blank">📍 Maps</a></div></div>`)).openPopup();
 }
-function updateMarkers(){BARS.forEach(bar=>{const m=barMarkers[bar.n];if(!m)return;const inT=tour.some(s=>s.n===bar.n);m.setIcon(L.divIcon({className:'',html:`<div class="my-marker${inT?' tour':''}"></div>`,iconSize:[13,13],iconAnchor:[6,6]}))})}
+function updateMarkers(){
+  ALL_BARS.forEach(bar=>{
+    const m=barMarkers[bar.n];if(!m)return;
+    const inT=tour.some(s=>s.n===bar.n);
+    const cls=inT?'my-marker tour':bar.extra?'my-marker extra':'my-marker';
+    m.setIcon(L.divIcon({className:'',html:`<div class="${cls}"></div>`,iconSize:[13,13],iconAnchor:[6,6]}));
+  });
+}
 function recenterMap(){if(map)map.flyTo([LAT,LNG],14,{duration:1})}
 function flyToBar(bar){showTab('mapa');setTimeout(()=>{if(map)map.flyTo([bar.lat,bar.lng],17,{duration:1.2})},100);const m=barMarkers[bar.n];if(m)setTimeout(()=>openPopup(bar,m),1300)}
 
-function dist(b){const R=6371,dLa=(b.lat-LAT)*Math.PI/180,dLn=(b.lng-LNG)*Math.PI/180;const a=Math.sin(dLa/2)**2+Math.cos(LAT*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLn/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))}
-function fmt(km){return km<1?`${Math.round(km*1000)}m`:`${km.toFixed(1)}km`}
+// ══ TABS ══════════════════════════════════════════
+function showTab(name){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const tabs=['mapa','lista','tour','ranking','result','hist'];
+    t.classList.toggle('active',tabs[i]===name);
+  });
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  const pane=document.getElementById('pane-'+name);
+  if(pane){pane.classList.add('active');pane.style.display='flex';}
+  if(name==='ranking')renderRanking();
+}
+
+// ══ UTILIDADES ═══════════════════════════════════
+function dist(bar){
+  const R=6371,dLat=(bar.lat-LAT)*Math.PI/180,dLon=(bar.lng-LNG)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(LAT*Math.PI/180)*Math.cos(bar.lat*Math.PI/180)*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function fmt(d){return d<1?Math.round(d*1000)+'m':d.toFixed(1)+'km'}
 function esc(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;')}
 
-function renderList(){
-  const body=document.getElementById('listBody');if(!body)return;
-  let bars=BARS.map(b=>({...b,d:dist(b)})).filter(b=>{
-    const mc=city==='all'||b.c===city;
-    const ms=!q||b.n.toLowerCase().includes(q)||b.p.toLowerCase().includes(q)||b.a.toLowerCase().includes(q);
-    return mc&&ms;
-  });
-  if(sort==='dist')bars.sort((a,b)=>a.d-b.d);else bars.sort((a,b)=>a.n.localeCompare(b.n));
-  document.getElementById('resCnt').textContent=`${bars.length} bares`;
-  const nearest=bars[0],locEl=document.getElementById('locInfo');
-  if(nearest&&nearest.d<0.15){locEl.textContent=`⭐ Você está no ${nearest.n}`;locEl.style.color='var(--beer)'}
-  else if(nearest){locEl.textContent=`📍 Mais próximo: ${fmt(nearest.d)}`;locEl.style.color=''}
-  const maxD=Math.max(...bars.map(b=>b.d),1);
-  if(!bars.length){body.innerHTML='<div class="no-res">Nenhum bar encontrado.</div>';return}
-  body.innerHTML=bars.map(bar=>{
-    const inT=tour.some(s=>s.n===bar.n),yh=bar.d<0.15,nr=bar.d<=2&&!yh;
-    const pct=Math.max(5,100-(bar.d/maxD)*92);
-    const murl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bar.n+', '+(bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia')+', GO')}`;
-    const cls='bar-item'+(yh?' you-here':inT?' in-tour':'');
-    const badge=yh?'<div class="item-badge badge-you">⭐ VOCÊ ESTÁ AQUI</div>':inT?'<div class="item-badge badge-tour">✓ ROTEIRO</div>':nr?'<div class="item-badge badge-near">📍 PRÓXIMO</div>':'';
-    return`<div class="${cls}"><div class="foto-wrap" onclick="openLightbox(BARS.find(b=>b.n===\'${esc(bar.n)}\'))" role="button" aria-label="Ver foto ampliada"><img class="item-foto" src="${bar.foto||''}" alt="${bar.p}" loading="lazy" onload="this.classList.add('loaded');this.classList.add('loaded');this.parentElement.classList.add('loaded');this.parentElement.style.animation='none'" onerror="this.style.display='none'"><div class="foto-zoom-hint">🔍 ampliar</div><div class="foto-overlay"><div class="foto-petisco-nome">&ldquo;${bar.p}&rdquo;</div></div></div>${badge}<div class="item-name">${bar.n}</div><div class="item-city">${bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia'}</div><div class="dist-bar-wrap"><div class="dist-lbl">📍 ${fmt(bar.d)}</div><div class="dist-track"><div class="dist-fill" style="width:${pct}%"></div></div></div><div class="petisco-box"><div class="petisco-lbl">Petisco participante</div><div class="petisco-name">"${bar.p}"</div></div><div class="item-addr">📍 <span>${bar.a}</span></div><div class="item-hrs">🕐 <span>${bar.h}</span></div><div class="item-actions"><button class="btn-add ${inT?'on':''}" onclick="toggleTourByName('${esc(bar.n)}')"><span style="display:flex;align-items:center;gap:4px">${inT?'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> No roteiro':'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Roteiro'}</span></button><button class="btn-ico" onclick="flyToBar(BARS.find(b=>b.n==='${esc(bar.n)}'))"title="Ver no mapa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></button><a class="btn-ico" href="${murl}" target="_blank" title="Abrir no Google Maps"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4285F4"/></svg></a><a class="btn-ico btn-ig" href="https://instagram.com/${bar.ig}" target="_blank" title="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a></div><div class="item-price">R$ 40</div></div>`;
-  }).join('');
+// ══ LISTA ═════════════════════════════════════════
+function toggleExtra(){
+  showExtra=!showExtra;
+  const chip=document.getElementById('chipExtra');
+  chip.className='chip'+(showExtra?' extra-on':'');
+  chip.textContent=showExtra?'🔮 Indicados ✓':'🔮 Indicados';
+  renderList();
 }
 
+function renderList(){
+  // Define pool de bares conforme filtros
+  let bars=showExtra ? ALL_BARS : BARS_EVENTO;
+  bars=bars.map(b=>({...b,d:dist(b)}));
+  if(city!=='all')bars=bars.filter(b=>b.c===city);
+  if(q)bars=bars.filter(b=>b.n.toLowerCase().includes(q)||b.p.toLowerCase().includes(q)||b.a.toLowerCase().includes(q));
+  if(sort==='dist')bars.sort((a,b)=>a.d-b.d);
+  else if(sort==='rating')bars.sort((a,b)=>{
+    const rb=getRating(b.n),ra=getRating(a.n);
+    if(rb.avg!==ra.avg)return rb.avg-ra.avg;
+    if(rb.count!==ra.count)return rb.count-ra.count;
+    return a.n.localeCompare(b.n);
+  });
+  else bars.sort((a,b)=>a.n.localeCompare(b.n));
+
+  const listBody=document.getElementById('listBody');
+  const total=showExtra?ALL_BARS.length:BARS_EVENTO.length;
+  document.getElementById('resCnt').textContent=`${bars.length} de ${total} bares`;
+  const near=bars.filter(b=>b.d<2);
+  document.getElementById('locInfo').textContent=gpsOk&&near.length?`🍺 ${near.length} perto de você`:(gpsOk?'Nenhum próximo':'GPS desligado');
+
+  if(!bars.length){listBody.innerHTML=`<div class="no-res">Nenhum bar encontrado.</div>`;return;}
+  const maxD=Math.max(...bars.map(b=>b.d),1);
+  listBody.innerHTML=bars.map(bar=>barCard(bar,maxD)).join('');
+}
+
+function barCard(bar,maxD){
+  const d=bar.d,pct=Math.min(100,(1-(d/maxD))*100);
+  const inT=tour.some(s=>s.n===bar.n);
+  const rInfo=getRating(bar.n);
+  const youHere=gpsOk&&d<0.05;
+  let cls='bar-item';
+  if(bar.extra)cls+=' extra-bar';
+  else if(youHere)cls+=' you-here';
+  else if(inT)cls+=' in-tour';
+  let badge='';
+  if(bar.extra)badge=`<div class="item-badge badge-extra">INDICADO</div>`;
+  else if(youHere)badge=`<div class="item-badge badge-you">VOCÊ ESTÁ AQUI</div>`;
+  else if(inT)badge=`<div class="item-badge badge-tour">NO ROTEIRO</div>`;
+  else if(d<1)badge=`<div class="item-badge badge-near">PERTO</div>`;
+  const murl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bar.n+', Goiânia, GO')}`;
+  const extraTag=bar.extra?`<div class="extra-tag">🔮 Bar Indicado</div>`:'';
+  const price=bar.extra?'':`<div class="item-price">🏆 R$ 40</div>`;
+  const petiscoBox=bar.p?`<div class="petisco-box"><div class="petisco-lbl">${bar.extra?'Especialidade':'Petisco participante'}</div><div class="petisco-name">"${bar.p}"</div></div>`:'';
+  return`<div class="${cls}">
+    <div class="foto-wrap" onclick="openLightbox(ALL_BARS.find(b=>b.n==='${esc(bar.n)}'))" role="button" aria-label="Ver foto ampliada">
+      ${bar.foto?`<img class="item-foto" src="${bar.foto}" alt="${bar.p}" loading="lazy" onload="this.classList.add('loaded');this.parentElement.classList.add('loaded');this.parentElement.style.animation='none'" onerror="this.style.display='none'"><div class="foto-zoom-hint">🔍 ampliar</div><div class="foto-overlay"><div class="foto-petisco-nome">&ldquo;${bar.p}&rdquo;</div></div>`:`<div style="height:100px;display:flex;align-items:center;justify-content:center;color:var(--cream3);font-size:.75rem">Sem foto disponível</div>`}
+    </div>
+    ${badge}
+    ${extraTag}
+    <div class="item-name">${bar.n}</div>
+    <div class="item-city">${bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia'}</div>
+    <div class="dist-bar-wrap"><div class="dist-lbl">📍 ${fmt(d)}</div><div class="dist-track"><div class="dist-fill" style="width:${pct}%"></div></div></div>
+    ${petiscoBox}
+    <div class="item-addr">📍 <span>${bar.a}</span></div>
+    ${bar.h?`<div class="item-hrs">🕐 <span>${bar.h}</span></div>`:''}
+    <div class="item-actions">
+      <button class="btn-add ${inT?'on':''}" onclick="toggleTourByName('${esc(bar.n)}')">
+        <span style="display:flex;align-items:center;gap:4px">${inT?'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> No roteiro':'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Roteiro'}</span>
+      </button>
+      <button class="btn-ico" onclick="flyToBar(ALL_BARS.find(b=>b.n==='${esc(bar.n)}'))" title="Ver no mapa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></button>
+      <a class="btn-ico" href="${murl}" target="_blank" title="Abrir no Google Maps"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4285F4"/></svg></a>
+      ${bar.ig?`<a class="btn-ico btn-ig" href="https://instagram.com/${bar.ig}" target="_blank" title="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>`:''}
+    </div>
+    <div class="item-rating">${ratingHtml(bar.n)}</div>
+    ${price}
+  </div>`;
+}
+
+// Filtro de cidade
+document.querySelectorAll('[data-city]').forEach(el=>{
+  el.addEventListener('click',()=>{
+    city=el.dataset.city;
+    document.querySelectorAll('[data-city]').forEach(c=>c.classList.remove('on'));
+    el.classList.add('on');
+    renderList();
+  });
+});
+document.getElementById('search').addEventListener('input',e=>{q=e.target.value.toLowerCase().trim();renderList();});
+
+function setSort(s){
+  sort=s;
+  ['dist','name','rating'].forEach(key=>{
+    const id=key==='dist'?'chipDist':key==='name'?'chipName':'chipRating';
+    const el=document.getElementById(id);
+    if(el)el.className='chip'+(s===key?' sort-on':'');
+  });
+  renderList();
+}
+
+// ══ TOUR ══════════════════════════════════════════
 function toggleTourByName(name){
-  const bar=BARS.find(b=>b.n===name);if(!bar)return;
-  const i=tour.findIndex(s=>s.n===name);
-  if(i>=0){tour.splice(i,1);showToast(`❌ ${name} removido`)}else{tour.push(bar);showToast(`✅ ${name} adicionado!`)}
-  renderList();renderTour();updateMarkers();document.getElementById('tabCnt').textContent=`(${tour.length})`;
+  const bar=ALL_BARS.find(b=>b.n===name);if(!bar)return;
+  const idx=tour.findIndex(s=>s.n===name);
+  if(idx>=0)tour.splice(idx,1);else tour.push(bar);
+  document.getElementById('tabCnt').textContent=`(${tour.length})`;
+  renderList();renderTour();updateMarkers();
+  showToast(idx>=0?`❌ ${name} removido`:`✅ ${name} no roteiro`);
 }
 function renderTour(){
-  const pane=document.getElementById('tourPane');document.getElementById('tabCnt').textContent=`(${tour.length})`;
-  if(!tour.length){pane.innerHTML='<div class="tour-empty"><div class="tour-empty-icon">🍻</div><div class="tour-empty-txt">Seu roteiro está vazio.<br>Vá em <strong>Bares</strong> e adicione os que quer visitar!</div></div>';return}
-  const orig=`${LAT},${LNG}`;
-  const ultimo=tour[tour.length-1];
-  const fmtStop=s=>`${s.n}/@${s.lat},${s.lng}`;
-  const dest=encodeURIComponent(fmtStop(ultimo));
-  const wpts=tour.slice(0,-1).map(s=>encodeURIComponent(fmtStop(s))).join('|');
-  let murl=`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(orig)}&destination=${dest}&travelmode=driving`;
-  if(wpts)murl+=`&waypoints=${wpts}`;
-  pane.innerHTML=`<div class="tour-header"><div class="tour-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg> Meu Roteiro</div><div style="display:flex;gap:6px;align-items:center"><button onclick="otimizarRota()" style="background:rgba(82,183,136,.15);border:1px solid rgba(82,183,136,.4);color:#52B788;font-family:JetBrains Mono,monospace;font-size:.6rem;padding:4px 8px;border-radius:6px;cursor:pointer">⚡ Otimizar</button><div class="tour-cnt-badge">${tour.length} paradas</div></div></div><div class="tour-total"><span>Total estimado</span><span>R$ ${tour.length*40} · ${tour.length} petisco${tour.length>1?'s':''}</span></div>${tour.map((b,i)=>`<div class="stop-item"><div class="stop-num">${i+1}</div><div class="stop-info"><div class="stop-name">${b.n}</div><div class="stop-petisco">${b.p}</div></div><div class="stop-dist">${fmt(dist(b))}</div><button class="stop-rm" onclick="toggleTourByName('${esc(b.n)}')">✕</button></div>`).join('')}<div style="margin-top:14px"><a href="${murl}" target="_blank" class="btn-maps-big"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg> ABRIR ROTA NO GOOGLE MAPS</a><button class="btn-clr" onclick="clearTour()">✕ LIMPAR ROTEIRO</button></div>`;
+  const el=document.getElementById('tourPane');
+  if(!tour.length){
+    el.innerHTML=`<div class="tour-empty"><div class="tour-empty-icon">🍺</div><div class="tour-empty-txt">Seu roteiro está vazio.<br>Adicione bares na lista!</div></div>`;return;
+  }
+  const total=tour.length*40;
+  const stopsHtml=tour.map((b,i)=>{
+    const d=dist(b);
+    return`<div class="stop-item"><div class="stop-num">${i+1}</div><div class="stop-info"><div class="stop-name">${b.n}</div><div class="stop-petisco">${b.p}</div></div><div class="stop-dist">${fmt(d)}</div><button class="stop-rm" onclick="toggleTourByName('${esc(b.n)}')">✕</button></div>`;
+  }).join('');
+  const wazeUrl=`https://waze.com/ul?ll=${tour[0].lat},${tour[0].lng}&navigate=yes`;
+  el.innerHTML=`<div class="tour-header"><div class="tour-title">🗺 Meu Roteiro</div><div class="tour-cnt-badge">${tour.length} paradas</div></div>
+    <div class="tour-total"><span>Total: ${tour.length} bares</span><span>≈ R$ ${total}</span></div>
+    ${stopsHtml}
+    <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+      <a class="btn-maps-big" href="${wazeUrl}" target="_blank">🗺 Abrir no Waze</a>
+      <button class="btn-clr" onclick="clearTour()">🗑 LIMPAR ROTEIRO</button>
+    </div>`;
 }
 function clearTour(){tour=[];renderList();renderTour();updateMarkers();document.getElementById('tabCnt').textContent='(0)';showToast('🗑 Roteiro limpo!')}
 
-function verificarAgora(btn){
-  const msg = document.getElementById('verificarMsg');
-  btn.disabled = true;
-  btn.style.opacity = '.7';
-  btn.textContent = '⏳ VERIFICANDO...';
-  if(msg) msg.textContent = '';
+// ══ SUPABASE CONFIG ═══════════════════════════════
+const SUPA_URL='https://aareiggbyszdbaglchih.supabase.co';
+const SUPA_KEY='sb_publishable_FjtEnckJC1j3dVHcHRuQqA_k9dicrwG';
 
-  buscarResultadoAuto().then(ranking=>{
-    btn.style.opacity = '1';
-    btn.disabled = false;
-    btn.textContent = '↻ VERIFICAR AGORA';
-
-    if(ranking && ranking.length > 0){
-      // Resultado encontrado!
-      CONFIG.resultado2026.status = 'finalizado';
-      CONFIG.resultado2026.ranking = ranking;
-      renderResult();
-    } else {
-      // Sem resultado ainda — mostra mensagem amigável
-      const hoje = new Date();
-      const fim = new Date('2026-05-10');
-      const emCurso = hoje <= fim;
-
-      if(msg){
-        msg.innerHTML = emCurso
-          ? '🍻 Evento ainda em curso!<br>O resultado sai após 10/05/2026.'
-          : '📋 Resultado ainda não publicado.<br>Tente novamente em breve.';
-        msg.style.color = 'var(--cream3)';
-        // Limpa após 5s
-        setTimeout(()=>{ if(msg) msg.textContent=''; }, 5000);
-      }
-    }
-  }).catch(()=>{
-    btn.style.opacity = '1';
-    btn.disabled = false;
-    btn.textContent = '↻ VERIFICAR AGORA';
-    if(msg){
-      msg.textContent = '⚠️ Erro ao verificar. Tente novamente.';
-      setTimeout(()=>{ if(msg) msg.textContent=''; }, 4000);
+async function supaFetch(path, opts={}){
+  const res=await fetch(SUPA_URL+path,{
+    ...opts,
+    headers:{
+      'apikey':SUPA_KEY,
+      'Authorization':'Bearer '+SUPA_KEY,
+      'Content-Type':'application/json',
+      'Prefer':'return=representation',
+      ...(opts.headers||{})
     }
   });
+  if(!res.ok){const e=await res.text();throw new Error(e);}
+  return res.status===204?null:res.json();
+}
+
+// ══ CACHE LOCAL (evita bater na API a cada render) ══
+// cache: { barNome: {avg, count, userRating} }
+let _ratingCache={};
+let _cacheLoaded=false;
+
+async function loadAllRatings(){
+  try{
+    const data=await supaFetch('/rest/v1/avaliacoes?select=bar_nome,rating,user_id');
+    _ratingCache={};
+    const userId=getUserId();
+    data.forEach(row=>{
+      if(!_ratingCache[row.bar_nome])_ratingCache[row.bar_nome]={sum:0,count:0,userRating:0};
+      _ratingCache[row.bar_nome].sum+=row.rating;
+      _ratingCache[row.bar_nome].count++;
+      if(row.user_id===userId)_ratingCache[row.bar_nome].userRating=row.rating;
+    });
+    _cacheLoaded=true;
+  }catch(e){console.warn('Supabase offline, usando cache local',e);}
+}
+
+function getRatingFromCache(name){
+  const c=_ratingCache[name];
+  if(!c||!c.count)return{avg:0,count:0,userRating:0};
+  return{avg:c.sum/c.count,count:c.count,userRating:c.userRating||0};
+}
+
+// ══ AVALIAÇÕES (Supabase) ══════════════════════════
+function getRating(name){
+  const r=getRatingFromCache(name);
+  return{avg:r.avg,count:r.count};
+}
+
+async function setRating(name,rating){
+  const user=getUser();
+  if(!user){openLoginModal();showToast('⚠️ Faça login para avaliar!');return;}
+  const userId=getUserId();
+
+  // Atualiza cache imediatamente (optimistic UI)
+  if(!_ratingCache[name])_ratingCache[name]={sum:0,count:0,userRating:0};
+  const c=_ratingCache[name];
+  if(c.userRating){c.sum=c.sum-c.userRating+rating;}
+  else{c.sum+=rating;c.count++;}
+  c.userRating=rating;
+
+  renderList();
+  renderRanking();
+  showToast('⭐ Avaliação salva!');
+
+  // Persiste no Supabase (upsert por bar_nome + user_id)
+  try{
+    await supaFetch('/rest/v1/avaliacoes',{
+      method:'POST',
+      headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},
+      body:JSON.stringify({bar_nome:name,user_id:userId,user_name:user,rating})
+    });
+  }catch(e){
+    console.warn('Erro ao salvar avaliação:',e);
+    showToast('⚠️ Erro ao salvar. Tente novamente.');
+  }
+}
+
+function ratingHtml(name){
+  const info=getRatingFromCache(name);
+  const displayRating=info.userRating||Math.round(info.avg);
+  let html='';
+  for(let i=1;i<=5;i++){
+    html+=`<span class="star${i<=displayRating?' on':''}" onclick="setRating('${name.replace(/'/g,"\\'")}',${i})">★</span>`;
+  }
+  if(info.count>0)html+=`<span class="rating-value">${info.avg.toFixed(1)} (${info.count})</span>`;
+  else html+=`<span class="rating-value">avaliar</span>`;
+  return html;
+}
+
+// ══ RANKING (Supabase) ════════════════════════════
+async function renderRanking(){
+  const body=document.getElementById('rankingBody');
+  if(!body)return;
+
+  // Mostra loading
+  body.innerHTML=`<div class="rank-empty"><div style="font-size:1.5rem;margin-bottom:8px">⏳</div><div class="rank-empty-txt">Carregando ranking...</div></div>`;
+
+  // Busca médias agregadas direto do Supabase
+  try{
+    const data=await supaFetch('/rest/v1/avaliacoes?select=bar_nome,rating&order=bar_nome');
+    
+    // Agrega por bar
+    const agg={};
+    data.forEach(row=>{
+      if(!agg[row.bar_nome])agg[row.bar_nome]={sum:0,count:0};
+      agg[row.bar_nome].sum+=row.rating;
+      agg[row.bar_nome].count++;
+    });
+
+    const ranked=ALL_BARS
+      .map(b=>{
+        const a=agg[b.n]||{sum:0,count:0};
+        return{...b,avg:a.count?a.sum/a.count:0,count:a.count};
+      })
+      .filter(b=>b.count>0)
+      .sort((a,b)=>{
+        if(b.avg!==a.avg)return b.avg-a.avg;
+        if(b.count!==a.count)return b.count-a.count;
+        return a.n.localeCompare(b.n);
+      });
+
+    if(!ranked.length){
+      body.innerHTML=`<div class="rank-empty"><div class="rank-empty-icon">⭐</div><div class="rank-empty-txt">Nenhum bar avaliado ainda.<br>Visite os bares e dê sua nota!</div></div>`;
+      return;
+    }
+    const medals=['🥇','🥈','🥉'];
+    body.innerHTML=ranked.map((b,i)=>{
+      const posClass=i<3?` p${i+1}`:'';
+      return`<div class="rank-item">
+        <div class="rank-pos${posClass}">${i<3?'':(i+1)+'º'}</div>
+        ${i<3?`<div class="rank-medal">${medals[i]}</div>`:''}
+        <div class="rank-info">
+          <div class="rank-name">${b.n}</div>
+          <div class="rank-petisco">${b.p}</div>
+          ${b.extra?'<div style="font-size:.55rem;color:#a78bfa;margin-top:2px">🔮 Bar Indicado</div>':''}
+        </div>
+        <div class="rank-right">
+          <div class="rank-avg">${b.avg.toFixed(1)} ⭐</div>
+          <div class="rank-votes">${b.count} voto${b.count>1?'s':''}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }catch(e){
+    body.innerHTML=`<div class="rank-empty"><div class="rank-empty-icon">⚠️</div><div class="rank-empty-txt">Erro ao carregar ranking.<br>Verifique sua conexão.</div></div>`;
+  }
+}
+
+// ══ LOGIN ═════════════════════════════════════════
+// UUID persistente por device (não muda ao trocar apelido)
+function getUserId(){
+  let id=localStorage.getItem('user_id');
+  if(!id){id=crypto.randomUUID();localStorage.setItem('user_id',id);}
+  return id;
+}
+function getUser(){return localStorage.getItem('user_name')||null;}
+
+function updateLoginUI(){
+  const user=getUser();
+  const btn=document.getElementById('loginBtn');
+  const lbl=document.getElementById('loginBtnLabel');
+  if(!btn||!lbl)return;
+  if(user){lbl.textContent=user.split(' ')[0];btn.classList.add('logged');}
+  else{lbl.textContent='Entrar';btn.classList.remove('logged');}
+}
+
+function openLoginModal(){
+  const modal=document.getElementById('loginModal');
+  modal.style.display='flex';
+  const user=getUser();
+  document.getElementById('modalLoggedOut').style.display=user?'none':'block';
+  document.getElementById('modalLoggedIn').style.display=user?'block':'none';
+  if(user){
+    document.getElementById('modalUserName').textContent=user;
+    document.getElementById('modalUserType').textContent='Apelido local';
+    // Conta avaliações do usuário no cache
+    const userId=getUserId();
+    const count=Object.values(_ratingCache).filter(c=>c.userRating>0).length;
+    document.getElementById('modalStats').textContent=`${count} bar${count!==1?'es':''} avaliado${count!==1?'s':''}`;
+    document.getElementById('modalAvatar').style.display='none';
+  }
+}
+function closeLoginModal(e){
+  if(e&&e.target!==document.getElementById('loginModal'))return;
+  document.getElementById('loginModal').style.display='none';
+}
+function loginGoogle(){
+  showToast('Em breve: login com Google');
+  document.getElementById('loginModal').style.display='none';
+}
+function loginNickname(){
+  const name=document.getElementById('nicknameInput').value.trim();
+  if(!name){showToast('⚠️ Digite um apelido!');return;}
+  localStorage.setItem('user_name',name);
+  updateLoginUI();
+  document.getElementById('loginModal').style.display='none';
+  showToast('👋 Olá, '+name+'!');
+  renderList();
+}
+function logout(){
+  localStorage.removeItem('user_name');
+  updateLoginUI();
+  document.getElementById('loginModal').style.display='none';
+  renderList();
+  showToast('👋 Até logo!');
+}
+
+// ══ RESULTADO OFICIAL ═════════════════════════════
+function verificarAgora(btn){
+  const msg=document.getElementById('verificarMsg');
+  btn.disabled=true;btn.style.opacity='.7';btn.textContent='⏳ VERIFICANDO...';
+  if(msg)msg.textContent='';
+  buscarResultadoAuto().then(ranking=>{
+    btn.style.opacity='1';btn.disabled=false;btn.textContent='↻ VERIFICAR AGORA';
+    if(ranking&&ranking.length>0){
+      CONFIG.resultado2026.status='finalizado';CONFIG.resultado2026.ranking=ranking;renderResult();
+    }else{
+      const hoje=new Date(),fim=new Date('2026-05-10'),emCurso=hoje<=fim;
+      if(msg){msg.innerHTML=emCurso?'🍻 Evento ainda em curso!<br>O resultado sai após 10/05/2026.':'📋 Resultado ainda não publicado.<br>Tente novamente em breve.';msg.style.color='var(--cream3)';setTimeout(()=>{if(msg)msg.textContent='';},5000);}
+    }
+  }).catch(()=>{btn.style.opacity='1';btn.disabled=false;btn.textContent='↻ VERIFICAR AGORA';if(msg){msg.textContent='⚠️ Erro ao verificar. Tente novamente.';setTimeout(()=>{if(msg)msg.textContent='';},4000);}});
 }
 function renderResult(){
   const el=document.getElementById('resultContent'),r=CONFIG.resultado2026;
   const hoje=new Date(),dataRes=new Date(CONFIG.dataResultado);
   const emAndamento=hoje>=new Date('2026-04-10')&&hoje<=new Date('2026-05-10');
-
-  if(r.status==='finalizado'){
-    // Resultado já configurado manualmente
-    renderPodio(el, r.ranking);
-    return;
-  }
-
-  // Tenta buscar resultado automático do site oficial via proxy
-  if(emAndamento || hoje >= dataRes){
-    el.innerHTML=`<div style="text-align:center;padding:40px 20px;color:var(--cream3)">
-      <div style="font-size:2rem;margin-bottom:12px">🔍</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--beer);letter-spacing:2px">Buscando resultado...</div>
-    </div>`;
+  if(r.status==='finalizado'){renderPodio(el,r.ranking);return;}
+  if(emAndamento||hoje>=dataRes){
+    el.innerHTML=`<div style="text-align:center;padding:40px 20px;color:var(--cream3)"><div style="font-size:2rem;margin-bottom:12px">🔍</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--beer);letter-spacing:2px">Buscando resultado...</div></div>`;
     buscarResultadoAuto().then(ranking=>{
-      if(ranking && ranking.length>0){
-        CONFIG.resultado2026.status='finalizado';
-        CONFIG.resultado2026.ranking=ranking;
-        renderPodio(el, ranking);
-      } else {
-        renderAguardando(el, emAndamento);
-      }
-    }).catch(()=>renderAguardando(el, emAndamento));
-    return;
+      if(ranking&&ranking.length>0){CONFIG.resultado2026.status='finalizado';CONFIG.resultado2026.ranking=ranking;renderPodio(el,ranking);}
+      else renderAguardando(el,emAndamento);
+    }).catch(()=>renderAguardando(el,emAndamento));return;
   }
-
-  renderAguardando(el, emAndamento);
+  renderAguardando(el,emAndamento);
 }
-
 async function buscarResultadoAuto(){
-  // Tenta primeiro via Edge Function (se existir no Vercel)
-  try {
-    const r = await fetch('/api/resultado', {signal: AbortSignal.timeout(5000)});
-    if(r.ok){
-      const d = await r.json();
-      if(d.ranking) return d.ranking;
-    }
-  } catch(e){}
-
-  // Fallback: verifica direto o site oficial (pode ser bloqueado por CORS)
-  try {
-    const r = await fetch('https://comidadibuteco.com.br/vencedores/goias/', {
-      signal: AbortSignal.timeout(8000),
-      mode: 'no-cors'
-    });
-    // no-cors retorna opaque — não conseguimos ler o conteúdo
-    // mas pelo menos confirma que o site está online
-  } catch(e){}
-
+  try{const r=await fetch('/api/resultado',{signal:AbortSignal.timeout(5000)});if(r.ok){const d=await r.json();if(d.ranking)return d.ranking;}}catch(e){}
   return null;
 }
-
-function renderAguardando(el, emAndamento){
-  const titulo = emAndamento ? 'VOTAÇÃO EM ANDAMENTO' : 'RESULTADO EM BREVE';
-  const descricao = emAndamento
-    ? `O evento está acontecendo de ${CONFIG.dataInicio} a ${CONFIG.dataFim}. O resultado será divulgado após o encerramento.`
-    : `O evento acontece de ${CONFIG.dataInicio} a ${CONFIG.dataFim}. Acompanhe o resultado aqui assim que for divulgado.`;
-
+function renderAguardando(el,emAndamento){
+  const titulo=emAndamento?'VOTAÇÃO EM ANDAMENTO':'RESULTADO EM BREVE';
+  const descricao=emAndamento?`O evento está acontecendo de ${CONFIG.dataInicio} a ${CONFIG.dataFim}. O resultado será divulgado após o encerramento.`:`O evento acontece de ${CONFIG.dataInicio} a ${CONFIG.dataFim}. Acompanhe o resultado aqui assim que for divulgado.`;
   el.innerHTML=`<div style="display:flex;flex-direction:column;min-height:100%;padding-bottom:env(safe-area-inset-bottom,20px)">
-    <div class="result-header">
-      <div class="result-title">Resultado ${CONFIG.ano}</div>
-      <div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição · ${BARS.length} bares</div>
-    </div>
+    <div class="result-header"><div class="result-title">Resultado ${CONFIG.ano}</div><div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição · ${BARS_EVENTO.length} bares</div></div>
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 24px;text-align:center">
       <div style="font-size:3rem;margin-bottom:16px">⏳</div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.45rem;color:var(--beer);letter-spacing:2px;margin-bottom:12px">${titulo}</div>
-
       <div style="background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:12px;padding:14px 18px;max-width:300px;margin-bottom:18px">
         <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--green3);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px">Período do evento</div>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:#fff;letter-spacing:1px">${CONFIG.dataInicio} → ${CONFIG.dataFim}</div>
         <div style="font-size:.72rem;color:var(--cream3);margin-top:6px;line-height:1.5">${descricao}</div>
       </div>
-
-      <button id="btnVerificar" onclick="verificarAgora(this)" style="background:var(--beer);border:none;color:#1a1200;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:14px 32px;border-radius:10px;cursor:pointer;letter-spacing:1.5px;width:100%;max-width:280px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;display:block">↻ VERIFICAR AGORA</button>
-
+      <button id="btnVerificar" onclick="verificarAgora(this)" style="background:var(--beer);border:none;color:#1a1200;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:14px 32px;border-radius:10px;cursor:pointer;letter-spacing:1.5px;width:100%;max-width:280px;display:block">↻ VERIFICAR AGORA</button>
       <div id="verificarMsg" style="margin-top:12px;min-height:20px;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--cream3);letter-spacing:1px"></div>
-    </div>
-  </div>`;
+    </div></div>`;
 }
-
-function renderPodio(el, ranking){
-  const r=CONFIG.resultado2026;
-  const p1=ranking[0]||{}, p2=ranking[1]||{}, p3=ranking[2]||{};
+function renderPodio(el,ranking){
+  const p1=ranking[0]||{},p2=ranking[1]||{},p3=ranking[2]||{};
   const outros=ranking.slice(3);
   el.innerHTML=`<div style="display:flex;flex-direction:column;height:100%;overflow-y:auto">
-    <div class="result-header"><div class="result-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Resultado ${CONFIG.ano}</div>
-    <div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição</div></div>
+    <div class="result-header"><div class="result-title">🏆 Resultado ${CONFIG.ano}</div><div class="result-sub">Tema: ${CONFIG.tema} · ${CONFIG.edicao} edição</div></div>
     <div style="padding:16px 12px;display:flex;flex-direction:column;gap:10px">
       <div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(245,166,35,.05));border:1px solid rgba(255,215,0,.4);border-radius:14px;padding:16px;text-align:center">
         <div style="font-size:2.2rem">🥇</div>
@@ -671,150 +1004,72 @@ function renderPodio(el, ranking){
           ${p3.petisco?`<div style="font-size:.65rem;color:var(--cream3);font-style:italic">"${p3.petisco}"</div>`:''}
         </div>
       </div>
-      ${outros.length?`<div style="background:rgba(255,255,255,.03);border-radius:10px;padding:10px 14px">
-        ${outros.map(o=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05)">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--cream3);min-width:24px">${o.pos}º</span>
-          <span style="font-size:.8rem;color:var(--cream2)">${o.nome}</span>
-          ${o.petisco?`<span style="font-size:.65rem;color:var(--cream3);font-style:italic;margin-left:auto">"${o.petisco}"</span>`:''}
-        </div>`).join('')}
-      </div>`:''}
+      ${outros.length?`<div style="background:rgba(255,255,255,.03);border-radius:10px;padding:10px 14px">${outros.map(o=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--cream3);min-width:24px">${o.pos}º</span><span style="font-size:.8rem;color:var(--cream2)">${o.nome}</span>${o.petisco?`<span style="font-size:.65rem;color:var(--cream3);font-style:italic;margin-left:auto">"${o.petisco}"</span>`:''}</div>`).join('')}</div>`:''}
     </div></div>`;
 }
 
-
+// ══ HISTÓRICO ════════════════════════════════════
 function renderHist(){
   const body=document.getElementById('histBody');
-  body.innerHTML=`<div style="padding:4px 2px 10px;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--cream3);letter-spacing:1px;text-transform:uppercase"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Hall da Fama — Goiânia & Aparecida</div>${HISTORICO.map((y,i)=>`<div class="year-card"><div class="year-header" onclick="toggleYear(${i})"><div class="year-num">${y.ano}</div><div class="year-meta"><div class="year-edition">${y.edicao} Edição · ${y.bares} bares</div><div class="year-theme">Tema: ${y.tema}</div></div><div class="year-chev${i===0?' open':''}" id="chev-${i}">${i===0?'▲':'▼'}</div></div><div class="year-content${i===0?' open':''}" id="ycont-${i}"><div class="year-winner"><div class="year-winner-medal" style="display:flex;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div><div><div class="year-winner-label">Campeão ${y.ano}</div><div class="year-winner-name">${y.vencedor.nome}</div><div class="year-winner-petisco">"${y.vencedor.petisco}"${y.vencedor.nota?' · ⭐ '+y.vencedor.nota:''}</div></div></div><div class="year-runner"><div class="year-runner-item"><div class="year-runner-rank">🥈 2º lugar</div><div class="year-runner-name">${y.segundo.nome}</div><div class="year-runner-petisco">"${y.segundo.petisco}"</div></div><div class="year-runner-item"><div class="year-runner-rank">🥉 3º lugar</div><div class="year-runner-name">${y.terceiro.nome}</div><div class="year-runner-petisco">"${y.terceiro.petisco}"</div></div></div><div class="year-stats"><div class="year-stat"><div class="year-stat-val">${y.bares}</div><div class="year-stat-lbl">Bares</div></div><div class="year-stat"><div class="year-stat-val">${y.edicao.replace('ª','')}</div><div class="year-stat-lbl">Edição</div></div><div class="year-stat"><div class="year-stat-val">${y.tema.split(' ')[0]}</div><div class="year-stat-lbl">Tema</div></div></div></div></div>`).join('')}`;
+  body.innerHTML=`<div style="padding:4px 2px 10px;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--cream3);letter-spacing:1px;text-transform:uppercase">🏆 Hall da Fama — Goiânia & Aparecida</div>${HISTORICO.map((y,i)=>`<div class="year-card"><div class="year-header" onclick="toggleYear(${i})"><div class="year-num">${y.ano}</div><div class="year-meta"><div class="year-edition">${y.edicao} Edição · ${y.bares} bares</div><div class="year-theme">Tema: ${y.tema||'—'}</div></div><div class="year-chev${i===0?' open':''}" id="chev-${i}">${i===0?'▲':'▼'}</div></div><div class="year-content${i===0?' open':''}" id="ycont-${i}"><div class="year-winner"><div class="year-winner-medal">🥇</div><div><div class="year-winner-label">Campeão ${y.ano}</div><div class="year-winner-name">${y.vencedor.nome}</div><div class="year-winner-petisco">"${y.vencedor.petisco}"${y.vencedor.nota?' · ⭐ '+y.vencedor.nota:''}</div></div></div><div class="year-runner"><div class="year-runner-item"><div class="year-runner-rank">🥈 2º lugar</div><div class="year-runner-name">${y.segundo.nome}</div><div class="year-runner-petisco">"${y.segundo.petisco}"</div></div><div class="year-runner-item"><div class="year-runner-rank">🥉 3º lugar</div><div class="year-runner-name">${y.terceiro.nome}</div><div class="year-runner-petisco">"${y.terceiro.petisco}"</div></div></div><div class="year-stats"><div class="year-stat"><div class="year-stat-val">${y.bares}</div><div class="year-stat-lbl">Bares</div></div><div class="year-stat"><div class="year-stat-val">${y.edicao.replace('ª','')}</div><div class="year-stat-lbl">Edição</div></div><div class="year-stat"><div class="year-stat-val">${y.tema?y.tema.split(' ')[0]:'—'}</div><div class="year-stat-lbl">Tema</div></div></div></div></div>`).join('')}`;
 }
-function toggleYear(i){const c=document.getElementById('ycont-'+i),ch=document.getElementById('chev-'+i),o=c.classList.contains('open');c.classList.toggle('open',!o);ch.textContent=o?'▼':'▲';ch.className='year-chev'+(o?'':' open')}
+function toggleYear(i){const c=document.getElementById('ycont-'+i),ch=document.getElementById('chev-'+i),o=c.classList.contains('open');c.classList.toggle('open',!o);ch.textContent=o?'▼':'▲';ch.className='year-chev'+(o?'':' open');}
 
-function otimizarRota(){
-  if(tour.length<2)return;
-  // Nearest neighbor: começa da posição atual e vai sempre pro mais próximo
-  let restantes=[...tour];
-  const ordenado=[];
-  let atLat=LAT,atLng=LNG;
-  while(restantes.length){
-    let minD=Infinity,minI=0;
-    restantes.forEach((b,i)=>{const d=dist(b);if(d<minD){minD=d;minI=i;}});
-    // recalcula dist a partir do último bar adicionado
-    restantes.forEach((b,i)=>{
-      const R=6371,dLa=(b.lat-atLat)*Math.PI/180,dLn=(b.lng-atLng)*Math.PI/180;
-      const a=Math.sin(dLa/2)**2+Math.cos(atLat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLn/2)**2;
-      const d=R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-      if(d<minD){minD=d;minI=i;}
-    });
-    const b=restantes.splice(minI,1)[0];
-    ordenado.push(b);
-    atLat=b.lat;atLng=b.lng;
-  }
-  tour=ordenado;
-  renderTour();
-  showToast('⚡ Rota otimizada por proximidade!');
-}
-function showTab(id){
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['mapa','lista','tour','result','hist'][i]===id));
-  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
-  document.getElementById('pane-'+id).classList.add('active');
-  if(id==='mapa'&&map)setTimeout(()=>map.invalidateSize(),50);
-  if(id==='lista')renderList();
-  if(id==='tour')renderTour();
-}
-document.querySelectorAll('.chip[data-city]').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.chip[data-city]').forEach(x=>x.classList.remove('on'));c.classList.add('on');city=c.dataset.city;renderList()}));
-document.getElementById('search').addEventListener('input',e=>{q=e.target.value.toLowerCase();renderList()});
-function setSort(s){sort=s;document.getElementById('chipDist').className='chip'+(s==='dist'?' sort-on':'');document.getElementById('chipName').className='chip'+(s==='name'?' sort-on':'');renderList()}
-let toastTimer;
-function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
-
-// ── LIGHTBOX ──
+// ══ LIGHTBOX ══════════════════════════════════════
 function openLightbox(bar){
+  if(!bar)return;
   const lb=document.getElementById('lightbox');
   const img=document.getElementById('lbImg');
   const info=document.getElementById('lbInfo');
-
-  // 1. Mostra imediatamente com 768x512 (já cacheada do card)
-  img.style.transition='none';
-  img.style.opacity='1';
-  img.src='';
-  img.src=bar.foto||'';
-  img.alt=bar.p||'';
-
-  // 2. Em segundo plano tenta HD original (sem sufixo de tamanho)
-  const urlOrig=bar.foto?bar.foto.replace(/-\d+x\d+\.jpg$/,'.jpg'):null;
-  if(urlOrig&&urlOrig!==bar.foto){
-    const hd=new Image();
-    hd.onload=function(){
-      img.style.transition='opacity .3s';
-      img.style.opacity='0';
-      setTimeout(()=>{img.src=hd.src;img.style.opacity='1';},300);
-    };
-    hd.src=urlOrig;
-  }
-
-  // 3. Info do bar
-  const dist=bar.d&&bar.d<50?`<span class="lb-badge">📍 ${fmt(bar.d)}</span>`:'';
-  info.innerHTML=`
-    <div class="lb-bar">${bar.n}</div>
-    <div class="lb-petisco">&ldquo;${bar.p}&rdquo;</div>
-    <div class="lb-meta">
-      <span class="lb-badge">R$ 40</span>
-      ${dist}
-      <span class="lb-badge">${bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia'}</span>
-    </div>`;
-
-  // 4. Abre: primeiro display flex, depois class open no próximo frame
-  lb.style.display='flex';
-  document.body.style.overflow='hidden';
+  img.style.transition='none';img.style.opacity='1';img.src='';
+  if(bar.foto){
+    img.src=bar.foto;img.alt=bar.p||'';
+    const urlOrig=bar.foto?bar.foto.replace(/-\d+x\d+\.jpg$/,'.jpg'):null;
+    if(urlOrig&&urlOrig!==bar.foto){
+      const hd=new Image();
+      hd.onload=function(){img.style.transition='opacity .3s';img.style.opacity='0';setTimeout(()=>{img.src=hd.src;img.style.opacity='1';},300);};
+      hd.src=urlOrig;
+    }
+  }else{img.src='';img.style.display='none';}
+  const d=bar.d&&bar.d<50?`<span class="lb-badge">📍 ${fmt(bar.d)}</span>`:'';
+  const extraBadge=bar.extra?`<span class="lb-badge" style="color:#a78bfa;border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.1)">🔮 Indicado</span>`:`<span class="lb-badge">🏆 Evento 2026</span>`;
+  info.innerHTML=`<div class="lb-bar">${bar.n}</div><div class="lb-petisco">&ldquo;${bar.p}&rdquo;</div><div class="lb-meta">${bar.extra?'':' <span class="lb-badge">R$ 40</span>'}${d}${extraBadge}<span class="lb-badge">${bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia'}</span></div>`;
+  lb.style.display='flex';document.body.style.overflow='hidden';
   requestAnimationFrame(()=>requestAnimationFrame(()=>lb.classList.add('open')));
 }
-
 function closeLightbox(){
   const lb=document.getElementById('lightbox');
-  lb.classList.remove('open');
-  document.body.style.overflow='';
-  setTimeout(()=>{
-    lb.style.display='none';
-    document.getElementById('lbImg').src='';
-    document.getElementById('lbImg').style.transition='none';
-  },320);
+  lb.classList.remove('open');document.body.style.overflow='';
+  setTimeout(()=>{lb.style.display='none';document.getElementById('lbImg').src='';},320);
 }
-
-function lbClose(e){
-  // Fecha ao clicar fora da imagem/info
-  if(e.target===document.getElementById('lightbox')) closeLightbox();
-}
-
-// Fecha com swipe down ou tecla Escape
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLightbox(); });
-
-// Listeners do lightbox — aguarda DOM estar pronto
+function lbClose(e){if(e.target===document.getElementById('lightbox'))closeLightbox();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
 (function initLightboxListeners(){
   function attach(){
-    const lb=document.getElementById('lightbox');
-    if(!lb){ document.addEventListener('DOMContentLoaded',attach); return; }
+    const lb=document.getElementById('lightbox');if(!lb){document.addEventListener('DOMContentLoaded',attach);return;}
     let startY=0;
-    lb.addEventListener('touchstart',e=>{ startY=e.touches[0].clientY; },{passive:true});
-    lb.addEventListener('touchmove',e=>{
-      const dy=e.touches[0].clientY-startY;
-      if(dy>60) closeLightbox();
-    },{passive:true});
+    lb.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;},{passive:true});
+    lb.addEventListener('touchmove',e=>{const dy=e.touches[0].clientY-startY;if(dy>60)closeLightbox();},{passive:true});
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',attach);
-  else attach();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',attach);else attach();
 })();
+
+// ══ TOAST ═════════════════════════════════════════
+let toastTimer;
+function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2200);}
 
 </script>
 
-  <!-- LIGHTBOX -->
+<!-- LIGHTBOX -->
 
-  <div id="lightbox" onclick="lbClose(event)">
-    <button class="lb-close" onclick="closeLightbox()">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-    </button>
-    <div class="lb-img-wrap" id="lbImgWrap">
-      <img id="lbImg" class="lb-img" src="" alt="">
-    </div>
-    <div class="lb-info" id="lbInfo"></div>
+<div id="lightbox" onclick="lbClose(event)">
+  <button class="lb-close" onclick="closeLightbox()">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <div class="lb-img-wrap" id="lbImgWrap">
+    <img id="lbImg" class="lb-img" src="" alt="">
   </div>
+  <div class="lb-info" id="lbInfo"></div>
+</div>
 </body>
 </html>
