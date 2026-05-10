@@ -14,6 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+input,textarea,select{font-size:16px!important}
 :root{
   --beer:#F5A623;--beer2:#D4881C;--bg:#0A0805;--bg2:#141008;--bg3:#1E1710;
   --surface:#221C14;--surface2:#2E261C;
@@ -229,6 +230,42 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
 .foto-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent 0%,rgba(0,0,0,.75) 100%);padding:28px 10px 8px}
 .foto-petisco-nome{font-family:‘Bebas Neue’,sans-serif;font-size:.92rem;color:#fff;letter-spacing:.5px;line-height:1.2}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.login-pill{display:flex;align-items:center;gap:5px;background:var(–surface);border:1px solid rgba(245,166,35,.2);border-radius:100px;padding:4px 10px;font-family:‘JetBrains Mono’,monospace;font-size:.6rem;color:var(–cream3);cursor:pointer;white-space:nowrap}
+.login-pill.logged{border-color:rgba(82,183,136,.4);color:var(–green3)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.modal-box{background:var(–bg2);border:1px solid rgba(245,166,35,.2);border-radius:20px;padding:28px 24px;width:100%;max-width:340px;position:relative}
+.modal-title{font-family:‘Bebas Neue’,sans-serif;font-size:1.5rem;color:var(–beer);letter-spacing:2px;margin-bottom:6px}
+.modal-sub{font-size:.74rem;color:var(–cream3);margin-bottom:18px;line-height:1.5}
+.modal-input{width:100%;background:var(–surface);border:1px solid rgba(245,166,35,.2);border-radius:var(–r2);padding:11px 14px;color:var(–cream);font-family:‘Outfit’,sans-serif;font-size:16px;outline:none;margin-bottom:10px}
+.modal-input:focus{border-color:rgba(245,166,35,.5)}
+.btn-modal-confirm{width:100%;background:linear-gradient(135deg,var(–beer),var(–beer2));border:none;border-radius:var(–r2);padding:12px;color:var(–bg);font-family:‘Bebas Neue’,sans-serif;font-size:1rem;letter-spacing:2px;cursor:pointer;margin-bottom:8px}
+.btn-modal-logout{width:100%;background:transparent;border:1px solid rgba(184,48,48,.3);border-radius:var(–r2);padding:10px;color:var(–red);font-family:‘JetBrains Mono’,monospace;font-size:.68rem;cursor:pointer;letter-spacing:1px}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(–cream3);font-size:1.1rem;cursor:pointer;padding:4px;line-height:1}
+.item-rating{display:flex;align-items:center;gap:3px;margin-top:6px}
+.item-rating .star{font-size:.9rem;color:var(–cream3);cursor:pointer;user-select:none}
+.item-rating .star.on{color:var(–beer)}
+.item-rating .rating-value{font-family:‘JetBrains Mono’,monospace;font-size:.6rem;margin-left:4px;color:var(–cream3)}
+.rank-hdr{padding:10px 12px 6px;background:var(–bg2);border-bottom:1px solid rgba(245,166,35,.08);flex-shrink:0}
+.rank-hdr-title{font-family:‘Bebas Neue’,sans-serif;font-size:1.1rem;color:var(–beer);letter-spacing:2px}
+.rank-hdr-sub{font-family:‘JetBrains Mono’,monospace;font-size:.55rem;color:var(–cream3);letter-spacing:1px;margin-top:2px}
+.rank-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px calc(8px + var(–safe-bot))}
+.rank-scroll::-webkit-scrollbar{display:none}
+.rank-row{display:flex;align-items:center;gap:10px;background:var(–surface);border:1px solid rgba(245,166,35,.1);border-radius:var(–r2);padding:10px 12px;margin-bottom:6px}
+.rank-pos{font-family:‘Bebas Neue’,sans-serif;font-size:1.25rem;color:var(–cream3);min-width:28px;text-align:center}
+.rank-pos.p1{color:var(–gold)}.rank-pos.p2{color:var(–silver)}.rank-pos.p3{color:var(–bronze)}
+.rank-body{flex:1;overflow:hidden}
+.rank-nome{font-family:‘Bebas Neue’,sans-serif;font-size:.98rem;color:var(–cream);letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-pet{font-size:.65rem;color:var(–beer);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0}
+.rank-avg{font-family:‘JetBrains Mono’,monospace;font-size:.72rem;color:var(–beer);font-weight:600}
+.rank-votes{font-family:‘JetBrains Mono’,monospace;font-size:.55rem;color:var(–cream3)}
+.rank-empty{text-align:center;padding:40px 20px;color:var(–cream3)}
+.badge-extra{background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.35);color:#a78bfa}
+.bar-item.extra-bar{border-color:rgba(139,92,246,.2)}
+.bar-item.extra-bar::before{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+.chip.extra-on{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.4);color:#a78bfa}
+.my-marker.extra{background:#a78bfa}
 </style>
 
 </head>
@@ -238,21 +275,29 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
   <div class="splash-year">COMIDA DI BUTECO · 26ª EDIÇÃO</div>
   <div class="splash-beer">🍺</div>
   <div class="splash-title">Buteco<br>GYN</div>
-  <div class="splash-sub">49 bares em Goiânia e Aparecida. Roteiro com GPS em tempo real.</div>
-  <button class="btn-gps" onclick="startGPS()">📍 LOCALIZAR MEU CELULAR</button>
-  <div class="splash-status" id="splashMsg"></div>
-  <div class="splash-skip" onclick="startApp(false)">Continuar sem GPS</div>
+  <div class="splash-sub">47 bares em Goiânia e Aparecida. Roteiro com GPS em tempo real.</div>
+  <div id="splashStep1" style="width:100%;max-width:300px;display:flex;flex-direction:column;gap:10px">
+    <input id="splashNick" type="text" placeholder="Seu apelido para o ranking..." maxlength="30" style="background:var(--surface);border:1px solid rgba(245,166,35,.25);border-radius:var(--r);padding:13px 16px;color:var(--cream);font-family:Outfit,sans-serif;font-size:16px;outline:none;text-align:center;width:100%">
+    <button class="btn-gps" onclick="splashConfirm()">ENTRAR E LOCALIZAR &#128205;</button>
+    <div class="splash-skip" onclick="splashSkip()">Continuar sem apelido</div>
+  </div>
+  <div id="splashStep2" style="display:none;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:300px">
+    <div class="splash-status" id="splashMsg"></div>
+    <div class="splash-skip" onclick="startApp(false)">Continuar sem GPS</div>
+  </div>
 </div>
 <div id="app">
   <div class="topbar">
     <div><div class="topbar-logo">🍺 Buteco GYN</div><div class="topbar-sub">10 ABR – 10 MAI 2026 · GOIÂNIA</div></div>
     <div class="topbar-spacer"></div>
     <div class="gps-pill" id="gpsPill" onclick="recenterMap()"><div class="gps-dot" id="gpsDot"></div><span id="gpsLabel">GPS</span></div>
+    <div class="login-pill" id="loginPill" onclick="openLoginModal()"><span id="loginPillLabel">Entrar</span></div>
   </div>
   <div class="tabs">
     <div class="tab active" onclick="showTab('mapa')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg><span class="tab-lbl">Mapa</span></div>
     <div class="tab" onclick="showTab('lista')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg><span class="tab-lbl">Bares</span></div>
     <div class="tab" onclick="showTab('tour')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="tab-lbl">Roteiro <span id="tabCnt">(0)</span></span></div>
+    <div class="tab" onclick="showTab('ranking')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg><span class="tab-lbl">Ranking</span></div>
     <div class="tab" onclick="showTab('result')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg><span class="tab-lbl">Resultado</span></div>
     <div class="tab" onclick="showTab('hist')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg><span class="tab-lbl">Campeões</span></div>
   </div>
@@ -280,6 +325,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
           <div class="chip on" data-city="all">Todos</div>
           <div class="chip" data-city="Goiânia">Goiânia (42)</div>
           <div class="chip" data-city="Aparecida">Aparecida (7)</div>
+          <div class="chip" id="chipExtra" onclick="toggleExtra()">&#128302; Indicados</div>
           <div class="chip sort-on" id="chipDist" onclick="setSort('dist')">📍 Distância</div>
           <div class="chip" id="chipName" onclick="setSort('name')">🔤 A–Z</div>
         </div>
@@ -288,6 +334,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--cream);fo
       <div class="list-body" id="listBody"></div>
     </div>
     <div class="pane" id="pane-tour"><div class="scroll-pane" id="tourPane"></div></div>
+    <div class="pane" id="pane-ranking"><div class="rank-hdr"><div class="rank-hdr-title">⭐ Ranking dos Usuários</div><div class="rank-hdr-sub">Avaliações do público · notas de 1–5</div></div><div class="rank-scroll" id="rankingBody"></div></div>
     <div class="pane" id="pane-result" style="overflow-y:auto"><div id="resultContent" style="display:flex;flex-direction:column;min-height:100%"></div></div>
     <div class="pane" id="pane-hist"><div class="hist-body" id="histBody"></div></div>
   </div>
@@ -356,7 +403,7 @@ const HISTORICO=[
 ];
 
 // ══ 49 BARES PARTICIPANTES 2026 ═════════════════════
-const BARS=[
+var BARS_EVENTO=[
   {n:"1960 Bar",p:"Rabo do Popeye",a:"Rua 237, 307 – Setor Coimbra",c:"Goiânia",ig:"1960barr",lat:-16.6810272,lng:-49.2825398,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18005703/1960bar_rabodopopeye_goias_2026_jaredmagalhaes4-768x512.jpg"},
   {n:"Bar do Rochinha",p:"Charutinho tropical",a:"Av. R-11, 240 – Setor Oeste",c:"Goiânia",ig:"bardorochinhagoiania",lat:-16.6853661,lng:-49.2758958,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12061916/bardorochinha_charutinhotropical_goias_2026_jaredmagalhaes3-768x512.jpg"},
   {n:"Bar Dodô",p:"Carne de sol de boteco",a:"Rua Horizonte, 160 – Setor Aeroviário",c:"Goiânia",ig:"bardodogoiania",lat:-16.6632217,lng:-49.3077828,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/18005919/bardodo_carnedesoldeboteco_goias_2026_jaredmagalhaes-768x512.jpg"},
@@ -406,6 +453,8 @@ const BARS=[
   {n:"Tribos do Espeto",p:"Joelho do Tatu",a:"Av. Nova York, 1336 – Jardim Novo Mundo",c:"Goiânia",ig:"tribosdoespeto",lat:-16.6612384,lng:-49.210502,foto:"https://cdb-static-files.s3.amazonaws.com/wp-content/uploads/2026/03/12062119/tribosdoespeto_joelhodotatu_goias_2026_jaredmagalhaes4-768x512.jpg"},
 ];
 
+var BARS=BARS_EVENTO;
+
 let LAT=-16.6890,LNG=-49.2770,gpsOk=false;
 let _lastRenderLat=0,_lastRenderLng=0,_lastRenderTs=0;
 let tour=[],city='all',q='',sort='dist';
@@ -430,7 +479,10 @@ function startApp(fromGPS){
       ()=>{},{enableHighAccuracy:true,maximumAge:5000}
     );
   }
-  updateGPSPill();initMap();renderList();renderTour();renderResult();renderHist();
+  document.querySelectorAll('.pane').forEach(function(p){p.style.display='none';p.classList.remove('active');});
+  var mp=document.getElementById('pane-mapa');if(mp){mp.style.display='flex';mp.classList.add('active');}
+  updateGPSPill();updateLoginUI();initMap();renderTour();renderResult();renderHist();
+  loadAllRatings().then(function(){renderList();renderRanking();}).catch(function(){renderList();});
   if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 function onPosUpdate(){
@@ -456,8 +508,9 @@ function initMap(){
   L.control.zoom({position:'bottomleft'}).addTo(map);
   const uIcon=L.divIcon({className:'',html:'<div class="user-dot"></div>',iconSize:[15,15],iconAnchor:[7,7]});
   userMarker=L.marker([LAT,LNG],{icon:uIcon,zIndexOffset:1000}).addTo(map);
-  BARS.forEach(bar=>{
-    const icon=L.divIcon({className:'',html:'<div class="my-marker"></div>',iconSize:[13,13],iconAnchor:[6,6]});
+  BARS_EVENTO.concat(BARS_EXTRA).forEach(bar=>{
+    var mCls=bar.extra?'my-marker extra':'my-marker';
+    const icon=L.divIcon({className:'',html:'<div class="'+mCls+'"></div>',iconSize:[13,13],iconAnchor:[6,6]});
     const m=L.marker([bar.lat,bar.lng],{icon}).addTo(map);
     m.on('click',()=>openPopup(bar,m));
     barMarkers[bar.n]=m;
@@ -466,9 +519,9 @@ function initMap(){
 function openPopup(bar,marker){
   const d=dist(bar),inT=tour.some(s=>s.n===bar.n);
   const murl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bar.n+', Goiânia, GO')}`;
-  marker.bindPopup(L.popup({maxWidth:240}).setContent(`<div class="popup-inner"><div class="popup-name">${bar.n}</div><div class="popup-petisco">🍽 ${bar.p}</div><div class="popup-dist">📍 ${fmt(d)} de você · R$ 40</div><div class="popup-actions"><button class="popup-btn" onclick="toggleTourByName('${bar.n.replace(/'/g,"\\'")}')"> ${inT?'✓ No roteiro':'＋ Roteiro'}</button><a class="popup-btn" href="${murl}" target="_blank"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg> Maps</a></div></div>`)).openPopup();
+  marker.bindPopup(L.popup({maxWidth:240}).setContent(`<div class="popup-inner"><div class="popup-name">${bar.n}</div><div class="popup-petisco">🍽 ${bar.p}</div><div class="popup-dist">📍 ${fmt(d)} de você${bar.extra?'':' · R$ 40'}</div><div class="popup-actions"><button class="popup-btn" onclick="toggleTourByName('${bar.n.replace(/'/g,"\\'")}')"> ${inT?'✓ No roteiro':'＋ Roteiro'}</button><a class="popup-btn" href="${murl}" target="_blank"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg> Maps</a></div></div>`)).openPopup();
 }
-function updateMarkers(){BARS.forEach(bar=>{const m=barMarkers[bar.n];if(!m)return;const inT=tour.some(s=>s.n===bar.n);m.setIcon(L.divIcon({className:'',html:`<div class="my-marker${inT?' tour':''}"></div>`,iconSize:[13,13],iconAnchor:[6,6]}))})}
+function updateMarkers(){BARS_EVENTO.concat(BARS_EXTRA).forEach(bar=>{var m=barMarkers[bar.n];if(!m)return;var inT=tour.some(s=>s.n===bar.n);var mc=inT?'my-marker tour':bar.extra?'my-marker extra':'my-marker';m.setIcon(L.divIcon({className:'',html:'<div class="'+mc+'"></div>',iconSize:[13,13],iconAnchor:[6,6]}));});}
 function recenterMap(){if(map)map.flyTo([LAT,LNG],14,{duration:1})}
 function flyToBar(bar){showTab('mapa');setTimeout(()=>{if(map)map.flyTo([bar.lat,bar.lng],17,{duration:1.2})},100);const m=barMarkers[bar.n];if(m)setTimeout(()=>openPopup(bar,m),1300)}
 
@@ -478,12 +531,15 @@ function esc(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;')}
 
 function renderList(){
   const body=document.getElementById('listBody');if(!body)return;
-  let bars=BARS.map(b=>({...b,d:dist(b)})).filter(b=>{
+  var pool=showExtra?BARS_EVENTO.concat(BARS_EXTRA):BARS_EVENTO;
+  let bars=pool.map(b=>({...b,d:dist(b)})).filter(b=>{
     const mc=city==='all'||b.c===city;
     const ms=!q||b.n.toLowerCase().includes(q)||b.p.toLowerCase().includes(q)||b.a.toLowerCase().includes(q);
     return mc&&ms;
   });
-  if(sort==='dist')bars.sort((a,b)=>a.d-b.d);else bars.sort((a,b)=>a.n.localeCompare(b.n));
+  if(sort==='dist')bars.sort((a,b)=>a.d-b.d);
+  else if(sort==='rating')bars.sort(function(a,b){var ra=getRatingData(a.n),rb=getRatingData(b.n);return rb.avg-ra.avg||rb.count-ra.count||a.n.localeCompare(b.n);});
+  else bars.sort((a,b)=>a.n.localeCompare(b.n));
   document.getElementById('resCnt').textContent=`${bars.length} bares`;
   const nearest=bars[0],locEl=document.getElementById('locInfo');
   if(nearest&&nearest.d<0.15){locEl.textContent=`⭐ Você está no ${nearest.n}`;locEl.style.color='var(--beer)'}
@@ -496,7 +552,7 @@ function renderList(){
     const murl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bar.n+', '+(bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia')+', GO')}`;
     const cls='bar-item'+(yh?' you-here':inT?' in-tour':'');
     const badge=yh?'<div class="item-badge badge-you">⭐ VOCÊ ESTÁ AQUI</div>':inT?'<div class="item-badge badge-tour">✓ ROTEIRO</div>':nr?'<div class="item-badge badge-near">📍 PRÓXIMO</div>':'';
-    return`<div class="${cls}"><div class="foto-wrap" onclick="openLightbox(BARS.find(b=>b.n===\'${esc(bar.n)}\'))" role="button" aria-label="Ver foto ampliada"><img class="item-foto" src="${bar.foto||''}" alt="${bar.p}" loading="lazy" onload="this.classList.add('loaded');this.classList.add('loaded');this.parentElement.classList.add('loaded');this.parentElement.style.animation='none'" onerror="this.style.display='none'"><div class="foto-zoom-hint">🔍 ampliar</div><div class="foto-overlay"><div class="foto-petisco-nome">&ldquo;${bar.p}&rdquo;</div></div></div>${badge}<div class="item-name">${bar.n}</div><div class="item-city">${bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia'}</div><div class="dist-bar-wrap"><div class="dist-lbl">📍 ${fmt(bar.d)}</div><div class="dist-track"><div class="dist-fill" style="width:${pct}%"></div></div></div><div class="petisco-box"><div class="petisco-lbl">Petisco participante</div><div class="petisco-name">"${bar.p}"</div></div><div class="item-addr">📍 <span>${bar.a}</span></div><div class="item-hrs">🕐 <span>${bar.h}</span></div><div class="item-actions"><button class="btn-add ${inT?'on':''}" onclick="toggleTourByName('${esc(bar.n)}')"><span style="display:flex;align-items:center;gap:4px">${inT?'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> No roteiro':'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Roteiro'}</span></button><button class="btn-ico" onclick="flyToBar(BARS.find(b=>b.n==='${esc(bar.n)}'))"title="Ver no mapa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></button><a class="btn-ico" href="${murl}" target="_blank" title="Abrir no Google Maps"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4285F4"/></svg></a><a class="btn-ico btn-ig" href="https://instagram.com/${bar.ig}" target="_blank" title="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a></div><div class="item-price">R$ 40</div></div>`;
+    return`<div class="${cls}"><div class="foto-wrap" onclick="openLightbox(BARS.find(b=>b.n===\'${esc(bar.n)}\'))" role="button" aria-label="Ver foto ampliada"><img class="item-foto" src="${bar.foto||''}" alt="${bar.p}" loading="lazy" onload="this.classList.add('loaded');this.classList.add('loaded');this.parentElement.classList.add('loaded');this.parentElement.style.animation='none'" onerror="this.style.display='none'"><div class="foto-zoom-hint">🔍 ampliar</div><div class="foto-overlay"><div class="foto-petisco-nome">&ldquo;${bar.p}&rdquo;</div></div></div>${badge}<div class="item-name">${bar.n}</div><div class="item-city">${bar.c==='Aparecida'?'Aparecida de Goiânia':'Goiânia'}</div><div class="dist-bar-wrap"><div class="dist-lbl">📍 ${fmt(bar.d)}</div><div class="dist-track"><div class="dist-fill" style="width:${pct}%"></div></div></div><div class="petisco-box"><div class="petisco-lbl">Petisco participante</div><div class="petisco-name">"${bar.p}"</div></div><div class="item-addr">📍 <span>${bar.a}</span></div><div class="item-hrs">🕐 <span>${bar.h}</span></div><div class="item-actions"><button class="btn-add ${inT?'on':''}" onclick="toggleTourByName('${esc(bar.n)}')"><span style="display:flex;align-items:center;gap:4px">${inT?'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> No roteiro':'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Roteiro'}</span></button><button class="btn-ico" onclick="flyToBar(BARS.find(b=>b.n==='${esc(bar.n)}'))"title="Ver no mapa"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></button><a class="btn-ico" href="${murl}" target="_blank" title="Abrir no Google Maps"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4285F4"/></svg></a><a class="btn-ico btn-ig" href="https://instagram.com/${bar.ig}" target="_blank" title="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a></div>"+(ratingHtml(bar.n))+"<div class="item-price">R$ 40</div></div>`;
   }).join('');
 }
 
@@ -713,16 +769,18 @@ function otimizarRota(){
   showToast('⚡ Rota otimizada por proximidade!');
 }
 function showTab(id){
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['mapa','lista','tour','result','hist'][i]===id));
-  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
-  document.getElementById('pane-'+id).classList.add('active');
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['mapa','lista','tour','ranking','result','hist'][i]===id));
+  document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('active');p.style.display='none';});
+  var pane=document.getElementById('pane-'+id);
+  if(pane){pane.classList.add('active');pane.style.display='flex';}
   if(id==='mapa'&&map)setTimeout(()=>map.invalidateSize(),50);
   if(id==='lista')renderList();
   if(id==='tour')renderTour();
+  if(id==='ranking')renderRanking();
 }
 document.querySelectorAll('.chip[data-city]').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.chip[data-city]').forEach(x=>x.classList.remove('on'));c.classList.add('on');city=c.dataset.city;renderList()}));
 document.getElementById('search').addEventListener('input',e=>{q=e.target.value.toLowerCase();renderList()});
-function setSort(s){sort=s;document.getElementById('chipDist').className='chip'+(s==='dist'?' sort-on':'');document.getElementById('chipName').className='chip'+(s==='name'?' sort-on':'');renderList()}
+function setSort(s){sort=s;['chipDist','chipName','chipRating'].forEach(function(id,i){var k=['dist','name','rating'][i];var el=document.getElementById(id);if(el)el.className='chip'+(s===k?' sort-on':'');});renderList();}
 let toastTimer;
 function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
 
@@ -803,6 +861,186 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLightbox(); }
   else attach();
 })();
 
+// ── SUPABASE ──────────────────────────────────────────
+var SUPA_URL='https://aareiggbyszdbaglchih.supabase.co';
+var SUPA_KEY='sb_publishable_FjtEnckJC1j3dVHcHRuQqA_k9dicrwG';
+async function supaFetch(path,opts){
+  opts=opts||{};
+  var res=await fetch(SUPA_URL+path,Object.assign({},opts,{headers:Object.assign({'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation'},opts.headers||{})}));
+  if(!res.ok)throw new Error(await res.text());
+  return res.status===204?null:res.json();
+}
+
+// ── CACHE AVALIAÇÕES ──────────────────────────────────
+var _rc={};
+async function loadAllRatings(){
+  try{
+    var data=await supaFetch('/rest/v1/avaliacoes?select=bar_nome,rating,user_id');
+    _rc={};
+    var uid=getUserId();
+    data.forEach(function(r){
+      if(!_rc[r.bar_nome])_rc[r.bar_nome]={sum:0,count:0,mine:0};
+      _rc[r.bar_nome].sum+=r.rating;
+      _rc[r.bar_nome].count++;
+      if(r.user_id===uid)_rc[r.bar_nome].mine=r.rating;
+    });
+  }catch(e){console.warn('Supabase offline',e);}
+}
+function getRatingData(name){
+  var c=_rc[name];
+  if(!c||!c.count)return{avg:0,count:0,mine:0};
+  return{avg:c.sum/c.count,count:c.count,mine:c.mine||0};
+}
+async function setRating(name,rating){
+  var user=getUser();
+  if(!user){openLoginModal();showToast('Faca login para avaliar!');return;}
+  var uid=getUserId();
+  if(!_rc[name])_rc[name]={sum:0,count:0,mine:0};
+  var c=_rc[name];
+  if(c.mine){c.sum=c.sum-c.mine+rating;}else{c.sum+=rating;c.count++;}
+  c.mine=rating;
+  renderList();
+  renderRanking();
+  showToast('Avaliacao salva!');
+  try{
+    await supaFetch('/rest/v1/avaliacoes',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({bar_nome:name,user_id:uid,user_name:user,rating:rating})});
+  }catch(e){console.warn('Erro ao salvar',e);}
+}
+function ratingHtml(name){
+  var info=getRatingData(name);
+  var display=info.mine||Math.round(info.avg);
+  var html='';
+  for(var i=1;i<=5;i++){
+    var esc=name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    html+='<span class="star'+(i<=display?' on':'')+'" onclick="setRating(\''+esc+'\','+i+')">&#9733;</span>';
+  }
+  html+='<span class="rating-value">'+(info.count?info.avg.toFixed(1)+' ('+info.count+')':'avaliar')+'</span>';
+  return html;
+}
+
+// ── RANKING ───────────────────────────────────────────
+async function renderRanking(){
+  var body=document.getElementById('rankingBody');
+  if(!body)return;
+  body.innerHTML='<div class="rank-empty" style="padding:30px 20px"><div style="font-size:1.4rem;margin-bottom:8px">&#9203;</div><div>Carregando ranking...</div></div>';
+  try{
+    var data=await supaFetch('/rest/v1/avaliacoes?select=bar_nome,rating&order=bar_nome');
+    var agg={};
+    data.forEach(function(r){
+      if(!agg[r.bar_nome])agg[r.bar_nome]={sum:0,count:0};
+      agg[r.bar_nome].sum+=r.rating;
+      agg[r.bar_nome].count++;
+    });
+    var allBars=BARS_EVENTO.concat(BARS_EXTRA);
+    var ranked=allBars.map(function(b){
+      var a=agg[b.n]||{sum:0,count:0};
+      return{n:b.n,p:b.p,avg:a.count?a.sum/a.count:0,count:a.count};
+    }).filter(function(b){return b.count>0;}).sort(function(a,b){
+      return b.avg-a.avg||b.count-a.count||a.n.localeCompare(b.n);
+    });
+    if(!ranked.length){
+      body.innerHTML='<div class="rank-empty" style="padding:40px 20px"><div style="font-size:2.5rem;margin-bottom:12px">&#11088;</div><div style="font-size:.82rem;line-height:1.7">Nenhum bar avaliado ainda.<br>Visite os bares e de sua nota!</div></div>';
+      return;
+    }
+    var medals=['&#127945;','&#127946;','&#127947;'];
+    body.innerHTML=ranked.map(function(b,i){
+      return '<div class="rank-row">'
+        +'<div class="rank-pos'+(i<3?' p'+(i+1):'')+'">'+( i<3?medals[i]:(i+1)+'.')+'</div>'
+        +'<div class="rank-body"><div class="rank-nome">'+b.n+'</div><div class="rank-pet">'+b.p+'</div></div>'
+        +'<div class="rank-right"><div class="rank-avg">'+b.avg.toFixed(1)+' &#11088;</div><div class="rank-votes">'+b.count+' voto'+(b.count>1?'s':'')+'</div></div>'
+        +'</div>';
+    }).join('');
+  }catch(e){
+    body.innerHTML='<div class="rank-empty" style="padding:30px 20px"><div style="font-size:2rem;margin-bottom:8px">&#9888;</div><div style="font-size:.82rem">Erro ao carregar ranking.</div></div>';
+  }
+}
+
+// ── LOGIN / IDENTIDADE ────────────────────────────────
+function getUserId(){
+  var id=localStorage.getItem('user_id');
+  if(!id){id=crypto.randomUUID();localStorage.setItem('user_id',id);}
+  return id;
+}
+function getUser(){return localStorage.getItem('user_name')||null;}
+function updateLoginUI(){
+  var u=getUser();
+  var lbl=document.getElementById('loginPillLabel');
+  var pill=document.getElementById('loginPill');
+  if(!lbl||!pill)return;
+  if(u){lbl.textContent=u.split(' ')[0];pill.classList.add('logged');}
+  else{lbl.textContent='Entrar';pill.classList.remove('logged');}
+}
+function openLoginModal(){
+  var u=getUser();
+  document.getElementById('modalLoggedOut').style.display=u?'none':'block';
+  document.getElementById('modalLoggedIn').style.display=u?'block':'none';
+  if(u){
+    document.getElementById('modalUserName').textContent=u;
+    var count=Object.keys(_rc).filter(function(k){return _rc[k]&&_rc[k].mine>0;}).length;
+    document.getElementById('modalUserStats').textContent=count+' bar'+(count!==1?'es':'')+' avaliado'+(count!==1?'s':'');
+  }
+  document.getElementById('loginModal').style.display='flex';
+}
+function closeLoginModal(){document.getElementById('loginModal').style.display='none';}
+function loginNickname(){
+  var name=document.getElementById('nicknameInput').value.trim();
+  if(!name){showToast('Digite um apelido!');return;}
+  localStorage.setItem('user_name',name);
+  updateLoginUI();closeLoginModal();
+  showToast('Ola, '+name+'!');renderList();
+}
+function logout(){
+  localStorage.removeItem('user_name');
+  updateLoginUI();closeLoginModal();
+  renderList();showToast('Ate logo!');
+}
+
+// ── BARES INDICADOS ───────────────────────────────────
+var BARS_EXTRA=[
+  {n:'Perlla Bar e Cozinha',p:'Torresmo artesanal',a:'Rua 23, 456 - Setor Oeste',c:'Goiania',ig:'perllabar',lat:-16.6840,lng:-49.2780,h:'Ter-Dom 18h-01h',extra:true},
+  {n:'Barzim do Ze',p:'Costelinha defumada',a:'Av. T-63, 200 - Setor Bueno',c:'Goiania',ig:'barzim_do_ze',lat:-16.6915,lng:-49.2720,h:'Qua-Dom 17h-00h',extra:true},
+  {n:'Choperia Serrinha',p:'Chopp artesanal gelado',a:'Av. Serrinha, 1100 - Setor Serrinha',c:'Goiania',ig:'choperiaserinha',lat:-16.7310,lng:-49.2640,h:'Seg-Dom 16h-02h',extra:true},
+];
+var showExtra=false;
+function toggleExtra(){
+  showExtra=!showExtra;
+  var chip=document.getElementById('chipExtra');
+  if(chip){chip.className='chip'+(showExtra?' extra-on':'');chip.textContent=showExtra?'Indicados':'Indicados';}
+  renderList();
+}
+
+// ── SPLASH COM IDENTIFICAÇÃO ──────────────────────────
+function splashConfirm(){
+  var name=document.getElementById('splashNick').value.trim();
+  if(!name){
+    document.getElementById('splashNick').style.borderColor='rgba(184,48,48,.6)';
+    document.getElementById('splashNick').placeholder='Digite um apelido primeiro...';
+    return;
+  }
+  localStorage.setItem('user_name',name);
+  _goGPS();
+}
+function splashSkip(){_goGPS();}
+function _goGPS(){
+  var s1=document.getElementById('splashStep1');
+  var s2=document.getElementById('splashStep2');
+  if(s1)s1.style.display='none';
+  if(s2)s2.style.display='flex';
+  startGPS();
+}
+window.addEventListener('load',function(){
+  var saved=localStorage.getItem('user_name');
+  if(saved){
+    var s1=document.getElementById('splashStep1');
+    var s2=document.getElementById('splashStep2');
+    var msg=document.getElementById('splashMsg');
+    if(s1)s1.style.display='none';
+    if(s2)s2.style.display='flex';
+    if(msg)msg.textContent='Ola, '+saved.split(' ')[0]+'!';
+    setTimeout(startGPS,300);
+  }
+});
+
 </script>
 
   <!-- LIGHTBOX -->
@@ -816,5 +1054,22 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLightbox(); }
     </div>
     <div class="lb-info" id="lbInfo"></div>
   </div>
+
+<div id="loginModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeLoginModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeLoginModal()">&#10005;</button>
+    <div id="modalLoggedOut">
+      <div class="modal-title">Entrar</div>
+      <div class="modal-sub">Digite um apelido para salvar suas avalia&#231;&#245;es no ranking.</div>
+      <input class="modal-input" id="nicknameInput" type="text" placeholder="Seu apelido..." maxlength="30">
+      <button class="btn-modal-confirm" onclick="loginNickname()">SALVAR</button>
+    </div>
+    <div id="modalLoggedIn" style="display:none">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--beer);letter-spacing:1px;margin-bottom:4px" id="modalUserName"></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--cream3);margin-bottom:16px" id="modalUserStats"></div>
+      <button class="btn-modal-logout" onclick="logout()">SAIR DA CONTA</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
